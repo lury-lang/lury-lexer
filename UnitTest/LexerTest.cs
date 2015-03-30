@@ -38,10 +38,24 @@ namespace UnitTest
 
                 foreach (var token in lexer.TokenOutput)
                 {
-                    Assert.AreEqual(file.Answers[index].TokenName, token.Entry.Name);
+                    Assert.AreEqual(file.Answers[index].TokenName,
+                                    token.Entry.Name,
+                                    string.Format("{0} 番目のトークン {1} は {2} と一致しません。(値は {3} および {4})",
+                                        index + 1,
+                                        file.Answers[index].TokenName,
+                                        token.Entry.Name,
+                                        file.Answers[index].TokenValue ?? "(null)",
+                                        token.Text));
 
                     if (file.Answers[index].TokenValue != null)
-                        Assert.AreEqual(file.Answers[index].TokenValue, token.Text);
+                        Assert.AreEqual(file.Answers[index].TokenValue,
+                                        token.Text,
+                                        string.Format("{0} 番目のトークン {1} は {2} と一致しません。(値は {3} および {4})",
+                                            index + 1,
+                                            file.Answers[index].TokenName,
+                                            token.Entry.Name,
+                                            file.Answers[index].TokenValue ?? "(null)",
+                                            token.Text));
 
                     index++;
                 }
