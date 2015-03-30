@@ -1,0 +1,17 @@
+﻿Identifier	value
+=
+Integer	1
++
+Integer	2
+-
+Integer	3
+*
+Integer	4
+/
+Integer	5
+NewLine
+Identifier	println
+(
+Identifier	value
+)
+EndOfFile
