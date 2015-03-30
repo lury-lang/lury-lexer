@@ -234,6 +234,7 @@ namespace Lury.Compiling.Lexer
             bool zeroWidthIndent = false;
             bool reachEndOfFile = false;
             Match indentSpace = null;
+            Match newlineMatch = null;
 
             this.output.Clear();
             this.commaDetected = false;
@@ -257,13 +258,18 @@ namespace Lury.Compiling.Lexer
                     reachEndOfFile = true;
                 else if (IsMatch(newline, this.SourceCode, this.index, out m))
                 {
-                    this.output.Add(new Token(newline, m.Value, this.index, this.SourceCode.GetPositionByIndex(this.index)));
+                    if(!lineBreak)
+                        newlineMatch = m;
+
                     lineBreak = true;
                     zeroWidthIndent = true;
                 }
                 else if (!this.MatchComment(out m))
                 {
                     TokenEntry entry;
+
+                    if (lineBreak)
+                        this.output.Add(new Token(newline, newlineMatch.Value, newlineMatch.Index, this.SourceCode.GetPositionByIndex(newlineMatch.Index)));
 
                     if (zeroWidthIndent || lineBreak && indentSpace != null)
                     {
