@@ -12,10 +12,12 @@ namespace UnitTest
     {
         private static IEnumerable<AnswerFile> answerFiles;
 
+        public TestContext TestContext { get; set; }
+
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            answerFiles = Directory.GetFiles("input", "*.answer").Select(s => new AnswerFile(s));
+            LexerTest.answerFiles = Directory.GetFiles("input", "*.answer").Select(s => new AnswerFile(s));
         }
 
         [TestMethod]
