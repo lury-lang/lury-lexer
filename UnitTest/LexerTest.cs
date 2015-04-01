@@ -26,7 +26,7 @@ namespace UnitTest
             var lexer = new Lexer("");
             lexer.Tokenize();
 
-            Assert.IsTrue(lexer.TokenOutput.Select(t => t.Entry.Name).SequenceEqual(new string[] { "EndOfFile" }));
+            CollectionAssert.AreEqual(new string[] { "EndOfFile" }, lexer.TokenOutput.Select(t => t.Entry.Name).ToArray());
         }
 
         [TestMethod]
