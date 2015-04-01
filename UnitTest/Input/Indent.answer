@@ -1,0 +1,76 @@
+﻿KeywordDef	def
+Identifier	max
+(
+Identifier	a
+,
+Identifier	b
+,
+Identifier	c
+)
+:
+NewLine
+Indent
+KeywordIf	if
+Identifier	a
+<
+Identifier	b
+:
+NewLine
+Indent
+KeywordIf	if
+Identifier	b
+<
+Identifier	c
+:
+NewLine
+Indent
+KeywordReturn	return
+Identifier	c
+NewLine
+Dedent
+KeywordElse	else
+:
+NewLine
+Indent
+KeywordReturn	return
+Identifier	b
+NewLine
+Dedent
+Dedent
+KeywordElse	else
+:
+NewLine
+Indent
+KeywordIf	if
+Identifier	a
+<
+Identifier	c
+:
+NewLine
+Indent
+KeywordReturn	return
+Identifier	c
+NewLine
+Dedent
+KeywordElse	else
+:
+NewLine
+Indent
+KeywordReturn	return
+Identifier	a
+NewLine
+Dedent
+Dedent
+Dedent
+Identifier	println
+(
+Identifier	max
+(
+Integer	3
+,
+Integer	5
+,
+Integer	1
+)
+)
+EndOfFile

@@ -63,6 +63,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Input\Indent.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Input\Indent.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Input\BasicArithmetics.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
