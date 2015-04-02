@@ -1,0 +1,9 @@
+﻿'test1"' # 'dummy'
+"test2'" # "dummy"
+`test3'"` # `dummy`
+
+`line1
+line2
+line3`
+
+````

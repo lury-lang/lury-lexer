@@ -1,0 +1,10 @@
+﻿StringLiteral	'test1"'
+NewLine
+EmbedStringLiteral	"test2'"
+NewLine
+WysiwygStringLiteral	`test3'"`
+NewLine
+WysiwygStringLiteral	`line1\r\nline2\r\nline3`
+NewLine
+WysiwygStringLiteral	````
+EndOfFile
