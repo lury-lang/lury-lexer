@@ -37,24 +37,23 @@ namespace UnitTest
                 var lexer = new Lexer(File.ReadAllText(file.TestFilePath));
                 lexer.Tokenize();
                 int index = 0;
-                Func<string> message = null;
 
                 this.TestContext.WriteLine("検証中: {0}", Path.GetFileName(file.AnswerFilePath));
 
                 foreach (var token in lexer.TokenOutput)
                 {
-                    message = message ?? (() => string.Format("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
+                    string message = string.Format("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
                                         Path.GetFileName(file.AnswerFilePath),
                                         index + 1,
                                         file.Answers[index].TokenName,
                                         token.Entry.Name,
                                         file.Answers[index].TokenValue ?? "(null)",
-                                        token.Text));
+                                        token.Text);
                     
-                    Assert.AreEqual(file.Answers[index].TokenName, token.Entry.Name, message());
+                    Assert.AreEqual(file.Answers[index].TokenName, token.Entry.Name, message);
 
                     if (file.Answers[index].TokenValue != null)
-                        Assert.AreEqual(file.Answers[index].TokenValue, token.Text, message());
+                        Assert.AreEqual(file.Answers[index].TokenValue, token.Text, message);
 
                     index++;
                 }
