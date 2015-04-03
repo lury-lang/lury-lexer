@@ -69,6 +69,12 @@
     <None Include="Input\Range.lr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Input\Collection.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Input\Collection.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Input\String.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

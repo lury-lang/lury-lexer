@@ -1,0 +1,15 @@
+﻿tuple = (1,
+		 2,
+		 3)
+
+list = [1,
+		2,
+		3]
+
+set = {1,
+	   2,
+	   3}
+
+hash = {'first': 1,
+		'second': 2,
+		'third': 3}

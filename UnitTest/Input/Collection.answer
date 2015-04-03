@@ -1,0 +1,54 @@
+﻿Identifier	tuple
+=
+(
+Integer	1
+,
+NewLine
+Integer	2
+,
+NewLine
+Integer	3
+)
+NewLine
+Identifier	list
+=
+[
+Integer	1
+,
+NewLine
+Integer	2
+,
+NewLine
+Integer	3
+]
+NewLine
+IdentifierSet	set
+=
+{
+Integer	1
+,
+NewLine
+Integer	2
+,
+NewLine
+Integer	3
+}
+NewLine
+Identifier	hash
+=
+{
+StringLiteral	'first'
+:
+Integer	1
+,
+NewLine
+StringLiteral	'second'
+:
+Integer	2
+,
+NewLine
+StringLiteral	'third'
+:
+Integer	3
+}
+EndOfFile
