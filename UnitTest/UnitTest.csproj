@@ -63,6 +63,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Input\Range.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Input\Range.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Input\String.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,0 +1,34 @@
+﻿FloatNumber	0.1
+NewLine
+Integer	0
+RangeClose	..
+Integer	1
+NewLine
+Integer	0
+RangeOpen	...
+Integer	1
+NewLine
+Integer	0
+RangeClose	..
+FloatNumber	1.0
+NewLine
+Integer	0
+RangeOpen	...
+FloatNumber	1.0
+NewLine
+FloatNumber	0.0
+RangeClose	..
+Integer	1
+NewLine
+FloatNumber	0.0
+RangeOpen	...
+Integer	1
+NewLine
+FloatNumber	0.0
+RangeClose	..
+FloatNumber	1.0
+NewLine
+FloatNumber	0.0
+RangeOpen	...
+FloatNumber	1.0
+EndOfFile
