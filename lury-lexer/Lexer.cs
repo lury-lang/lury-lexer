@@ -103,7 +103,7 @@ namespace Lury.Compiling.Lexer
             new TokenEntry(")", @"\)"),
             new TokenEntry("[", @"\["),
             new TokenEntry("]", @"\]"),
-            new TokenEntry("{", @"\}"),
+            new TokenEntry("{", @"\{"),
             new TokenEntry("}", @"\}"),
             new TokenEntry(";", @";"),
             new TokenEntry("@", @"@"),
