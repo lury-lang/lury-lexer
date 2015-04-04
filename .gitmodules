@@ -1,0 +1,3 @@
+[submodule "submodule/compiler-base"]
+	path = submodule/compiler-base
+	url = git@github.com:lury-lang/compiler-base.git
