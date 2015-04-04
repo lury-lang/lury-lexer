@@ -44,6 +44,12 @@
     <Compile Include="Token.cs" />
     <Compile Include="TokenEntry.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\submodule\compiler-base\Lury.Compiling\Lury.Compiling.csproj">
+      <Project>{0523ce8e-34d5-46f1-9408-4c957f0bb9aa}</Project>
+      <Name>Lury.Compiling</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
