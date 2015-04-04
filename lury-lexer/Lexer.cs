@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Lury.Compiling.Utils;
 
 namespace Lury.Compiling.Lexer
 {

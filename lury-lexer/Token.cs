@@ -26,6 +26,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using Lury.Compiling.Utils;
+
 namespace Lury.Compiling.Lexer
 {
     public class Token
