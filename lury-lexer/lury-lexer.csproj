@@ -42,6 +42,7 @@
     <Compile Include="Lexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Token.cs" />
+    <Compile Include="TokenEntries.cs" />
     <Compile Include="TokenEntry.cs" />
   </ItemGroup>
   <ItemGroup>
