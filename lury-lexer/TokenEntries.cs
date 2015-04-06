@@ -34,7 +34,27 @@ namespace Lury.Compiling.Lexer
     public partial class Lexer
     {
         #region Token Entry
-        private static readonly TokenEntry identifier = new TokenEntry("Identifier", @"([_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}][_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}]*)");
+        // Unicode 6.0 Emoji Code Blocks
+        //     U+ : Unicode
+        //     \u : UTF-16 and Regex format
+        //
+        // Geometric Shapes (U+25A0 - U+25FF)
+        //     [\u25a0-\u25ff]
+        // Miscellaneous Symbols (U+2600 - U+26FF)
+        //     [\u2600-\u26ff]
+        // Dingbats (U+2700 - U+27BF)
+        //     [\u2700-\u27bf]
+        // Miscellaneous Symbols And Pictographs (U+1F300 - U+1F5FF)
+        //     \ud83c[\udf00-\udff7]|\ud83d[\udc00-\uddff]
+        // Emoticons (U+1F600 - U+1F64F)
+        //     \ud83d[\ude00-\ude4f]
+        // Transport and Map Symbols (U+1F680 - U+1F6FF)
+        //     \ud83d[\ude80-\udef3]
+        //
+        // Combined: ([\u25a0-\u27bf]|\ud83c[\udf00-\udff7]|\ud83d[\udc00-\ude4f\ude80-\udef3])
+        //
+        private static readonly TokenEntry identifier = new TokenEntry("Identifier", @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*");
+        
         private static readonly TokenEntry numberAndRange = new TokenEntry("NumberAndRange", @"(?<num>0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*([eE][\+\-]?[0-9](_?[0-9])*)?i?)(?<op>\.{2,3})");
         private static readonly TokenEntry comma = new TokenEntry(",", @",");
         private static readonly TokenEntry dot = new TokenEntry(".", @"\.");
