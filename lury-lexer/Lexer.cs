@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Lury.Compiling.Logger;
 using Lury.Compiling.Utils;
 
 namespace Lury.Compiling.Lexer
@@ -44,15 +45,18 @@ namespace Lury.Compiling.Lexer
 
         public IEnumerable<Token> TokenOutput { get { return this.output; } }
 
+        public OutputLogger Logger { get; private set; }
+
         public Lexer(string sourceCode)
         {
             this.SourceCode = sourceCode;
             this.index = 0;
+            this.Logger = new OutputLogger();
             this.output = new List<Token>();
             this.indentStack = new Stack<int>();
         }
 
-        public void Tokenize()
+        public bool Tokenize()
         {
             bool checkIndentFirstLine = false;
             bool lineBreak = false;
@@ -72,7 +76,13 @@ namespace Lury.Compiling.Lexer
                 if (IsMatch(space, this.SourceCode, this.index, out m))
                 {
                     if (!checkIndentFirstLine)
-                        throw new Exception("LexerError: 最初の行はインデントできません.");
+                    {
+                        this.Logger.ReportError(LexerError.InvalidIndentFirstLine,
+                                                m.Value,
+                                                this.SourceCode,
+                                                this.SourceCode.GetPositionByIndex(m.Index));
+                        return false;
+                    }
 
                     if (lineBreak)
                         indentSpace = m;
@@ -83,7 +93,7 @@ namespace Lury.Compiling.Lexer
                     reachEndOfFile = true;
                 else if (IsMatch(newline, this.SourceCode, this.index, out m))
                 {
-                    if(!lineBreak)
+                    if (!lineBreak)
                         newlineMatch = m;
 
                     lineBreak = true;
@@ -98,8 +108,8 @@ namespace Lury.Compiling.Lexer
 
                     if (zeroWidthIndent || lineBreak && indentSpace != null)
                     {
-                        if (!commaDetected)
-                            this.StackIndent(indentSpace);
+                        if (!commaDetected && !this.StackIndent(indentSpace))
+                            return false;
 
                         indentSpace = null;
                     }
@@ -111,7 +121,14 @@ namespace Lury.Compiling.Lexer
                     if (this.MatchOtherTokens(out m, out entry))
                         this.output.Add(new Token(entry, m.Value, this.index, this.SourceCode.GetPositionByIndex(this.index)));
                     else
-                        throw new Exception("LexerError: 認識できない文字が検出されました. " + this.SourceCode[this.index]);
+                    {
+                        this.Logger.ReportError(LexerError.InvalidCharacter,
+                                                m.Value,
+                                                this.SourceCode,
+                                                this.SourceCode.GetPositionByIndex(newlineMatch.Index),
+                                                string.Format("Character `{0}'", this.SourceCode[this.index].ToString().ConvertControlChars()));
+                        return false;
+                    }
                 }
 
                 this.MoveForward(m);
@@ -123,11 +140,14 @@ namespace Lury.Compiling.Lexer
 
             if (indentStack.Count > 1)
             {
-                this.StackIndent(null);
+                if (!this.StackIndent(null))
+                    return false;
+
                 lineBreak = false;
             }
 
-            this.output.Add(new Token(endoffile, "", this.SourceCode.Length == 0 ? 0 : this.index,  this.SourceCode.Length == 0 ? CharPosition.BasePosition : this.SourceCode.GetPositionByIndex(this.index)));
+            this.output.Add(new Token(endoffile, "", this.SourceCode.Length == 0 ? 0 : this.index, this.SourceCode.Length == 0 ? CharPosition.BasePosition : this.SourceCode.GetPositionByIndex(this.index)));
+            return true;
         }
 
         private bool MatchOtherTokens(out Match m, out TokenEntry tokenEntry)
@@ -144,16 +164,11 @@ namespace Lury.Compiling.Lexer
 
                     if (entry == Lexer.numberAndRange)
                     {
-                        if (MatchTokenEntries(Lexer.number, tempMatch.Groups["num"].Value, 0, out m, out tokenEntry))
-                            this.output.Add(new Token(tokenEntry, tempMatch.Groups["num"].Value, this.index,  this.SourceCode.GetPositionByIndex(this.index)));
-                        else
-                            throw new Exception("不明なエラー.");
-
+                        MatchTokenEntries(Lexer.number, tempMatch.Groups["num"].Value, 0, out m, out tokenEntry);
+                        this.output.Add(new Token(tokenEntry, tempMatch.Groups["num"].Value, this.index, this.SourceCode.GetPositionByIndex(this.index)));
                         this.MoveForward(m);
 
-                        if (!MatchTokenEntries(Lexer.tokenEntry, tempMatch.Groups["op"].Value, 0, out m, out tokenEntry))
-                            throw new Exception("不明なエラー.");
-
+                        MatchTokenEntries(Lexer.tokenEntry, tempMatch.Groups["op"].Value, 0, out m, out tokenEntry);
                         return true;
                     }
                     else if (entry == Lexer.dot)
@@ -217,15 +232,14 @@ namespace Lury.Compiling.Lexer
             return false;
         }
 
-        private void StackIndent(Match match)
+        private bool StackIndent(Match match)
         {
             int level = (match == null) ? 0 : match.Length;
             int peek = this.indentStack.Peek();
 
             if (peek == level)
-                return;
+                return true;
             //else if (level == 0)    // Empty Line
-            //    yield break;
             else if (peek < level)
             {
                 indentStack.Push(level);
@@ -244,8 +258,13 @@ namespace Lury.Compiling.Lexer
                 while (indentStack.Count > 0);
 
                 if (indentStack.Count == 0)
-                    throw new Exception("LexerError: インデントが不正です.");
+                {
+                    this.Logger.ReportError(LexerError.InvalidIndent, null, this.SourceCode, this.SourceCode.GetPositionByIndex(this.index));
+                    return false;
+                }
             }
+
+            return true;
         }
 
         private static bool IsMatch(TokenEntry entry, string source, int index, out Match match, bool perfect = false)
