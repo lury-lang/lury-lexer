@@ -24,7 +24,7 @@ namespace UnitTest
         public void TokenizeTest1()
         {
             var lexer = new Lexer("");
-            lexer.Tokenize();
+            Assert.IsTrue(lexer.Tokenize());
 
             CollectionAssert.AreEqual(new string[] { "EndOfFile" }, lexer.TokenOutput.Select(t => t.Entry.Name).ToArray());
         }
@@ -35,7 +35,7 @@ namespace UnitTest
             foreach (var file in answerFiles)
             {
                 var lexer = new Lexer(File.ReadAllText(file.TestFilePath));
-                lexer.Tokenize();
+                Assert.IsTrue(lexer.Tokenize());
                 int index = 0;
 
                 this.TestContext.WriteLine("検証中: {0}", Path.GetFileName(file.AnswerFilePath));
