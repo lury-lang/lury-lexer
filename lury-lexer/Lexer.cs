@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Lury.Compiling.Logger;
 using Lury.Compiling.Utils;
@@ -247,10 +248,11 @@ namespace Lury.Compiling.Lexer
             }
             else // peek > level
             {
+                int dedentCount = 0;
                 do
                 {
                     indentStack.Pop();
-                    this.output.Add(new Token(new TokenEntry("Dedent"), "", this.index, this.SourceCode.GetPositionByIndex(this.index)));
+                    dedentCount++;
 
                     if (indentStack.Count == 0 || indentStack.Peek() == level)
                         break;
@@ -262,6 +264,12 @@ namespace Lury.Compiling.Lexer
                     this.Logger.ReportError(LexerError.InvalidIndent, null, this.SourceCode, this.SourceCode.GetPositionByIndex(this.index));
                     return false;
                 }
+
+                this.output.AddRange(Enumerable.Repeat(new Token(new TokenEntry("Dedent"),
+                                                                 "",
+                                                                 this.index,
+                                                                 this.SourceCode.GetPositionByIndex(this.index)),
+                                                                 dedentCount));
             }
 
             return true;
