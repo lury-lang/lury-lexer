@@ -60,6 +60,10 @@
       <Project>{05c9df24-183e-43e3-b140-b6ddfd3b95fe}</Project>
       <Name>lury-lexer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\submodule\compiler-base\Lury.Compiling\Lury.Compiling.csproj">
+      <Project>{0523ce8e-34d5-46f1-9408-4c957f0bb9aa}</Project>
+      <Name>Lury.Compiling</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
