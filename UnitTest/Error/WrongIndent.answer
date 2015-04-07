@@ -1,0 +1,25 @@
+﻿KeywordFor	for
+Identifier	i
+KeywordIn	in
+Integer	0
+RangeOpen	...
+Integer	5
+:
+NewLine
+Indent
+KeywordSwitch	switch
+Identifier	i
+:
+NewLine
+Indent
+KeywordCase	case
+Integer	0
+:
+NewLine
+Indent
+Identifier	println
+(
+StringLiteral	'Indent error'
+)
+NewLine
+!Error	1048579

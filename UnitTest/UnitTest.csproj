@@ -67,6 +67,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Error\WrongIndent.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\WrongIndent.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Error\IndentFirstLine.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
