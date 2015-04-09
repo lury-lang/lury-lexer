@@ -121,6 +121,18 @@
     <None Include="Input\BasicArithmetics.lr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Input\UTF-16BE_BOM.answer" />
+    <None Include="Input\UTF-16BE_BOM.lr" />
+    <None Include="Input\UTF-16LE_BOM.answer" />
+    <None Include="Input\UTF-16LE_BOM.lr" />
+    <None Include="Input\UTF-32BE_BOM.answer" />
+    <None Include="Input\UTF-32BE_BOM.lr" />
+    <None Include="Input\UTF-32LE_BOM.answer" />
+    <None Include="Input\UTF-32LE_BOM.lr" />
+    <None Include="Input\UTF-8.answer" />
+    <None Include="Input\UTF-8.lr" />
+    <None Include="Input\UTF-8_BOM.answer" />
+    <None Include="Input\UTF-8_BOM.lr" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
