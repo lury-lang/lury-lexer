@@ -1,0 +1,501 @@
+﻿KeywordImport	import
+Identifier	random
+NewLine
+@
+KeywordPublic	public
+NewLine
+KeywordInterface	interface
+Identifier	IGreetable
+:
+NewLine
+Indent
+KeywordDef	def
+Identifier	greet
+(
+Identifier	name
+)
+:
+NewLine
+Indent
+KeywordIn	in
+:
+NewLine
+Indent
+Identifier	assert
+(
+Identifier	name
+KeywordIs	is
+Identifier	String
+)
+NewLine
+Identifier	assert
+(
+Identifier	name
+Equal	==
+KeywordNil	nil
+KeywordOr	or
+KeywordNot	not
+Identifier	name
+.
+Identifier	isWhitespace
+)
+NewLine
+Dedent
+KeywordOut	out
+(
+Identifier	res
+)
+:
+NewLine
+Indent
+Identifier	assert
+(
+Identifier	res
+NotEqual	!=
+KeywordNil	nil
+)
+NewLine
+Dedent
+Dedent
+Dedent
+KeywordAbstract	abstract
+KeywordClass	class
+Identifier	Person
+(
+Identifier	IGreetable
+)
+:
+NewLine
+Indent
+KeywordProtected	protected
+KeywordVar	var
+Identifier	trueAge
+NewLine
+@
+KeywordPublic
+NewLine
+KeywordAbstract	abstract
+KeywordProperty	property
+Identifier	age
+(
+IdentifierGet	get
+)
+:
+NewLine
+Indent
+KeywordIn	in
+:
+NewLine
+Indent
+Identifier	assert
+(
+Identifier	age
+KeywordIs	is
+Identifier	Integer
+)
+NewLine
+Identifier	assert
+(
+Identifier	age
+MoreThan	>=
+Integer	0
+KeywordAnd	and
+Identifier	age
+LessThan	<=
+Integer	1000
+)
+NewLine
+Dedent
+Dedent
+KeywordAbstract	abstract
+KeywordDef	def
+Identifier	execute
+(
+KeywordLazy	lazy
+Identifier	func
+)
+:
+NewLine
+Indent
+KeywordPass	pass
+NewLine
+Dedent
+KeywordDef	def
+KeywordThis	this
+(
+Identifier	age
+)
+:
+NewLine
+Indent
+KeywordThis	this
+.
+Identifier	trueAge
+=
+Identifier	age
+NewLine
+Dedent
+KeywordInvariant	invariant
+:
+NewLine
+Indent
+Identifier	assert
+(
+KeywordThis	this
+.
+Identifier	trueAge
+KeywordIs	is
+Identifier	Integer
+)
+NewLine
+Identifier	assert
+(
+KeywordThis	this
+.
+Identifier	trueAge
+MoreThan	>=
+Integer	0
+KeywordAnd	and
+Identifier	age
+LessThan	<=
+Integer	1000
+)
+NewLine
+Dedent
+Dedent
+KeywordClass	class
+Identifier	Honest
+(
+Identifier	Person
+)
+:
+NewLine
+Indent
+@
+KeywordPublic	public
+NewLine
+KeywordDef	def
+KeywordThis	this
+(
+Identifier	age
+)
+:
+NewLine
+Indent
+KeywordSuper	super
+(
+Identifier	age
+)
+NewLine
+Dedent
+KeywordOverride	override
+KeywordProperty	property
+Identifier	age
+:
+NewLine
+Indent
+IdentifierGet	get
+:
+NewLine
+Indent
+KeywordReturn	return
+KeywordThis	this
+.
+Identifier	trueAge
+NewLine
+Dedent
+Dedent
+KeywordDef	def
+Identifier	greet
+(
+Identifier	name
+)
+:
+NewLine
+Indent
+KeywordReturn	return
+EmbedStringLiteral	"Hello, #{name}!"
+NewLine
+Dedent
+KeywordOverride	override
+KeywordDef	def
+Identifier	execute
+(
+KeywordLazy	lazy
+Identifier	func
+)
+:
+NewLine
+Indent
+Identifier	println
+(
+StringLiteral	'Sure. I try '
+~
+(
+KeywordRef	ref
+Identifier	func
+)
+.
+Identifier	toString
+)
+NewLine
+KeywordReturn	return
+Identifier	func
+NewLine
+Dedent
+KeywordUnittest	unittest
+:
+NewLine
+Indent
+Identifier	assert
+(
+KeywordThis	this
+.
+Identifier	trueAge
+Equal	==
+KeywordThis	this
+.
+Identifier	age
+)
+NewLine
+Dedent
+Dedent
+KeywordClass	class
+Identifier	Lier
+(
+Identifier	Person
+)
+:
+NewLine
+Indent
+@
+KeywordPublic
+NewLine
+KeywordDef	def
+KeywordThis	this
+(
+Identifier	age
+)
+:
+NewLine
+Indent
+KeywordSuper	super
+(
+Identifier	age
+)
+NewLine
+Dedent
+KeywordOverride	override
+KeywordProperty	property
+Identifier	age
+:
+NewLine
+Indent
+IdentifierGet	get
+Lambda	=>
+KeywordThis	this
+.
+Identifier	trueAge
+*
+KeywordNew	new
+Identifier	Random
+.
+Identifier	next
+(
+-
+Integer	5
+RangeClose	..
+Integer	5
+)
+NewLine
+Dedent
+KeywordDef	def
+Identifier	greet
+(
+Identifier	name
+)
+Lambda	=>
+EmbedStringLiteral	"Hi, #{name}!"
+NewLine
+KeywordOverride	override
+KeywordDef	def
+Identifier	execute
+(
+KeywordLazy	lazy
+Identifier	func
+)
+:
+NewLine
+Indent
+Identifier	println
+(
+StringLiteral	'Roger. I try '
+~
+(
+KeywordRef	ref
+Identifier	func
+)
+.
+Identifier	toString
+)
+NewLine
+KeywordReturn	return
+Identifier	func
+KeywordIf	if
+KeywordNew	new
+Identifier	Random
+.
+Identifier	next
+(
+Integer	0
+RangeOpen	...
+Integer	5
+)
+Equal	==
+Integer	0
+NewLine
+Dedent
+Dedent
+KeywordDef	def
+Identifier	devide
+(
+Identifier	a
+,
+Identifier	b
+)
+:
+NewLine
+Indent
+KeywordTry	try
+:
+NewLine
+Indent
+Identifier	println
+(
+EmbedStringLiteral	"#{a} / #{b} = #{a / b}"
+)
+NewLine
+Dedent
+KeywordCatch	catch
+:
+NewLine
+Indent
+Identifier	println
+(
+EmbedStringLiteral	"wow!"
+)
+NewLine
+Dedent
+KeywordFinally	finally
+:
+NewLine
+Indent
+Identifier	println
+(
+EmbedStringLiteral	"Completed."
+)
+NewLine
+Dedent
+Dedent
+Identifier	person
+=
+KeywordNew	new
+Identifier	Honest
+(
+Integer	20
+)
+NewLine
+Identifier	person
+.
+Identifier	greet
+(
+StringLiteral	'Aris'
+)
+NewLine
+KeywordFor	for
+Identifier	i
+KeywordIn	in
+Integer	0
+RangeOpen	...
+Integer	5
+:
+NewLine
+Indent
+Identifier	person
+.
+Identifier	execute
+(
+Identifier	devide
+(
+Identifier	i
+,
+Integer	5
+)
+)
+NewLine
+Dedent
+KeywordDelete	delete
+Identifier	person
+NewLine
+Identifier	person
+=
+KeywordNew	new
+Identifier	Lier
+(
+Integer	20
+)
+NewLine
+Identifier	person
+.
+Identifier	greet
+(
+StringLiteral	'Bob'
+)
+NewLine
+KeywordIf	if
+Identifier	person
+.
+Identifier	age
+Equal	==
+Integer	20
+:
+NewLine
+Indent
+Identifier	println
+(
+StringLiteral	'Bob is honest!'
+)
+NewLine
+Dedent
+KeywordElse	else
+:
+NewLine
+Indent
+Identifier	println
+(
+StringLiteral	'Bob lies!'
+)
+NewLine
+Dedent
+KeywordFor	for
+Identifier	i
+KeywordIn	in
+Integer	0
+RangeOpen	...
+Integer	5
+:
+NewLine
+Indent
+Identifier	person
+.
+Identifier	execute
+(
+Identifier	devide
+(
+Identifier	i
+,
+Integer	5
+)
+)
+Dedent
+EndOfFile

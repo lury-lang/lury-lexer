@@ -1,0 +1,90 @@
+﻿import random
+
+@public
+interface IGreetable:
+	def greet(name):
+		in:
+			assert(name is String)
+			assert(name == nil or not name.isWhitespace)
+		out(res):
+			assert(res != nil)
+
+abstract class Person(IGreetable):
+	
+	protected var trueAge
+
+	@public
+	abstract property age (get):
+		in:
+			assert(age is Integer)
+			assert(age >= 0 and age <= 1000)
+	
+	abstract def execute(lazy func):
+		pass
+
+	def this(age):
+		this.trueAge = age
+
+	invariant:
+		assert(this.trueAge is Integer)
+		assert(this.trueAge >= 0 and age <= 1000)
+
+class Honest(Person):
+	@public 
+	def this(age):
+		super(age)
+
+	override property age:
+		get:
+			return this.trueAge
+	
+	def greet(name):
+		return "Hello, #{name}!"
+
+	override def execute(lazy func):
+		println('Sure. I try ' ~ (ref func).toString)
+		return func
+
+	unittest:
+		assert(this.trueAge == this.age)
+
+class Lier(Person):
+	@public 
+	def this(age):
+		super(age)
+
+	override property age:
+		get => this.trueAge * new Random.next(-5..5)
+
+	def greet(name) => "Hi, #{name}!"
+
+	override def execute(lazy func):
+		println('Roger. I try ' ~ (ref func).toString)
+		return func if new Random.next(0...5) == 0
+
+def devide(a, b):
+	try:
+		println("#{a} / #{b} = #{a / b}")
+	catch:
+		println("wow!")
+	finally:
+		println("Completed.")
+
+
+person = new Honest(20)
+person.greet('Aris')
+
+for i in 0...5:
+	person.execute(devide(i, 5))
+
+delete person
+person = new Lier(20)
+person.greet('Bob')
+
+if person.age == 20:
+	println('Bob is honest!')
+else:
+	println('Bob lies!')
+
+for i in 0...5:
+	person.execute(devide(i, 5))
