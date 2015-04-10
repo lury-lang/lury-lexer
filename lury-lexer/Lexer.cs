@@ -137,11 +137,12 @@ namespace Lury.Compiling.Lexer
                         this.output.Add(new Token(entry, m.Value, this.index, this.SourceCode.GetPositionByIndex(this.index)));
                     else
                     {
+                        string unrecognizableChar = this.SourceCode[this.index].ToString();
                         this.Logger.ReportError(LexerError.InvalidCharacter,
-                                                m.Value,
+                                                unrecognizableChar,
                                                 this.SourceCode,
-                                                this.SourceCode.GetPositionByIndex(newlineMatch.Index),
-                                                string.Format("Character `{0}'", this.SourceCode[this.index].ToString().ConvertControlChars()));
+                                                this.SourceCode.GetPositionByIndex(this.index),
+                                                string.Format("Character `{0}'", unrecognizableChar.ConvertControlChars()));
                         return false;
                     }
                 }
