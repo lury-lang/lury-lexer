@@ -37,16 +37,26 @@ namespace Lury.Compiling.Lexer
 {
     public partial class Lexer
     {
-        private int index;
-        private bool commaDetected;
+        #region -- Private Fields --
+
         private readonly List<Token> output;
         private readonly Stack<int> indentStack;
+        private int index;
+        private bool commaDetected;
+
+        #endregion
+
+        #region -- Public Properties --
 
         public string SourceCode { get; private set; }
 
         public IEnumerable<Token> TokenOutput { get { return this.output; } }
 
         public OutputLogger Logger { get; private set; }
+
+        #endregion
+
+        #region -- Constructors --
 
         public Lexer(string sourceCode)
         {
@@ -56,6 +66,10 @@ namespace Lury.Compiling.Lexer
             this.output = new List<Token>();
             this.indentStack = new Stack<int>();
         }
+
+        #endregion
+
+        #region -- Public Methods --
 
         public bool Tokenize()
         {
@@ -151,6 +165,10 @@ namespace Lury.Compiling.Lexer
             return true;
         }
 
+        #endregion
+
+        #region -- Private Methods --
+
         private bool MatchOtherTokens(out Match m, out TokenEntry tokenEntry)
         {
             foreach (var entry in Lexer.tokenEntry)
@@ -202,22 +220,6 @@ namespace Lury.Compiling.Lexer
             tokenEntry = null;
 
             return false;                                   // Error
-        }
-
-        private static bool MatchTokenEntries(IEnumerable<TokenEntry> entries, string code, int index, out Match m, out TokenEntry entry, bool perfect = false)
-        {
-            foreach (var targetEntry in entries)
-            {
-                if (IsMatch(targetEntry, code, index, out m, perfect))
-                {
-                    entry = targetEntry;
-                    return true;
-                }
-            }
-
-            m = null;
-            entry = null;
-            return false;
         }
 
         private bool MatchComment(out Match m)
@@ -275,15 +277,37 @@ namespace Lury.Compiling.Lexer
             return true;
         }
 
+        private void MoveForward(Match match)
+        {
+            this.index += match.Length;
+        }
+
+        #endregion
+
+        #region -- Private Static Methods --
+
+        private static bool MatchTokenEntries(IEnumerable<TokenEntry> entries, string code, int index, out Match m, out TokenEntry entry, bool perfect = false)
+        {
+            foreach (var targetEntry in entries)
+            {
+                if (IsMatch(targetEntry, code, index, out m, perfect))
+                {
+                    entry = targetEntry;
+                    return true;
+                }
+            }
+
+            m = null;
+            entry = null;
+            return false;
+        }
+
         private static bool IsMatch(TokenEntry entry, string source, int index, out Match match, bool perfect = false)
         {
             match = entry.Regex.Match(source, index);
             return match.Success && match.Index == index && (!perfect || match.Length == source.Length);
         }
 
-        private void MoveForward(Match match)
-        {
-            this.index += match.Length;
-        }
+        #endregion
     }
 }
