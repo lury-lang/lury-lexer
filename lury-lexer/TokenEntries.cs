@@ -212,6 +212,9 @@ namespace Lury.Compiling.Lexer
         private static readonly TokenEntry endoffile = new TokenEntry("EndOfFile", @"[\u0000\u001a]");
         private static readonly TokenEntry newline = new TokenEntry("NewLine", @"(\n|(\r\n)|\r|\u2028|\u2029)");
 
+        private static readonly TokenEntry indent = new TokenEntry("Indent");
+        private static readonly TokenEntry dedent = new TokenEntry("Dedent");
+
         private static readonly IReadOnlyCollection<TokenEntry> whitespace = new[]{ 
             Lexer.space,
             Lexer.endoffile,

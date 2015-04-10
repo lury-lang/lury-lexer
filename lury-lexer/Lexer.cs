@@ -246,7 +246,7 @@ namespace Lury.Compiling.Lexer
             else if (peek < level)
             {
                 indentStack.Push(level);
-                this.output.Add(new Token(new TokenEntry("Indent"), "", this.index, this.SourceCode.GetPositionByIndex(this.index)));
+                this.output.Add(new Token(Lexer.indent, "", this.index, this.SourceCode.GetPositionByIndex(this.index)));
             }
             else // peek > level
             {
@@ -267,7 +267,7 @@ namespace Lury.Compiling.Lexer
                     return false;
                 }
 
-                this.output.AddRange(Enumerable.Repeat(new Token(new TokenEntry("Dedent"),
+                this.output.AddRange(Enumerable.Repeat(new Token(Lexer.dedent,
                                                                  "",
                                                                  this.index,
                                                                  this.SourceCode.GetPositionByIndex(this.index)),
