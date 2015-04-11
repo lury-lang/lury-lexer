@@ -32,9 +32,15 @@ namespace Lury.Compiling.Lexer
 {
     public class TokenEntry
     {
+        #region -- Public Properties --
+
         public string Name { get; private set; }
 
         public Regex Regex { get; private set; }
+
+        #endregion
+
+        #region -- Constructors --
 
         public TokenEntry(string name)
         {
@@ -52,5 +58,7 @@ namespace Lury.Compiling.Lexer
             : this(name, new Regex(regex, RegexOptions.Compiled | RegexOptions.ExplicitCapture))
         {
         }
+
+        #endregion
     }
 }
