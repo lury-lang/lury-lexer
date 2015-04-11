@@ -32,6 +32,8 @@ namespace Lury.Compiling.Lexer
 {
     public class Token
     {
+        #region -- Public Properties --
+
         public TokenEntry Entry { get; private set; }
 
         public string Text { get; private set; }
@@ -39,6 +41,10 @@ namespace Lury.Compiling.Lexer
         public CharPosition Position { get; private set; }
 
         public int Index { get; private set; }
+
+        #endregion
+
+        #region -- Constructors --
 
         public Token(TokenEntry entry, string text, int index, CharPosition position)
         {
@@ -48,9 +54,15 @@ namespace Lury.Compiling.Lexer
             this.Position = position;
         }
 
+        #endregion
+
+        #region -- Public Methods --
+
         public override string ToString()
         {
             return string.Format("{0} {1}{2}", this.Position, this.Entry.Name, this.Entry.Name.Length > 1 ? " - " + this.Text : "");
         }
+
+        #endregion
     }
 }
