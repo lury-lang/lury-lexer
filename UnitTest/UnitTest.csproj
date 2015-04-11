@@ -85,6 +85,12 @@
     <None Include="Error\IndentFirstLine.lr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Input\EndOfFile.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Input\EndOfFile.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Input\Keywords.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
