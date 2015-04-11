@@ -154,13 +154,7 @@ namespace Lury.Compiling.Lexer
             // End of SourceCode
             this.index = this.SourceCode.Length - 1;
 
-            if (indentStack.Count > 1)
-            {
-                if (!this.StackIndent(null))
-                    return false;
-
-                lineBreak = false;
-            }
+            this.StackIndent(null);
 
             this.output.Add(new Token(endoffile, "", this.SourceCode.Length == 0 ? 0 : this.index, this.SourceCode.Length == 0 ? CharPosition.BasePosition : this.SourceCode.GetPositionByIndex(this.index)));
             return true;
