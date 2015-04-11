@@ -67,6 +67,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Error\UnrecognizableCharacter.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnrecognizableCharacter.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Error\WrongIndent.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
