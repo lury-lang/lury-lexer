@@ -42,6 +42,7 @@ namespace Lury.Compiling.Lexer
         private readonly List<Token> output;
         private readonly Stack<int> indentStack;
         private int index;
+        private CharPosition position;
         private bool commaDetected;
 
         #endregion
@@ -62,6 +63,7 @@ namespace Lury.Compiling.Lexer
         {
             this.SourceCode = sourceCode;
             this.index = 0;
+            this.position = CharPosition.BasePosition;
             this.Logger = new OutputLogger();
             this.output = new List<Token>();
             this.indentStack = new Stack<int>();
@@ -95,7 +97,7 @@ namespace Lury.Compiling.Lexer
                         this.Logger.ReportError(LexerError.InvalidIndentFirstLine,
                                                 m.Value,
                                                 this.SourceCode,
-                                                this.SourceCode.GetPositionByIndex(m.Index));
+                                                this.position);
                         return false;
                     }
 
@@ -114,13 +116,16 @@ namespace Lury.Compiling.Lexer
                     lineBreak = true;
                     zeroWidthIndent = true;
                     indentSpace = null;
+
+                    this.position.Line++;
+                    this.position.Column = 1;
                 }
                 else if (!this.MatchComment(out m))
                 {
                     TokenEntry entry;
 
                     if (lineBreak)
-                        this.output.Add(new Token(newline, newlineMatch.Value, newlineMatch.Index, this.SourceCode.GetPositionByIndex(newlineMatch.Index)));
+                        this.output.Add(new Token(newline, newlineMatch.Value, newlineMatch.Index, this.position));
 
                     if (zeroWidthIndent || lineBreak && indentSpace != null)
                     {
@@ -135,14 +140,14 @@ namespace Lury.Compiling.Lexer
                     zeroWidthIndent = false;
 
                     if (this.MatchOtherTokens(out m, out entry))
-                        this.output.Add(new Token(entry, m.Value, this.index, this.SourceCode.GetPositionByIndex(this.index)));
+                        this.output.Add(new Token(entry, m.Value, this.index, this.position));
                     else
                     {
                         string unrecognizableChar = this.SourceCode[this.index].ToString();
                         this.Logger.ReportError(LexerError.InvalidCharacter,
                                                 unrecognizableChar,
                                                 this.SourceCode,
-                                                this.SourceCode.GetPositionByIndex(this.index),
+                                                this.position,
                                                 string.Format("Character `{0}'", unrecognizableChar.ConvertControlChars()));
                         return false;
                     }
@@ -157,7 +162,10 @@ namespace Lury.Compiling.Lexer
 
             this.StackIndent(null);
 
-            this.output.Add(new Token(endoffile, "", this.SourceCode.Length == 0 ? 0 : this.index, this.SourceCode.Length == 0 ? CharPosition.BasePosition : this.SourceCode.GetPositionByIndex(this.index)));
+            this.output.Add(new Token(endoffile,
+                                      "",
+                                      this.SourceCode.Length == 0 ? 0 : this.index,
+                                      this.SourceCode.Length == 0 ? CharPosition.BasePosition : this.position));
             return true;
         }
 
@@ -180,7 +188,7 @@ namespace Lury.Compiling.Lexer
                     if (entry == Lexer.numberAndRange)
                     {
                         MatchTokenEntries(Lexer.number, tempMatch.Groups["num"].Value, 0, out m, out tokenEntry);
-                        this.output.Add(new Token(tokenEntry, tempMatch.Groups["num"].Value, this.index, this.SourceCode.GetPositionByIndex(this.index)));
+                        this.output.Add(new Token(tokenEntry, tempMatch.Groups["num"].Value, this.index, this.position));
                         this.MoveForward(m);
 
                         MatchTokenEntries(Lexer.tokenEntry, tempMatch.Groups["op"].Value, 0, out m, out tokenEntry);
@@ -242,7 +250,7 @@ namespace Lury.Compiling.Lexer
             else if (peek < level)
             {
                 indentStack.Push(level);
-                this.output.Add(new Token(Lexer.indent, "", this.index, this.SourceCode.GetPositionByIndex(this.index)));
+                this.output.Add(new Token(Lexer.indent, "", this.index, this.position));
             }
             else // peek > level
             {
@@ -259,14 +267,14 @@ namespace Lury.Compiling.Lexer
 
                 if (indentStack.Count == 0)
                 {
-                    this.Logger.ReportError(LexerError.InvalidIndent, null, this.SourceCode, this.SourceCode.GetPositionByIndex(this.index));
+                    this.Logger.ReportError(LexerError.InvalidIndent, null, this.SourceCode, this.position);
                     return false;
                 }
 
                 this.output.AddRange(Enumerable.Repeat(new Token(Lexer.dedent,
                                                                  "",
                                                                  this.index,
-                                                                 this.SourceCode.GetPositionByIndex(this.index)),
+                                                                 this.position),
                                                                  dedentCount));
             }
 
@@ -275,7 +283,9 @@ namespace Lury.Compiling.Lexer
 
         private void MoveForward(Match match)
         {
-            this.index += match.Length;
+            int length = match.Length;
+            this.index += length;
+            this.position.Column += length;
         }
 
         #endregion
