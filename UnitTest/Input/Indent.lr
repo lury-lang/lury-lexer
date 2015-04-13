@@ -3,11 +3,11 @@
 		if b < c:
 			return c
 		else:
-			return b
+			return b		# two dedent after newline
 	else:
 		if a < c:
 			return c
 		else:
 			return a
-
+							# three dedent
 println(max(3, 5, 1))
