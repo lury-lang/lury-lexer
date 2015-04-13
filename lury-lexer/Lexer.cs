@@ -113,6 +113,7 @@ namespace Lury.Compiling.Lexer
 
                     lineBreak = true;
                     zeroWidthIndent = true;
+                    indentSpace = null;
                 }
                 else if (!this.MatchComment(out m))
                 {
