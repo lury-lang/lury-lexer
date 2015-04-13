@@ -53,169 +53,174 @@ namespace Lury.Compiling.Lexer
         //
         // Combined: ([\u25a0-\u27bf]|\ud83c[\udf00-\udff7]|\ud83d[\udc00-\ude4f\ude80-\udef3])
         //
-        private static readonly TokenEntry identifier = new TokenEntry("Identifier", @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*");
-        
-        private static readonly TokenEntry numberAndRange = new TokenEntry("NumberAndRange", @"(?<num>0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*([eE][\+\-]?[0-9](_?[0-9])*)?i?)(?<op>\.{2,3})");
-        private static readonly TokenEntry comma = new TokenEntry(",", @",");
-        private static readonly TokenEntry dot = new TokenEntry(".", @"\.");
+        private static readonly RegexTokenEntry identifier = new RegexTokenEntry("Identifier", @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*");
 
-        private static readonly IReadOnlyCollection<TokenEntry> tokenEntry = new[]{ 
+        private static readonly RegexTokenEntry numberAndRange = new RegexTokenEntry("NumberAndRange", @"(?<num>0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*([eE][\+\-]?[0-9](_?[0-9])*)?i?)(?<op>\.{2,3})");
+
+        private static readonly IReadOnlyCollection<RegexTokenEntry> tokenEntry = new[]{ 
             Lexer.identifier,
-            new TokenEntry("$", @"\$"),
 
-            new TokenEntry("StringLiteral", @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'"),
-            new TokenEntry("EmbedStringLiteral", @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?"""),
-            new TokenEntry("WysiwygStringLiteral", new Regex(@"`(``|[^`])*`", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture)),
+            new RegexTokenEntry("StringLiteral", @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'"),
+            new RegexTokenEntry("EmbedStringLiteral", @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?"""),
+            new RegexTokenEntry("WysiwygStringLiteral", new Regex(@"`(``|[^`])*`", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture)),
 
             numberAndRange,
-                        
-            new TokenEntry("RangeOpen", @"\.{3}"),
-            new TokenEntry("RangeClose", @"\.{2}"),
-            dot,
-            new TokenEntry("Increment", @"\+{2}"),
-            new TokenEntry("AssignmentAdd", @"\+="),
-            new TokenEntry("+", @"\+"),
-            new TokenEntry("Decrement", @"\-{2}"),
-            new TokenEntry("AssignmentSub", @"\-="),
-            new TokenEntry("AnnotationReturn", @"\-\>"),
-            new TokenEntry("-", @"\-"),
-            new TokenEntry("AssignmentConcat", @"~="),
-            new TokenEntry("~", @"~"),
-            new TokenEntry("AssignmentPower", @"\*{2}="),
-            new TokenEntry("Power", @"\*{2}"),
-            new TokenEntry("AssignmentMultiply", @"\*="),
-            new TokenEntry("*", @"\*"),
-            new TokenEntry("AssignmentIntDivide", @"//="),
-            new TokenEntry("IntDivide", @"//"),
-            new TokenEntry("AssignmentDivide", @"/="),
-            new TokenEntry("/", @"/"),
-            new TokenEntry("AssignmentModulo", @"%="),
-            new TokenEntry("%", @"%"),
-            new TokenEntry("AssignmentLeftShift", @"<<="),
-            new TokenEntry("LeftShift", @"<<"),
-            new TokenEntry("LessThan", @"<="),
-            new TokenEntry("<", @"<"),
-            new TokenEntry("AssignmentRightShift", @">>="),
-            new TokenEntry("RightShift", @">>"),
-            new TokenEntry("MoreThan", @">="),
-            new TokenEntry(">", @">"),
-            new TokenEntry("Equal", @"={2}"),
-            new TokenEntry("Lambda", @"=>"),
-            new TokenEntry("=", @"="),
-            new TokenEntry("NotIn", @"!in"),
-            new TokenEntry("NotIs", @"!is"),
-            new TokenEntry("NotEqual", @"!="),
-            new TokenEntry("!", @"!"),
-            new TokenEntry("AndShort", @"&&"),
-            new TokenEntry("AssginmentAnd", @"&="),
-            new TokenEntry("&", @"&"),
-            new TokenEntry("AssignmentXor", @"\^="),
-            new TokenEntry("^", @"\^"),
-            new TokenEntry("OrShort", @"\|{2}"),
-            new TokenEntry("AssignmentOr", @"\|="),
-            new TokenEntry("|", @"\|"),
-            new TokenEntry("NilCoalesce", @"\?{2}"),
-            new TokenEntry("?", @"\?"),
-            new TokenEntry(":", @":"),
-            comma,
-            new TokenEntry("(", @"\("),
-            new TokenEntry(")", @"\)"),
-            new TokenEntry("[", @"\["),
-            new TokenEntry("]", @"\]"),
-            new TokenEntry("{", @"\{"),
-            new TokenEntry("}", @"\}"),
-            new TokenEntry(";", @";"),
-            new TokenEntry("@", @"@"),
         };
+
+        #region Static Characters
+
+        private static readonly StaticTokenEntry comma = new StaticTokenEntry(",");
+        private static readonly StaticTokenEntry dot = new StaticTokenEntry(".");
+
+        private static readonly IReadOnlyCollection<StaticTokenEntry> staticAndOperators = new[]{ 
+            new StaticTokenEntry("$"),
+            new StaticTokenEntry("RangeOpen", "..."),
+            new StaticTokenEntry("RangeClose", ".."),
+            dot,
+            new StaticTokenEntry("Increment", "++"),
+            new StaticTokenEntry("AssignmentAdd", "+="),
+            new StaticTokenEntry("+"),
+            new StaticTokenEntry("Decrement", "--"),
+            new StaticTokenEntry("AssignmentSub", "-="),
+            new StaticTokenEntry("AnnotationReturn", "->"),
+            new StaticTokenEntry("-"),
+            new StaticTokenEntry("AssignmentConcat", "~="),
+            new StaticTokenEntry("~"),
+            new StaticTokenEntry("AssignmentPower", "**="),
+            new StaticTokenEntry("Power", "**"),
+            new StaticTokenEntry("AssignmentMultiply", "*="),
+            new StaticTokenEntry("*"),
+            new StaticTokenEntry("AssignmentIntDivide", "//="),
+            new StaticTokenEntry("IntDivide", "//"),
+            new StaticTokenEntry("AssignmentDivide", "/="),
+            new StaticTokenEntry("/"),
+            new StaticTokenEntry("AssignmentModulo", "%="),
+            new StaticTokenEntry("%"),
+            new StaticTokenEntry("AssignmentLeftShift", "<<="),
+            new StaticTokenEntry("LeftShift", "<<"),
+            new StaticTokenEntry("LessThan", "<="),
+            new StaticTokenEntry("<"),
+            new StaticTokenEntry("AssignmentRightShift", ">>="),
+            new StaticTokenEntry("RightShift", ">>"),
+            new StaticTokenEntry("MoreThan", ">="),
+            new StaticTokenEntry(">"),
+            new StaticTokenEntry("Equal", "=="),
+            new StaticTokenEntry("Lambda", "=>"),
+            new StaticTokenEntry("="),
+            new StaticTokenEntry("NotEqual", "!="),
+            new StaticTokenEntry("!"),
+            new StaticTokenEntry("AndShort", "&&"),
+            new StaticTokenEntry("AssginmentAnd", "&="),
+            new StaticTokenEntry("&"),
+            new StaticTokenEntry("AssignmentXor", "^="),
+            new StaticTokenEntry("^"),
+            new StaticTokenEntry("OrShort", "||"),
+            new StaticTokenEntry("AssignmentOr", "|="),
+            new StaticTokenEntry("|"),
+            new StaticTokenEntry("NilCoalesce", "??"),
+            new StaticTokenEntry("?"),
+            new StaticTokenEntry(":"),
+            comma,
+            new StaticTokenEntry("("),
+            new StaticTokenEntry(")"),
+            new StaticTokenEntry("["),
+            new StaticTokenEntry("]"),
+            new StaticTokenEntry("{"),
+            new StaticTokenEntry("}"),
+            new StaticTokenEntry(";"),
+            new StaticTokenEntry("@"),
+        };
+
+        #endregion
         #endregion
 
         #region Number
-        private static readonly IReadOnlyCollection<TokenEntry> number = new[]{ 
-            new TokenEntry("ImaginaryNumber", @"(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.?)([eE][\+\-]?[0-9](_?[0-9])*)?i"),
+        private static readonly IReadOnlyCollection<RegexTokenEntry> number = new[]{ 
+            new RegexTokenEntry("ImaginaryNumber", @"(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.?)([eE][\+\-]?[0-9](_?[0-9])*)?i"),
             // Base Model:
             // (([0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))[eE][\+\-]?[0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))
-            new TokenEntry("FloatNumber", @"(([0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))[eE][\+\-]?[0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))"),
-            new TokenEntry("Integer", @"(0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*)"),
+            new RegexTokenEntry("FloatNumber", @"(([0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))[eE][\+\-]?[0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))"),
+            new RegexTokenEntry("Integer", @"(0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*)"),
         };
         #endregion
 
         #region Identifier
-        private static readonly IReadOnlyCollection<TokenEntry> identifiers = new[]{
-            new TokenEntry("IdentifierGet", @"get"),
-            new TokenEntry("IdentifierSet", @"set"),
-            new TokenEntry("IdentifierFile", @"file"),
-            new TokenEntry("IdentifierLine", @"line"),
-            new TokenEntry("IdentifierExit", @"exit"),
-            new TokenEntry("IdentifierSuccess", @"success"),
-            new TokenEntry("IdentifierFailure", @"failure"),
+        private static readonly IReadOnlyCollection<RegexTokenEntry> identifiers = new[]{
+            new RegexTokenEntry("IdentifierGet", @"get"),
+            new RegexTokenEntry("IdentifierSet", @"set"),
+            new RegexTokenEntry("IdentifierFile", @"file"),
+            new RegexTokenEntry("IdentifierLine", @"line"),
+            new RegexTokenEntry("IdentifierExit", @"exit"),
+            new RegexTokenEntry("IdentifierSuccess", @"success"),
+            new RegexTokenEntry("IdentifierFailure", @"failure"),
 
-            new TokenEntry("KeywordAbstract", @"abstract"),
-            new TokenEntry("KeywordAnd", @"and"),
-            new TokenEntry("KeywordBreak", @"break"),
-            new TokenEntry("KeywordCase", @"case"),
-            new TokenEntry("KeywordCatch", @"catch"),
-            new TokenEntry("KeywordClass", @"class"),
-            new TokenEntry("KeywordContinue", @"continue"),
-            new TokenEntry("KeywordDef", @"def"),
-            new TokenEntry("KeywordDefault", @"default"),
-            new TokenEntry("KeywordDelete", @"delete"),
-            new TokenEntry("KeywordElif", @"elif"),
-            new TokenEntry("KeywordElse", @"else"),
-            new TokenEntry("KeywordEnum", @"enum"),
-            new TokenEntry("KeywordExtended", @"extended"),
-            new TokenEntry("KeywordFalse", @"false"),
-            new TokenEntry("KeywordFinally", @"finally"),
-            new TokenEntry("KeywordFor", @"for"),
-            new TokenEntry("KeywordIf", @"if"),
-            new TokenEntry("KeywordImport", @"import"),
-            new TokenEntry("KeywordIn", @"in"),
-            new TokenEntry("KeywordInterface", @"interface"),
-            new TokenEntry("KeywordInvariant", @"invariant"),
-            new TokenEntry("KeywordIs", @"is"),
-            new TokenEntry("KeywordLazy", @"lazy"),
-            new TokenEntry("KeywordNameof", @"nameof"),
-            new TokenEntry("KeywordNew", @"new"),
-            new TokenEntry("KeywordNil", @"nil"),
-            new TokenEntry("KeywordNot", @"not"),
-            new TokenEntry("KeywordOr", @"or"),
-            new TokenEntry("KeywordOut", @"out"),
-            new TokenEntry("KeywordOverride", @"override"),
-            new TokenEntry("KeywordPass", @"pass"),
-            new TokenEntry("KeywordPrivate", @"private"),
-            new TokenEntry("KeywordProperty", @"property"),
-            new TokenEntry("KeywordProtected", @"protected"),
-            new TokenEntry("KeywordPublic", @"public"),
-            new TokenEntry("KeywordRef", @"ref"),
-            new TokenEntry("KeywordReflect", @"reflect"),
-            new TokenEntry("KeywordReturn", @"return"),
-            new TokenEntry("KeywordScope", @"scope"),
-            new TokenEntry("KeywordSealed", @"sealed"),
-            new TokenEntry("KeywordStatic", @"static"),
-            new TokenEntry("KeywordSuper", @"super"),
-            new TokenEntry("KeywordSwitch", @"switch"),
-            new TokenEntry("KeywordThis", @"this"),
-            new TokenEntry("KeywordThrow", @"throw"),
-            new TokenEntry("KeywordTrue", @"true"),
-            new TokenEntry("KeywordTry", @"try"),
-            new TokenEntry("KeywordUnittest", @"unittest"),
-            new TokenEntry("KeywordUnless", @"unless"),
-            new TokenEntry("KeywordUntil", @"until"),
-            new TokenEntry("KeywordVar", @"var"),
-            new TokenEntry("KeywordWhile", @"while"),
-            new TokenEntry("KeywordWith", @"with"),
-            new TokenEntry("KeywordYield", @"yield"),
+            new RegexTokenEntry("KeywordAbstract", @"abstract"),
+            new RegexTokenEntry("KeywordAnd", @"and"),
+            new RegexTokenEntry("KeywordBreak", @"break"),
+            new RegexTokenEntry("KeywordCase", @"case"),
+            new RegexTokenEntry("KeywordCatch", @"catch"),
+            new RegexTokenEntry("KeywordClass", @"class"),
+            new RegexTokenEntry("KeywordContinue", @"continue"),
+            new RegexTokenEntry("KeywordDef", @"def"),
+            new RegexTokenEntry("KeywordDefault", @"default"),
+            new RegexTokenEntry("KeywordDelete", @"delete"),
+            new RegexTokenEntry("KeywordElif", @"elif"),
+            new RegexTokenEntry("KeywordElse", @"else"),
+            new RegexTokenEntry("KeywordEnum", @"enum"),
+            new RegexTokenEntry("KeywordExtended", @"extended"),
+            new RegexTokenEntry("KeywordFalse", @"false"),
+            new RegexTokenEntry("KeywordFinally", @"finally"),
+            new RegexTokenEntry("KeywordFor", @"for"),
+            new RegexTokenEntry("KeywordIf", @"if"),
+            new RegexTokenEntry("KeywordImport", @"import"),
+            new RegexTokenEntry("KeywordIn", @"in"),
+            new RegexTokenEntry("KeywordInterface", @"interface"),
+            new RegexTokenEntry("KeywordInvariant", @"invariant"),
+            new RegexTokenEntry("KeywordIs", @"is"),
+            new RegexTokenEntry("KeywordLazy", @"lazy"),
+            new RegexTokenEntry("KeywordNameof", @"nameof"),
+            new RegexTokenEntry("KeywordNew", @"new"),
+            new RegexTokenEntry("KeywordNil", @"nil"),
+            new RegexTokenEntry("KeywordNot", @"not"),
+            new RegexTokenEntry("KeywordOr", @"or"),
+            new RegexTokenEntry("KeywordOut", @"out"),
+            new RegexTokenEntry("KeywordOverride", @"override"),
+            new RegexTokenEntry("KeywordPass", @"pass"),
+            new RegexTokenEntry("KeywordPrivate", @"private"),
+            new RegexTokenEntry("KeywordProperty", @"property"),
+            new RegexTokenEntry("KeywordProtected", @"protected"),
+            new RegexTokenEntry("KeywordPublic", @"public"),
+            new RegexTokenEntry("KeywordRef", @"ref"),
+            new RegexTokenEntry("KeywordReflect", @"reflect"),
+            new RegexTokenEntry("KeywordReturn", @"return"),
+            new RegexTokenEntry("KeywordScope", @"scope"),
+            new RegexTokenEntry("KeywordSealed", @"sealed"),
+            new RegexTokenEntry("KeywordStatic", @"static"),
+            new RegexTokenEntry("KeywordSuper", @"super"),
+            new RegexTokenEntry("KeywordSwitch", @"switch"),
+            new RegexTokenEntry("KeywordThis", @"this"),
+            new RegexTokenEntry("KeywordThrow", @"throw"),
+            new RegexTokenEntry("KeywordTrue", @"true"),
+            new RegexTokenEntry("KeywordTry", @"try"),
+            new RegexTokenEntry("KeywordUnittest", @"unittest"),
+            new RegexTokenEntry("KeywordUnless", @"unless"),
+            new RegexTokenEntry("KeywordUntil", @"until"),
+            new RegexTokenEntry("KeywordVar", @"var"),
+            new RegexTokenEntry("KeywordWhile", @"while"),
+            new RegexTokenEntry("KeywordWith", @"with"),
+            new RegexTokenEntry("KeywordYield", @"yield"),
         };
         #endregion
 
         #region Space
-        private static readonly TokenEntry space = new TokenEntry("Space", @"[\u0020\u0009\u000b\u000c]+");
-        private static readonly TokenEntry endoffile = new TokenEntry("EndOfFile", @"[\u0000\u001a]");
-        private static readonly TokenEntry newline = new TokenEntry("NewLine", @"(\n|(\r\n)|\r|\u2028|\u2029)");
+        private static readonly RegexTokenEntry space = new RegexTokenEntry("Space", @"[\u0020\u0009\u000b\u000c]+");
+        private static readonly RegexTokenEntry endoffile = new RegexTokenEntry("EndOfFile", @"[\u0000\u001a]");
+        private static readonly RegexTokenEntry newline = new RegexTokenEntry("NewLine", @"(\n|(\r\n)|\r|\u2028|\u2029)");
 
-        private static readonly TokenEntry indent = new TokenEntry("Indent");
-        private static readonly TokenEntry dedent = new TokenEntry("Dedent");
+        private static readonly RegexTokenEntry indent = new RegexTokenEntry("Indent");
+        private static readonly RegexTokenEntry dedent = new RegexTokenEntry("Dedent");
 
-        private static readonly IReadOnlyCollection<TokenEntry> whitespace = new[]{ 
+        private static readonly IReadOnlyCollection<RegexTokenEntry> whitespace = new[]{ 
             Lexer.space,
             Lexer.endoffile,
             Lexer.newline,
@@ -225,10 +230,10 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region Comment
-        private static readonly IReadOnlyCollection<TokenEntry> comment = new[]{ 
-            new TokenEntry("BlockComment", new Regex(@"###.*?###", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture)),
-            new TokenEntry("LineComment", @"#[^\n\r\u2028\u2029]*"),
-            new TokenEntry("LineCancel", @"\\(\n|(\r\n)|\r|\u2028|\u2029)"),
+        private static readonly IReadOnlyCollection<RegexTokenEntry> comment = new[]{ 
+            new RegexTokenEntry("BlockComment", new Regex(@"###.*?###", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture)),
+            new RegexTokenEntry("LineComment", @"#[^\n\r\u2028\u2029]*"),
+            new RegexTokenEntry("LineCancel", @"\\(\n|(\r\n)|\r|\u2028|\u2029)"),
         };
         #endregion
     }
