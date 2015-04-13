@@ -14,14 +14,14 @@ namespace UnitTest
         const string text = "dummyText";
         const int index = 42;
         static CharPosition position;
-        static TokenEntry entry, entryShort;
+        static RegexTokenEntry entry, entryShort;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
             position = new CharPosition(4, 2);
-            entry = new TokenEntry(name, regex);
-            entryShort = new TokenEntry(nameShort, regex);
+            entry = new RegexTokenEntry(name, regex);
+            entryShort = new RegexTokenEntry(nameShort, regex);
         }
 
         [TestMethod]
