@@ -105,9 +105,12 @@ namespace Lury.Compiling.Lexer
                         indentSpace = m;
 
                     zeroWidthIndent = false;
+                    this.MoveForward(m.Length);
                 }
                 else if (IsMatch(endoffile, this.SourceCode, this.index, out m))
+                {
                     reachEndOfFile = true;
+                }
                 else if (IsMatch(newline, this.SourceCode, this.index, out m))
                 {
                     if (!lineBreak)
@@ -119,8 +122,13 @@ namespace Lury.Compiling.Lexer
 
                     this.position.Line++;
                     this.position.Column = 1;
+                    this.MoveForward(m.Length);
                 }
-                else if (!this.MatchComment(out m))
+                else if (this.MatchComment(out m))
+                {
+                    this.MoveForward(m.Length);
+                }
+                else
                 {
                     TokenEntry entry;
 
@@ -140,7 +148,14 @@ namespace Lury.Compiling.Lexer
                     zeroWidthIndent = false;
 
                     if (this.MatchOtherTokens(out m, out entry))
+                    {
                         this.output.Add(new Token(entry, m.Value, this.index, this.position));
+                        this.MoveForward(m.Length);
+                    }
+                    else if (this.MatchStaticTokens(out staticTokenLength))
+                    {
+                        this.MoveForward(staticTokenLength);
+                    }
                     else
                     {
                         string unrecognizableChar = this.SourceCode[this.index].ToString();
@@ -152,8 +167,7 @@ namespace Lury.Compiling.Lexer
                         return false;
                     }
                 }
-
-                this.MoveForward(m);
+                
                 checkIndentFirstLine = true;
             }
 
@@ -281,9 +295,8 @@ namespace Lury.Compiling.Lexer
             return true;
         }
 
-        private void MoveForward(Match match)
+        private void MoveForward(int length)
         {
-            int length = match.Length;
             this.index += length;
             this.position.Column += length;
         }
