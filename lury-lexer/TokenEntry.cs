@@ -30,13 +30,11 @@ using System.Text.RegularExpressions;
 
 namespace Lury.Compiling.Lexer
 {
-    public class TokenEntry
+    public abstract class TokenEntry
     {
         #region -- Public Properties --
 
         public string Name { get; private set; }
-
-        public Regex Regex { get; private set; }
 
         #endregion
 
@@ -45,18 +43,6 @@ namespace Lury.Compiling.Lexer
         public TokenEntry(string name)
         {
             this.Name = name;
-            this.Regex = null;
-        }
-
-        public TokenEntry(string name, Regex regex)
-        {
-            this.Name = name;
-            this.Regex = regex;
-        }
-
-        public TokenEntry(string name, string regex)
-            : this(name, new Regex(regex, RegexOptions.Compiled | RegexOptions.ExplicitCapture))
-        {
         }
 
         #endregion
