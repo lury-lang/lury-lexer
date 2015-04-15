@@ -223,37 +223,20 @@ namespace Lury.Compiling.Lexer
 
                     if (entry == Lexer.identifier &&
                         MatchTokenEntries(Lexer.identifiers, tempMatch.Value, 0, out m, out tokenEntry, perfect: true))
-                        return true;                    // Identifier
+                        return true;                            // Keyword or Contextual Keyword
 
                     if (entry == Lexer.numberAndRange)
                     {
                         MatchTokenEntries(Lexer.number, tempMatch.Groups["num"].Value, 0, out m, out tokenEntry);
-                        this.output.Add(new Token(tokenEntry, tempMatch.Groups["num"].Value, this.index, this.position));
-                        this.MoveForward(m);
-
-                        MatchTokenEntries(Lexer.tokenEntry, tempMatch.Groups["op"].Value, 0, out m, out tokenEntry);
                         return true;
                     }
-                    else if (entry == Lexer.dot)
-                    {
-                        if (MatchTokenEntries(Lexer.number, this.SourceCode, this.index, out m, out tokenEntry))
+                    else if (entry.Name == Lexer.dot.Name &&
+                             MatchTokenEntries(Lexer.number, this.SourceCode, this.index, out m, out tokenEntry))
                             return true;                        // Number
-                        else
-                        {
-                            m = tempMatch;
-                            tokenEntry = entry;
-                            return true;                        // Dot
-                        }
-                    }
-                    else
-                    {
-                        if (entry == Lexer.comma)
-                            this.commaDetected = true;
 
-                        m = tempMatch;
-                        tokenEntry = entry;
-                        return true;                        // Other Token
-                    }
+                    m = tempMatch;
+                    tokenEntry = entry;
+                    return true;                                // Identifier
                 }
             }
 
@@ -262,8 +245,7 @@ namespace Lury.Compiling.Lexer
 
             m = null;
             tokenEntry = null;
-
-            return false;                                   // Error
+            return false;
         }
 
         private bool MatchComment(out Match m)
