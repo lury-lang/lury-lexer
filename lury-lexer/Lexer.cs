@@ -313,7 +313,7 @@ namespace Lury.Compiling.Lexer
 
         #region -- Private Static Methods --
 
-        private static bool MatchTokenEntries(IEnumerable<TokenEntry> entries, string code, int index, out Match m, out TokenEntry entry, bool perfect = false)
+        private static bool MatchTokenEntries(IEnumerable<RegexTokenEntry> entries, string code, int index, out Match m, out TokenEntry entry, bool perfect = false)
         {
             foreach (var targetEntry in entries)
             {
@@ -329,7 +329,7 @@ namespace Lury.Compiling.Lexer
             return false;
         }
 
-        private static bool IsMatch(TokenEntry entry, string source, int index, out Match match, bool perfect = false)
+        private static bool IsMatch(RegexTokenEntry entry, string source, int index, out Match match, bool perfect = false)
         {
             match = entry.Regex.Match(source, index);
             return match.Success && match.Index == index && (!perfect || match.Length == source.Length);
