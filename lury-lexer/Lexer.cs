@@ -131,6 +131,7 @@ namespace Lury.Compiling.Lexer
                 else
                 {
                     TokenEntry entry;
+                    int staticTokenLength;
 
                     if (lineBreak)
                         this.output.Add(new Token(newline, newlineMatch.Value, newlineMatch.Index, this.position));
@@ -186,6 +187,31 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region -- Private Methods --
+
+        private bool MatchStaticTokens(out int staticTokenLength)
+        {
+            string target = this.SourceCode.Substring(this.index, Math.Min(3, this.SourceCode.Length - this.index));
+
+            foreach (var entry in Lexer.staticAndOperators)
+            {
+                if (target.IndexOf(entry.TokenValue, 0, StringComparison.InvariantCulture) == 0)
+                {
+                    this.output.Add(new Token(entry,
+                                              entry.TokenValue,
+                                              this.index,
+                                              this.position));
+                    staticTokenLength = entry.TokenValue.Length;
+
+                    if (entry == comma)
+                        this.commaDetected = true;
+
+                    return true;
+                }
+            }
+
+            staticTokenLength = 0;
+            return false;
+        }
 
         private bool MatchOtherTokens(out Match m, out TokenEntry tokenEntry)
         {
