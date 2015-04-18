@@ -42,6 +42,8 @@ namespace UnitTest
 
                 this.TestContext.WriteLine("検証中: {0}", Path.GetFileName(file.AnswerFilePath));
 
+                Assert.AreEqual(file.Answers.Count, lexer.TokenOutput.Count());
+
                 foreach (var token in lexer.TokenOutput)
                 {
                     string message = string.Format("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
@@ -72,6 +74,8 @@ namespace UnitTest
                 int index = 0;
 
                 this.TestContext.WriteLine("検証中: {0}", Path.GetFileName(file.AnswerFilePath));
+
+                Assert.AreEqual(file.Answers.Where(a => a.TokenName != "!Error").Count(), lexer.TokenOutput.Count());
 
                 foreach (var token in lexer.TokenOutput)
                 {
