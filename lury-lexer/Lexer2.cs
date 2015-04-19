@@ -1,8 +1,34 @@
-﻿using System;
+﻿//
+// Lexer.cs
+//
+// Author:
+//       Tomona Nanase <nanase@users.noreply.github.com>
+//
+// The MIT License (MIT)
+//
+// Copyright (c) 2015 Tomona Nanase
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lury.Compiling.Logger;
 using Lury.Compiling.Utils;
 
@@ -72,6 +98,10 @@ namespace Lury.Compiling.Lexer
 
         #region Comment
 
+        /// <summary>
+        /// コメントを読み飛ばし、インデクスを前進させます。
+        /// </summary>
+        /// <returns>成功した時 true、処理に失敗し続行できないとき false。</returns>
         private bool SkipComment()
         {
             int elementIndex;
@@ -123,6 +153,14 @@ namespace Lury.Compiling.Lexer
 
         #endregion
 
+        /// <summary>
+        /// 指定された文字列の配列のうち、いずれかが現在のインデクスから一致しているかを判定します。
+        /// </summary>
+        /// <param name="chars">一致を判定する文字列の配列。</param>
+        /// <returns>
+        /// 引数として指定された文字列の配列のうち、最初に一致と判定された要素のインデクス。
+        /// いずれの文字列にも一致しない場合は -1。
+        /// </returns>
         private int JudgeEqual(params string[] chars)
         {
             for (int i = 0, count = chars.Length; i < count; i++)
@@ -132,16 +170,35 @@ namespace Lury.Compiling.Lexer
             return -1;
         }
 
+        /// <summary>
+        /// 指定された文字列が、現在のインデクスから一致しているかを判定します。
+        /// </summary>
+        /// <param name="chars">一致を判定する文字列。</param>
+        /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(string chars)
         {
             return (this.sourceCode.IndexOf(chars, this.index, chars.Length, StringComparison.Ordinal) == this.index);
         }
 
+        /// <summary>
+        /// 指定された文字が、現在のインデクスが指し示す文字と一致するかを判定します。
+        /// </summary>
+        /// <param name="character">一致を判定する文字。</param>
+        /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(char character)
         {
             return (this.sourceCode[this.index] == character);
         }
 
+        /// <summary>
+        /// 指定された文字列の配列のうち、いずれかの文字列が出現するまでインデクスを前進させます。
+        /// 指定された文字列は前進に含めません。
+        /// </summary>
+        /// <param name="chars">一致を判定する文字列の配列。</param>
+        /// <returns>
+        /// 現在のインデクスから前進したインデクス数。
+        /// 文字列終端まで達し、前進できなかった場合は -1。
+        /// </returns>
         private int Skip(params string[] chars)
         {
             var keys = chars.Select(c => c[0]).Distinct().ToArray();
@@ -157,6 +214,15 @@ namespace Lury.Compiling.Lexer
             return -1;
         }
 
+        /// <summary>
+        /// 指定された文字列が出現するまでインデクスを前進させます。
+        /// 指定された文字列は前進に含めません。
+        /// </summary>
+        /// <param name="chars">一致を判定する文字列。</param>
+        /// <returns>
+        /// 現在のインデクスから前進したインデクス数。
+        /// 文字列終端まで達し、前進できなかった場合は -1。
+        /// </returns>
         private int Skip(string chars)
         {
             int i = 0;
@@ -170,6 +236,15 @@ namespace Lury.Compiling.Lexer
             return -1;
         }
 
+        /// <summary>
+        /// 指定された文字が出現するまでインデクスを前進させます。
+        /// 指定された文字は前進に含めません。
+        /// </summary>
+        /// <param name="character">一致を判定する文字。</param>
+        /// <returns>
+        /// 現在のインデクスから前進したインデクス数。
+        /// 文字列終端まで達し、前進できなかった場合は -1。
+        /// </returns>
         private int Skip(char character)
         {
             int i = 0;
