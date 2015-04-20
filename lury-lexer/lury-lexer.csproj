@@ -43,6 +43,7 @@
     <Compile Include="Lexer2.cs" />
     <Compile Include="LexerError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegexConstants.cs" />
     <Compile Include="StringConstants.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="TokenEntries.cs" />
