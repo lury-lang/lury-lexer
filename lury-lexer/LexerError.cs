@@ -38,6 +38,9 @@ namespace Lury.Compiling.Lexer
         InvalidIndentFirstLine = 0x100001,
         InvalidCharacter = 0x100002,
         InvalidIndent = 0x100003,
+        UnexpectedCharacterAfterBackslash = 0x100004,
+        UnclosedBlockComment = 0x100005,
+        UnclosedStringLiteral = 0x100006,
     }
 
     public enum LexerWarning
