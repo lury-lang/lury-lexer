@@ -51,8 +51,88 @@ namespace Lury.Compiling.Lexer
                 "\u000d",
                 "\u2028",
                 "\u2029",
+            },
+
+            LineBreak = new string[] {
+                "\u000d\u000a",
+                "\u000a",
+                "\u000d",
+                "\u2028",
+                "\u2029",
                 "\u0000",
                 "\u001a"
+            },
+            
+            DigitAndDot = new string[] {
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                ".0",
+                ".1",
+                ".2",
+                ".3",
+                ".4",
+                ".5",
+                ".6",
+                ".7",
+                ".8",
+                ".9"
+            };
+
+        public static readonly char[]
+
+            Space = new char[] { 
+                '\u0020',
+                '\u0009',
+                '\u000b',
+                '\u000c'
+            },
+
+            EndOfFile = new char[] {
+                '\u0000',
+                '\u001a'
+            },
+
+            StringLiteral = new char[] {
+                '\'',
+                '"',
+                '`'
+            },
+
+            OperatorAndDelimiter = new char[] {
+                '.',
+                '+',
+                '-',
+                '~',
+                '*',
+                '/',
+                '%',
+                '<',
+                '>',
+                '=',
+                '!',
+                '&',
+                '^',
+                '|',
+                '?',
+                ':',
+                ',',
+                '(',
+                ')',
+                '[',
+                ']',
+                '{',
+                '}',
+                ';',
+                '@',
+                '$'
             };
 
         #endregion
