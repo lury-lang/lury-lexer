@@ -153,6 +153,16 @@ namespace Lury.Compiling.Lexer
 
         #endregion
 
+        private void AddToken(TokenEntry tokenEntry, int length)
+        {
+            this.AddToken(tokenEntry, this.index, length);
+        }
+
+        private void AddToken(TokenEntry tokenEntry, int index, int length)
+        {
+            this.output.Add(new Token(tokenEntry, this.sourceCode, index, length));
+        }
+
         /// <summary>
         /// 指定された文字列の配列のうち、いずれかが現在のインデクスから一致しているかを判定します。
         /// </summary>
