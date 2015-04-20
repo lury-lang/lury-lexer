@@ -174,7 +174,8 @@ namespace Lury.Compiling.Lexer
         private int JudgeEqual(params string[] chars)
         {
             for (int i = 0, count = chars.Length; i < count; i++)
-                if (this.sourceCode.IndexOf(chars[i], this.index, chars[i].Length, StringComparison.Ordinal) == this.index)
+                if (this.length >= this.index + chars[i].Length &&
+                    this.sourceCode.IndexOf(chars[i], this.index, chars[i].Length, StringComparison.Ordinal) == this.index)
                     return i;
 
             return -1;
@@ -187,7 +188,8 @@ namespace Lury.Compiling.Lexer
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(string chars)
         {
-            return (this.sourceCode.IndexOf(chars, this.index, chars.Length, StringComparison.Ordinal) == this.index);
+            return (this.length >= this.index + chars.Length &&
+                    this.sourceCode.IndexOf(chars, this.index, chars.Length, StringComparison.Ordinal) == this.index);
         }
 
         /// <summary>
@@ -197,7 +199,8 @@ namespace Lury.Compiling.Lexer
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(char character)
         {
-            return (this.sourceCode[this.index] == character);
+            return (this.length >= this.index + 1 &&
+                    this.sourceCode[this.index] == character);
         }
 
         /// <summary>
