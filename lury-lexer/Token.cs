@@ -26,6 +26,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using Lury.Compiling.Utils;
 
 namespace Lury.Compiling.Lexer
@@ -36,22 +37,52 @@ namespace Lury.Compiling.Lexer
 
         public TokenEntry Entry { get; private set; }
 
-        public string Text { get; private set; }
+        public string Text 
+        {
+            get
+            {
+                if (this.Length == 0)
+                    return "";
+                else
+                    return this.SourceCode.Substring(this.Index, this.Length);
+            }
+        }
 
-        public CharPosition Position { get; private set; }
+        public int Length { get; private set; }
+
+        public CharPosition Position 
+        {
+            get
+            {
+                int index = this.Index;
+                
+                if (this.Index == this.SourceCode.Length)
+                    index = this.SourceCode.Length - 1;
+
+                if (index < 0)
+                    return CharPosition.BasePosition;
+                else
+                    return this.SourceCode.GetPositionByIndex(index);
+            }
+        }
 
         public int Index { get; private set; }
+
+        public string SourceCode { get; private set; }
 
         #endregion
 
         #region -- Constructors --
 
-        public Token(TokenEntry entry, string text, int index, CharPosition position)
+        public Token(TokenEntry entry, string sourceCode, int index, int length)
         {
+            if (sourceCode.Length < index + length)
+                throw new ArgumentOutOfRangeException("length");
+
             this.Entry = entry;
-            this.Text = text;
+            this.SourceCode = sourceCode;
             this.Index = index;
-            this.Position = position;
+            this.Length = length;
         }
 
         #endregion
