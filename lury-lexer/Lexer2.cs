@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Lury.Compiling.Logger;
 using Lury.Compiling.Utils;
 
@@ -45,6 +46,7 @@ namespace Lury.Compiling.Lexer
         private CharPosition position;
         private readonly string sourceCode;
         private bool commaDetected;
+        private int indentIndex;
 
         #endregion
 
@@ -143,11 +145,168 @@ namespace Lury.Compiling.Lexer
                     if ((elementIndex = this.JudgeEqual(newLine)) == -1)
                         // Reached the end of file
                         this.index = this.length;
-                    else
-                        this.index += newLine[elementIndex].Length;
+        #region Indent
+
+        private bool StackIndent(int indentIndex, int level)
+        {
+            int peek = this.indentStack.Peek();
+
+            if (peek == level)
+                return true;
+            else if (peek < level)
+            {
+                indentStack.Push(level);
+                this.AddToken(Lexer2.indent, indentIndex, 0);
+            }
+            else // peek > level
+            {
+                int dedentCount = 0;
+                do
+                {
+                    indentStack.Pop();
+                    dedentCount++;
+
+                    if (indentStack.Count == 0 || indentStack.Peek() == level)
+                        break;
                 }
+                while (indentStack.Count > 0);
+
+                if (indentStack.Count == 0)
+                {
+                    this.Logger.ReportError(LexerError.InvalidIndent, null, this.SourceCode);
+                    return false;
+                }
+
+                for (int i = 0; i < dedentCount; i++)
+                    this.AddToken(Lexer2.dedent, indentIndex, 0);
             }
 
+            return true;
+        }
+
+        #endregion
+
+        #region Number
+
+        private bool SkipNumber()
+        {
+            string str;
+            Match match;
+
+            if ((match = RegexConstants.IntegerAndRange.Match(this.sourceCode, this.index)).Success &&
+                match.Index == this.index)
+            {
+                // Integer and Imaginary Integer (with range)
+                str = match.Groups["num"].Value;
+
+                if (str.EndsWith("i", StringComparison.Ordinal))
+                    this.AddToken(Lexer2.ImaginaryNumber, str.Length);
+                else
+                    this.AddToken(Lexer2.Integer, str.Length);
+            }
+            else if ((match = RegexConstants.FloatAndImaginary.Match(this.sourceCode, this.index)).Success &&
+                     match.Index == this.index)
+            {
+                // Float and Imaginary Float
+                str = match.Value;
+
+                if (str.EndsWith("i", StringComparison.Ordinal))
+                    this.AddToken(Lexer2.ImaginaryNumber, str.Length);
+                else
+                    this.AddToken(Lexer2.FloatNumber, str.Length);
+            }
+            else
+            {
+                match = RegexConstants.Integer.Match(this.sourceCode, this.index);
+                // Integer and Imaginary Integer
+                str = match.Value;
+
+                if (str.EndsWith("i", StringComparison.Ordinal))
+                    this.AddToken(Lexer2.ImaginaryNumber, str.Length);
+                else
+                    this.AddToken(Lexer2.Integer, str.Length);
+            }
+
+            this.index += str.Length;
+            return true;
+        }
+
+        #endregion
+
+        #region String
+
+        private bool SkipString()
+        {
+            Match match;
+
+            if (this.JudgeEqual('\''))
+            {
+                if ((match = Lexer2.StringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
+                    match.Index == this.index)
+                    this.AddToken(Lexer2.StringLiteral, match.Length);
+            }
+            else if (this.JudgeEqual('"'))
+            {
+                if ((match = Lexer2.EmbedStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
+                    match.Index == this.index)
+                    this.AddToken(Lexer2.EmbedStringLiteral, match.Length);
+            }
+                    else
+            {
+                if ((match = Lexer2.WysiwygStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
+                    match.Index == this.index)
+                    this.AddToken(Lexer2.WysiwygStringLiteral, match.Length);
+            }
+
+            if (!match.Success)
+            {
+                // !Error: String literal is not closed!
+                this.Logger.ReportError(LexerError.UnclosedStringLiteral,
+                                        this.sourceCode[this.index].ToString(),
+                                        this.sourceCode,
+                                        this.sourceCode.GetPositionByIndex(this.index));
+                return false;
+            }
+
+            this.index += match.Length;
+            return true;
+                }
+
+        #endregion
+
+        #region Operator and Delimiter
+
+        private bool SkipOperatorAndDelimiter()
+        {
+            var token = Lexer2.staticAndOperators.First(e => this.JudgeEqual(e.TokenValue));
+            this.AddToken(token, token.TokenValue.Length);
+
+            if (token == comma)
+                this.commaDetected = true;
+
+            this.index += token.TokenValue.Length;
+            return true;
+            }
+
+        #endregion
+
+        #region Identifier
+
+        private bool SkipIdentifier()
+        {
+            Match match = Lexer2.identifier.Regex.Match(this.sourceCode, this.index);
+
+            if (!match.Success || match.Index != this.index)
+                return false;
+
+            var keyword = Lexer2.identifiers.FirstOrDefault(e => e.TokenValue == match.Value);
+
+            if (keyword == null)
+                this.AddToken(Lexer2.identifier, match.Length);
+            else
+                this.AddToken(keyword, match.Length);
+
+            this.index += match.Length;
             return true;
         }
 
