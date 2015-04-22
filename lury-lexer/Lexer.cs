@@ -35,7 +35,7 @@ using Lury.Compiling.Utils;
 
 namespace Lury.Compiling.Lexer
 {
-    public partial class Lexer2
+    public partial class Lexer
     {
         #region -- Private Fields --
 
@@ -62,7 +62,7 @@ namespace Lury.Compiling.Lexer
 
         #region -- Constructors --
 
-        public Lexer2(string sourceCode)
+        public Lexer(string sourceCode)
         {
             this.sourceCode = sourceCode;
             this.index = 0;
@@ -138,7 +138,7 @@ namespace Lury.Compiling.Lexer
                 if (lineBreak)
                 {
                     if (passedFirstLine)
-                        this.AddToken(Lexer2.newline, lineBreakIndex, lineBreakLength);
+                        this.AddToken(Lexer.newline, lineBreakIndex, lineBreakLength);
 
                     if (!this.commaDetected)
                     {
@@ -221,7 +221,7 @@ namespace Lury.Compiling.Lexer
             if (this.length > 0)
                 this.StackIndent(this.length - 1, 0);
 
-            this.AddToken(Lexer2.endoffile, 0);
+            this.AddToken(Lexer.endoffile, 0);
             return true;
         }
 
@@ -297,7 +297,7 @@ namespace Lury.Compiling.Lexer
             else if (peek < level)
             {
                 indentStack.Push(level);
-                this.AddToken(Lexer2.indent, indentIndex, 0);
+                this.AddToken(Lexer.indent, indentIndex, 0);
             }
             else // peek > level
             {
@@ -319,7 +319,7 @@ namespace Lury.Compiling.Lexer
                 }
 
                 for (int i = 0; i < dedentCount; i++)
-                    this.AddToken(Lexer2.dedent, indentIndex, 0);
+                    this.AddToken(Lexer.dedent, indentIndex, 0);
             }
 
             return true;
@@ -341,9 +341,9 @@ namespace Lury.Compiling.Lexer
                 str = match.Groups["num"].Value;
 
                 if (str.EndsWith("i", StringComparison.Ordinal))
-                    this.AddToken(Lexer2.ImaginaryNumber, str.Length);
+                    this.AddToken(Lexer.ImaginaryNumber, str.Length);
                 else
-                    this.AddToken(Lexer2.Integer, str.Length);
+                    this.AddToken(Lexer.Integer, str.Length);
             }
             else if ((match = RegexConstants.FloatAndImaginary.Match(this.sourceCode, this.index)).Success &&
                      match.Index == this.index)
@@ -352,9 +352,9 @@ namespace Lury.Compiling.Lexer
                 str = match.Value;
 
                 if (str.EndsWith("i", StringComparison.Ordinal))
-                    this.AddToken(Lexer2.ImaginaryNumber, str.Length);
+                    this.AddToken(Lexer.ImaginaryNumber, str.Length);
                 else
-                    this.AddToken(Lexer2.FloatNumber, str.Length);
+                    this.AddToken(Lexer.FloatNumber, str.Length);
             }
             else
             {
@@ -363,9 +363,9 @@ namespace Lury.Compiling.Lexer
                 str = match.Value;
 
                 if (str.EndsWith("i", StringComparison.Ordinal))
-                    this.AddToken(Lexer2.ImaginaryNumber, str.Length);
+                    this.AddToken(Lexer.ImaginaryNumber, str.Length);
                 else
-                    this.AddToken(Lexer2.Integer, str.Length);
+                    this.AddToken(Lexer.Integer, str.Length);
             }
 
             this.index += str.Length;
@@ -382,21 +382,21 @@ namespace Lury.Compiling.Lexer
 
             if (this.JudgeEqual('\''))
             {
-                if ((match = Lexer2.StringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
+                if ((match = Lexer.StringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
                     match.Index == this.index)
-                    this.AddToken(Lexer2.StringLiteral, match.Length);
+                    this.AddToken(Lexer.StringLiteral, match.Length);
             }
             else if (this.JudgeEqual('"'))
             {
-                if ((match = Lexer2.EmbedStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
+                if ((match = Lexer.EmbedStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
                     match.Index == this.index)
-                    this.AddToken(Lexer2.EmbedStringLiteral, match.Length);
+                    this.AddToken(Lexer.EmbedStringLiteral, match.Length);
             }
             else
             {
-                if ((match = Lexer2.WysiwygStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
+                if ((match = Lexer.WysiwygStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
                     match.Index == this.index)
-                    this.AddToken(Lexer2.WysiwygStringLiteral, match.Length);
+                    this.AddToken(Lexer.WysiwygStringLiteral, match.Length);
             }
 
             if (!match.Success)
@@ -419,7 +419,7 @@ namespace Lury.Compiling.Lexer
 
         private bool SkipOperatorAndDelimiter()
         {
-            var token = Lexer2.staticAndOperators.First(e => this.JudgeEqual(e.TokenValue));
+            var token = Lexer.staticAndOperators.First(e => this.JudgeEqual(e.TokenValue));
             this.AddToken(token, token.TokenValue.Length);
 
             if (token == comma)
@@ -435,15 +435,15 @@ namespace Lury.Compiling.Lexer
 
         private bool SkipIdentifier()
         {
-            Match match = Lexer2.identifier.Regex.Match(this.sourceCode, this.index);
+            Match match = Lexer.identifier.Regex.Match(this.sourceCode, this.index);
 
             if (!match.Success || match.Index != this.index)
                 return false;
 
-            var keyword = Lexer2.identifiers.FirstOrDefault(e => e.TokenValue == match.Value);
+            var keyword = Lexer.identifiers.FirstOrDefault(e => e.TokenValue == match.Value);
 
             if (keyword == null)
-                this.AddToken(Lexer2.identifier, match.Length);
+                this.AddToken(Lexer.identifier, match.Length);
             else
                 this.AddToken(keyword, match.Length);
 
