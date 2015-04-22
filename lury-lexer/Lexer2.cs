@@ -314,6 +314,17 @@ namespace Lury.Compiling.Lexer
             return elementIndex;
         }
 
+        private int SkipWhile(params char[] chars)
+        {
+            int baseIndex = this.index;
+
+            for (int j = 0; this.index < this.length; this.index++, j++)
+                if (this.JudgeEqual(chars) < 0)
+                    return j;
+
+            this.index = baseIndex;
+            return -1;
+        }
 
         #endregion
     }
