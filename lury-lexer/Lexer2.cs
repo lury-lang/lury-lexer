@@ -192,6 +192,19 @@ namespace Lury.Compiling.Lexer
                     this.sourceCode.IndexOf(chars, this.index, chars.Length, StringComparison.Ordinal) == this.index);
         }
 
+        private int JudgeEqual(params char[] chars)
+        {
+            if (this.length < this.index + 1)
+                return -1;
+
+            char current = this.sourceCode[this.index];
+            for (int i = 0, count = chars.Length; i < count; i++)
+                if (current == chars[i])
+                    return i;
+
+            return -1;
+        }
+
         /// <summary>
         /// 指定された文字が、現在のインデクスが指し示す文字と一致するかを判定します。
         /// </summary>
