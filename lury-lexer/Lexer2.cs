@@ -270,8 +270,51 @@ namespace Lury.Compiling.Lexer
             return -1;
         }
 
+        /// <summary>
+        /// 指定された文字列の配列のうち、一致するいずれかの文字列の長さだけインデクスを前進させます。
+        /// </summary>
+        /// <param name="chars">読み飛ばす文字列の配列。</param>
+        /// <returns>
+        /// 読み飛ばした文字列の配列のインデクス。
+        /// いずれの文字列にも一致しなかったとき、-1。
+        /// </returns>
+        private int SkipOver(params string[] chars)
+        {
+            int elementIndex;
+            if ((elementIndex = this.JudgeEqual(chars)) == -1)
+                return -1;
+
+            this.index += chars[elementIndex].Length;
+            return elementIndex;
+        }
+
+        /// <summary>
+        /// 指定された文字列が一致するとき、文字列の長さだけインデクスを前進させます。
+        /// </summary>
+        /// <param name="chars">読み飛ばす文字列。</param>
+        /// <returns>
+        /// 読み飛ばしに成功した時 true、それ以外のとき false。
+        /// </returns>
+        private bool SkipOver(string chars)
+        {
+            if (this.JudgeEqual(chars))
+                return false;
+
+            this.index += chars.Length;
+            return true;
+        }
+
+        private int SkipOver(params char[] chars)
+        {
+            int elementIndex;
+            if ((elementIndex = this.JudgeEqual(chars)) == -1)
+                return -1;
+
+            this.index++;
+            return elementIndex;
+        }
+
+
         #endregion
-
-
     }
 }
