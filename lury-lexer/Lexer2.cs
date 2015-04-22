@@ -71,6 +71,7 @@ namespace Lury.Compiling.Lexer
             this.Logger = new OutputLogger();
             this.output = new List<Token>();
             this.indentStack = new Stack<int>();
+            this.indentStack.Push(0);
         }
 
         #endregion
@@ -79,18 +80,148 @@ namespace Lury.Compiling.Lexer
 
         public bool Tokenize()
         {
+            bool lineBreak = true;
+            int lineBreakIndex = 0;
+            int lineBreakLength = 0;
+            this.indentIndex = -1;
+            int indentLength = 0;
+            bool zeroWidthIndent = false;
+            int elementIndex;
+            bool passedFirstLine = false;
+
             for (; this.index < this.length; )
             {
-                // 0 : Comments
+                #region 1 : WhiteSpace and Comment
+                // 1.1 : NewLine
+                if ((elementIndex = this.SkipOver(StringConstants.NewLine)) >= 0)
+                {
+                    if (!lineBreak)
+                    {
+                        lineBreakLength = StringConstants.NewLine[elementIndex].Length;
+                        lineBreakIndex = this.index - lineBreakLength;
+                        lineBreak = true;
+                    }
+
+                    this.indentIndex = -1;
+                    indentLength = 0;
+                    zeroWidthIndent = true;
+                    continue;
+                }
+
+                // 1.2 : WhiteSpace
+                if (this.JudgeEqual(StringConstants.Space) >= 0)
+                {
+                    if (lineBreak && this.indentIndex < 0)
+                        this.indentIndex = this.index;
+
+                    int spaceLength = this.SkipWhile(StringConstants.Space);
+
+                    if (lineBreak)
+                        indentLength += spaceLength;
+
+                    zeroWidthIndent = false;
+                    continue;
+                }
+
+                // 1.3 : Comments
                 if (this.JudgeEqual("\\", "#") >= 0)
                 {
                     if (!this.SkipComment()) return false;
                     continue;
                 }
 
-                this.index++;
+                // 1.4 : EndOfFile
+                if (this.JudgeEqual(StringConstants.EndOfFile) >= 0)
+                    break;
+
+                // 1.5 : NewLine and Indent/Dedent
+                if (lineBreak)
+                {
+                    if (passedFirstLine)
+                        this.AddToken(Lexer2.newline, lineBreakIndex, lineBreakLength);
+
+                    if (!this.commaDetected)
+                    {
+                        if (zeroWidthIndent)
+                        {
+                            if (!this.StackIndent(this.index, 0))
+                                return false;
+                        }
+                        else if (!passedFirstLine &&
+                                 indentLength > 0)
+                        {
+                            this.Logger.ReportError(LexerError.InvalidIndentFirstLine,
+                                                    null,
+                                                    this.sourceCode,
+                                                    this.sourceCode.GetPositionByIndex(this.indentIndex));
+                            return false;
+                        }
+                        else if (this.indentIndex >= 0 &&
+                                 !this.StackIndent(this.indentIndex, indentLength))
+                            return false;
+                    }
+
+                    zeroWidthIndent = false;
+                    lineBreak = false;
+                    this.indentIndex = -1;
+                    indentLength = 0;
+                }
+
+                this.commaDetected = false;
+                passedFirstLine = true;
+                #endregion
+
+                #region 2 : Number
+
+                if (this.JudgeEqual(StringConstants.DigitAndDot) >= 0)
+                {
+                    if (!this.SkipNumber()) return false;
+                    continue;
+                }
+
+                #endregion
+
+                #region 3 : String
+
+                if (this.JudgeEqual(StringConstants.StringLiteral) >= 0)
+                {
+                    if (!this.SkipString()) return false;
+                    continue;
+                }
+
+                #endregion
+
+                #region 4 : Operator and Delimiter
+
+                if (this.JudgeEqual(StringConstants.OperatorAndDelimiter) >= 0)
+                {
+                    if (!this.SkipOperatorAndDelimiter()) return false;
+                    continue;
+                }
+
+                #endregion
+
+                #region 5 : Identifier
+
+                if (this.SkipIdentifier())
+                    continue;
+                else
+                {
+                    // !Error: Unknown Character!
+                    this.Logger.ReportError(LexerError.InvalidCharacter,
+                                            this.sourceCode[this.index].ToString(),
+                                            this.sourceCode,
+                                            this.sourceCode.GetPositionByIndex(this.index));
+                    return false;
+                }
+
+                #endregion
             }
 
+            if (this.length > 0)
+                this.StackIndent(this.length - 1, 0);
+
+            this.AddToken(Lexer2.endoffile, 0);
             return true;
         }
 
@@ -261,7 +392,7 @@ namespace Lury.Compiling.Lexer
                     match.Index == this.index)
                     this.AddToken(Lexer2.EmbedStringLiteral, match.Length);
             }
-                    else
+            else
             {
                 if ((match = Lexer2.WysiwygStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
                     match.Index == this.index)
@@ -280,7 +411,7 @@ namespace Lury.Compiling.Lexer
 
             this.index += match.Length;
             return true;
-                }
+        }
 
         #endregion
 
@@ -296,7 +427,7 @@ namespace Lury.Compiling.Lexer
 
             this.index += token.TokenValue.Length;
             return true;
-            }
+        }
 
         #endregion
 
