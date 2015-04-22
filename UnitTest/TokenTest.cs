@@ -11,15 +11,16 @@ namespace UnitTest
         const string name = "dummyName";
         const string nameShort = "n";
         const string regex = "dummyRegex";
-        const string text = "dummyText";
-        const int index = 42;
+        const string source = "dummyText";
+        const int index = 2;
+        const int length = 3;
         static CharPosition position;
         static RegexTokenEntry entry, entryShort;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            position = new CharPosition(4, 2);
+            position = new CharPosition(1, 3);
             entry = new RegexTokenEntry(name, regex);
             entryShort = new RegexTokenEntry(nameShort, regex);
         }
@@ -27,47 +28,47 @@ namespace UnitTest
         [TestMethod]
         public void EntryTest()
         {
-            Token token = new Token(entry, text, index, position);
+            Token token = new Token(entry, source, index, length);
             Assert.AreEqual(entry, token.Entry);
         }
 
         [TestMethod]
         public void TextTest()
         {
-            Token token = new Token(entry, text, index, position);
-            Assert.AreEqual(text, token.Text);
+            Token token = new Token(entry, source, index, length);
+            Assert.AreEqual("mmy", token.Text);
         }
 
         [TestMethod]
         public void IndexTest()
         {
-            Token token = new Token(entry, text, index, position);
+            Token token = new Token(entry, source, index, length);
             Assert.AreEqual(index, token.Index);
         }
 
         [TestMethod]
         public void PositionTest()
         {
-            Token token = new Token(entry, text, index, position);
+            Token token = new Token(entry, source, index, length);
             Assert.AreEqual(position, token.Position);
         }
 
         [TestMethod]
         public void ToStringTest()
         {
-            Token token = new Token(entry, text, index, position);
+            Token token = new Token(entry, source, index, length);
             string tokenString = token.ToString();
 
             Assert.IsTrue(tokenString.Contains(position.Line.ToString()));
             Assert.IsTrue(tokenString.Contains(position.Column.ToString()));
             Assert.IsTrue(tokenString.Contains(entry.Name));
-            Assert.IsTrue(tokenString.Contains(text));
+            Assert.IsTrue(tokenString.Contains("mmy"));
         }
 
         [TestMethod]
         public void ToStringTestShort()
         {
-            Token token = new Token(entryShort, text, index, position);
+            Token token = new Token(entryShort, source, index, length);
             string tokenString = token.ToString();
 
             Assert.IsTrue(tokenString.Contains(position.Line.ToString()));
