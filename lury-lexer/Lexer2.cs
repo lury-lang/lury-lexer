@@ -106,20 +106,18 @@ namespace Lury.Compiling.Lexer
         /// <returns>成功した時 true、処理に失敗し続行できないとき false。</returns>
         private bool SkipComment()
         {
-            int elementIndex;
-
             if (this.JudgeEqual('\\'))
             {
                 // LineCancel
-                string[] lineCancel = new string[] { "\\\u000d\u000a", "\\\u000a", "\\\u000d", "\\\u2028", "\\\u2029" };
-
-                if ((elementIndex = this.JudgeEqual(lineCancel)) == -1)
+                if (this.SkipOver(StringConstants.LineCancel) == -1)
                 {
                     // !Error: NewLine is expected after `\'
+                    this.Logger.ReportError(LexerError.UnexpectedCharacterAfterBackslash,
+                                            this.sourceCode[this.index].ToString(),
+                                            this.sourceCode,
+                                            this.sourceCode.GetPositionByIndex(this.index));
                     return false;
                 }
-
-                this.index += lineCancel[elementIndex].Length;
             }
             else if (this.JudgeEqual('#'))
             {
@@ -131,6 +129,10 @@ namespace Lury.Compiling.Lexer
                     if (this.Skip("###") == -1)
                     {
                         // !Error: BlockComment is not closed!
+                        this.Logger.ReportError(LexerError.UnclosedBlockComment,
+                                                this.sourceCode[this.index].ToString(),
+                                                this.sourceCode,
+                                                this.sourceCode.GetPositionByIndex(this.index));
                         return false;
                     }
 
@@ -139,12 +141,20 @@ namespace Lury.Compiling.Lexer
                 else
                 {
                     // LineComment
-                    string[] newLine = new string[] { "\u000d\u000a", "\u000a", "\u000d", "\u2028", "\u2029", "\u0000", "\u001a" };
-                    this.Skip(newLine);
 
-                    if ((elementIndex = this.JudgeEqual(newLine)) == -1)
+                    // For empty line with line comment
+                    this.indentIndex = -1;
+                    if (this.Skip(StringConstants.LineBreak) == -1)
                         // Reached the end of file
                         this.index = this.length;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion
+
         #region Indent
 
         private bool StackIndent(int indentIndex, int level)
