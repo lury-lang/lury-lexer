@@ -55,20 +55,6 @@ namespace Lury.Compiling.Lexer
         //
         private static readonly RegexTokenEntry identifier = new RegexTokenEntry("Identifier", @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*");
 
-        private static readonly RegexTokenEntry numberAndRange = new RegexTokenEntry("NumberAndRange", @"(?<num>0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*([eE][\+\-]?[0-9](_?[0-9])*)?i?)(?<op>\.{2,3})");
-        
-        /*
-        private static readonly IReadOnlyCollection<RegexTokenEntry> tokenEntry = new[]{ 
-            Lexer.identifier,
-
-            new RegexTokenEntry("StringLiteral", @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'"),
-            new RegexTokenEntry("EmbedStringLiteral", @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?"""),
-            new RegexTokenEntry("WysiwygStringLiteral", new Regex(@"`(``|[^`])*`", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture)),
-
-            numberAndRange,
-        };
-        */
-
         private static readonly RegexTokenEntry
             StringLiteral = new RegexTokenEntry("StringLiteral", @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'"),
             EmbedStringLiteral = new RegexTokenEntry("EmbedStringLiteral", @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?"""),
@@ -142,14 +128,6 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region Number
-        /*private static readonly IReadOnlyCollection<RegexTokenEntry> number = new[]{ 
-            new RegexTokenEntry("ImaginaryNumber", @"(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.?)([eE][\+\-]?[0-9](_?[0-9])*)?i"),
-            // Base Model:
-            // (([0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))[eE][\+\-]?[0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))
-            new RegexTokenEntry("FloatNumber", @"(([0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))[eE][\+\-]?[0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))"),
-            new RegexTokenEntry("Integer", @"(0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*)"),
-        };*/
-
         private static readonly RegexTokenEntry
             ImaginaryNumber = new RegexTokenEntry("ImaginaryNumber", @"(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.?)([eE][\+\-]?[0-9](_?[0-9])*)?i?"),
             FloatNumber = new RegexTokenEntry("FloatNumber", @"(([0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))[eE][\+\-]?[0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))"),
@@ -225,28 +203,11 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region Space
-        private static readonly RegexTokenEntry space = new RegexTokenEntry("Space", @"[\u0020\u0009\u000b\u000c]+");
         private static readonly RegexTokenEntry endoffile = new RegexTokenEntry("EndOfFile", @"[\u0000\u001a]");
         private static readonly RegexTokenEntry newline = new RegexTokenEntry("NewLine", @"(\n|(\r\n)|\r|\u2028|\u2029)");
 
         private static readonly StaticTokenEntry indent = new StaticTokenEntry("Indent");
         private static readonly StaticTokenEntry dedent = new StaticTokenEntry("Dedent");
-
-        private static readonly IReadOnlyCollection<RegexTokenEntry> whitespace = new[]{ 
-            Lexer.space,
-            Lexer.endoffile,
-            Lexer.newline,
-            //new TokenEntry("Indent"),
-            //new TokenEntry("Dedent"),
-        };
-        #endregion
-
-        #region Comment
-        private static readonly IReadOnlyCollection<RegexTokenEntry> comment = new[]{ 
-            new RegexTokenEntry("BlockComment", new Regex(@"###.*?###", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture)),
-            new RegexTokenEntry("LineComment", @"#[^\n\r\u2028\u2029]*"),
-            new RegexTokenEntry("LineCancel", @"\\(\n|(\r\n)|\r|\u2028|\u2029)"),
-        };
         #endregion
     }
 }
