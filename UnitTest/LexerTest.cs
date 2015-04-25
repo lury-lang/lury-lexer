@@ -46,18 +46,16 @@ namespace UnitTest
 
                 foreach (var token in lexer.TokenOutput)
                 {
-                    string message = string.Format("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
-                                        Path.GetFileName(file.AnswerFilePath),
-                                        index + 1,
-                                        file.Answers[index].TokenName,
-                                        token.Entry.Name,
-                                        file.Answers[index].TokenValue ?? "(null)",
-                                        token.Text);
-
-                    Assert.AreEqual(file.Answers[index].TokenName, token.Entry.Name, message);
-
-                    if (file.Answers[index].TokenValue != null)
-                        Assert.AreEqual(file.Answers[index].TokenValue, token.Text, message);
+                    if (file.Answers[index].TokenName != token.Entry.Name ||
+                       (file.Answers[index].TokenValue != null && 
+                        file.Answers[index].TokenValue != token.Text))
+                        Assert.Fail("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
+                                    Path.GetFileName(file.AnswerFilePath),
+                                    index + 1,
+                                    file.Answers[index].TokenName,
+                                    token.Entry.Name,
+                                    file.Answers[index].TokenValue ?? "(null)",
+                                    token.Text);
 
                     index++;
                 }
@@ -79,19 +77,16 @@ namespace UnitTest
 
                 foreach (var token in lexer.TokenOutput)
                 {
-                    string message = string.Format("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
-                                        Path.GetFileName(file.AnswerFilePath),
-                                        index + 1,
-                                        file.Answers[index].TokenName,
-                                        token.Entry.Name,
-                                        file.Answers[index].TokenValue ?? "(null)",
-                                        token.Text);
-
-                    Assert.AreEqual(file.Answers[index].TokenName, token.Entry.Name, message);
-
-                    if (file.Answers[index].TokenValue != null)
-                        Assert.AreEqual(file.Answers[index].TokenValue, token.Text, message);
-
+                    if (file.Answers[index].TokenName != token.Entry.Name ||
+                       (file.Answers[index].TokenValue != null &&
+                        file.Answers[index].TokenValue != token.Text))
+                        Assert.Fail("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
+                                    Path.GetFileName(file.AnswerFilePath),
+                                    index + 1,
+                                    file.Answers[index].TokenName,
+                                    token.Entry.Name,
+                                    file.Answers[index].TokenValue ?? "(null)",
+                                    token.Text);
                     index++;
                 }
 
