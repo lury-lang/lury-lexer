@@ -203,8 +203,8 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region Space
-        private static readonly RegexTokenEntry endoffile = new RegexTokenEntry("EndOfFile", @"[\u0000\u001a]");
-        private static readonly RegexTokenEntry newline = new RegexTokenEntry("NewLine", @"(\n|(\r\n)|\r|\u2028|\u2029)");
+        private static readonly StaticTokenEntry endoffile = new StaticTokenEntry("EndOfFile");
+        private static readonly StaticTokenEntry newline = new StaticTokenEntry("NewLine");
 
         private static readonly StaticTokenEntry indent = new StaticTokenEntry("Indent");
         private static readonly StaticTokenEntry dedent = new StaticTokenEntry("Dedent");
