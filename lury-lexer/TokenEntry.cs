@@ -30,16 +30,26 @@ using System.Text.RegularExpressions;
 
 namespace Lury.Compiling.Lexer
 {
+    /// <summary>
+    /// 出力されるトークンを区別するための抽象クラスです。
+    /// </summary>
     public abstract class TokenEntry
     {
         #region -- Public Properties --
 
+        /// <summary>
+        /// トークン名を表す文字列を取得します。
+        /// </summary>
         public string Name { get; private set; }
 
         #endregion
 
         #region -- Constructors --
 
+        /// <summary>
+        /// トークン名を指定して新しい TokenEntry クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="name">トークン名。</param>
         public TokenEntry(string name)
         {
             this.Name = name;

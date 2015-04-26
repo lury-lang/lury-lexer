@@ -30,28 +30,51 @@ using System.Text.RegularExpressions;
 
 namespace Lury.Compiling.Lexer
 {
+    /// <summary>
+    /// 正規表現を使ったマッチングが必要なトークンエントリを表します。
+    /// </summary>
     public class RegexTokenEntry : TokenEntry
     {
         #region -- Public Properties --
 
+        /// <summary>
+        /// マッチングに使用する正規表現オブジェクトを取得します。
+        /// </summary>
         public Regex Regex { get; private set; }
 
         #endregion
 
         #region -- Constructors --
 
+        /// <summary>
+        /// 正規表現オブジェクトを指定せずに新しい RegexTokenEntry クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="name">トークン名。</param>
         public RegexTokenEntry(string name)
             : base(name)
         {
             this.Regex = null;
         }
 
+        /// <summary>
+        /// トークン名と正規表現オブジェクトを指定して新しい RegexTokenEntry クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="name">トークン名。</param>
+        /// <param name="regex">正規表現オブジェクト。</param>
         public RegexTokenEntry(string name, Regex regex)
             : base(name)
         {
             this.Regex = regex;
         }
 
+        /// <summary>
+        /// トークン名と正規表現パターンを指定して新しい RegexTokenEntry クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="name">トークン名。</param>
+        /// <param name="regex">
+        /// 正規表現パターン。
+        /// 既定で RegexOptions.Compiled および RegexOptions.ExplicitCapture 列挙体が指定されます。
+        /// </param>
         public RegexTokenEntry(string name, string regex)
             : this(name, new Regex(regex, RegexOptions.Compiled | RegexOptions.ExplicitCapture))
         {

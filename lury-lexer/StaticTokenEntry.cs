@@ -30,21 +30,37 @@ using System.Text.RegularExpressions;
 
 namespace Lury.Compiling.Lexer
 {
+    /// <summary>
+    /// トークンの値が変化しないトークンエントリを表します。
+    /// </summary>
     public class StaticTokenEntry : TokenEntry
     {
         #region -- Public Properties --
 
+        /// <summary>
+        /// トークンの値を表す文字列を取得します。
+        /// </summary>
         public string TokenValue { get; private set; }
 
         #endregion
 
         #region -- Constructors --
 
+        /// <summary>
+        /// トークン名を指定して新しい StaticTokenEntry クラスのインスタンスを初期化します。
+        /// トークン値はトークン名と同一となります。
+        /// </summary>
+        /// <param name="name">トークン名およびトークン値。</param>
         public StaticTokenEntry(string name)
             : this(name, name)
         {
         }
 
+        /// <summary>
+        /// トークン名とトークン値を指定して新しい StaticTokenEntry クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="name">トークン名。</param>
+        /// <param name="tokenValue">トークン値。</param>
         public StaticTokenEntry(string name, string tokenValue)
             : base(name)
         {
