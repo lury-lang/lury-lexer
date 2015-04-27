@@ -68,6 +68,24 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Error\UnclosedString3.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnclosedString3.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnclosedString2.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnclosedString2.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnclosedString1.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnclosedString1.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Error\UnrecognizableCharacter.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
