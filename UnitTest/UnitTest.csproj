@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Error\UnclosedBlockComment.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnclosedBlockComment.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Error\UnclosedString3.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
