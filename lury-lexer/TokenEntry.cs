@@ -29,9 +29,9 @@
 namespace Lury.Compiling.Lexer
 {
     /// <summary>
-    /// 出力されるトークンを区別するための抽象クラスです。
+    /// 出力されるトークンを区別するためのクラスです。
     /// </summary>
-    public abstract class TokenEntry
+    public class TokenEntry
     {
         #region -- Public Properties --
 
