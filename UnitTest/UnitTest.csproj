@@ -152,6 +152,12 @@
     <None Include="Input\Collection.lr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Input\Number.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Input\Number.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Input\String.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

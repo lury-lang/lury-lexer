@@ -1,0 +1,32 @@
+﻿(
+Integer	0
+,
+ImaginaryNumber	0i
+,
+Integer	1_0
+,
+ImaginaryNumber	1_0i
+,
+FloatNumber	1_0.
+,
+ImaginaryNumber	1_0.i
+,
+FloatNumber	1_0.0
+,
+ImaginaryNumber	1_0.0i
+,
+FloatNumber	1_0.0_0
+,
+ImaginaryNumber	1_0.0_0i
+,
+FloatNumber	.0_0
+,
+FloatNumber	.0e0
+,
+FloatNumber	0.0e+0_0
+,
+ImaginaryNumber	0.0E-0i
+,
+FloatNumber	1e10
+)
+EndOfFile
