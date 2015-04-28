@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Error\UnexpectedCharacterAfterBackslash.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnexpectedCharacterAfterBackslash.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Error\UnclosedBlockComment.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
