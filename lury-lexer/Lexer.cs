@@ -331,44 +331,213 @@ namespace Lury.Compiling.Lexer
 
         private bool SkipNumber()
         {
-            string str;
-            Match match;
+            #region Labels
+            const int START = 0,
+                      INT_ZERO = 1,
+                      INT_ONE = 2,
+                      INT_UNDER = 3,
+                      HEX_PREFIX = 4,
+                      HEX_DIGIT = 5,
+                      HEX_UNDER = 6,
+                      BIN_PREFIX = 7,
+                      BIN_DIGIT = 8,
+                      BIN_UNDER = 9,
+                      OCT_PREFIX = 10,
+                      OCT_DIGIT = 11,
+                      OCT_UNDER = 12,
+                      POINT_END = 13,
+                      RANGE = 14,
+                      POINT_START = 15,
+                      FLT_DECIMAL = 16,
+                      FLT_UNDER = 17,
+                      EXP_PREFIX_INTEGER = 18,
+                      EXP_PREFIX_FLOAT = 19,
+                      EXP_SIGN = 20,
+                      EXP_DIGIT = 22,
+                      EXP_UNDER = 23,
+                      INTEGER = 24,
+                      INTEGER_BACK = 25,
+                      FLOATING = 26,
+                      FLOATING_BACK = 27,
+                      IMAGINARY = 28;
+            #endregion
 
-            if ((match = RegexConstants.IntegerAndRange.Match(this.sourceCode, this.index)).Success &&
-                match.Index == this.index)
+            int index_old = this.index;
+                       
+            switch (START)
             {
-                // Integer and Imaginary Integer (with range)
-                str = match.Groups["num"].Value;
+                case START:
+                    if (this.JudgeEqual('0')) goto case INT_ZERO;
+                    if (this.JudgeEqual('.')) goto case POINT_START;
+                    goto case INT_ONE;
 
-                if (str.EndsWith("i", StringComparison.Ordinal))
-                    this.AddToken(Lexer.ImaginaryNumber, str.Length);
-                else
-                    this.AddToken(Lexer.Integer, str.Length);
+                #region Integer
+                #region Decimal
+                case INT_ZERO:
+                    this.index++;
+                    if (this.JudgeEqual('x') || this.JudgeEqual('X')) goto case HEX_PREFIX;
+                    if (this.JudgeEqual('o') || this.JudgeEqual('O')) goto case OCT_PREFIX;
+                    if (this.JudgeEqual('b') || this.JudgeEqual('B')) goto case BIN_PREFIX;
+                    if (this.JudgeEqual('0')) goto case INT_ZERO;
+                    if (this.JudgeEqual('_')) goto case INT_UNDER;
+                    if (this.JudgeEqual('.')) goto case POINT_END;
+                    if (this.JudgeEqual('e') || this.JudgeEqual('E')) goto case EXP_PREFIX_INTEGER;
+                    if (this.JudgeEqual(StringConstants.DigitWithoutZero) >= 0) goto case INT_ONE;
+                    goto case INTEGER;
+
+                case INT_UNDER:
+                    this.index++;
+                    if (this.JudgeEqual('0')) goto case INT_ZERO;
+                    if (this.JudgeEqual(StringConstants.DigitWithoutZero) >= 0) goto case INT_ONE;
+                    goto case INTEGER_BACK;
+
+                case INT_ONE:
+                    this.index++;
+                    if (this.JudgeEqual('0')) goto case INT_ZERO;
+                    if (this.JudgeEqual('_')) goto case INT_UNDER;
+                    if (this.JudgeEqual('.')) goto case POINT_END;
+                    if (this.JudgeEqual('e') || this.JudgeEqual('E')) goto case EXP_PREFIX_INTEGER;
+                    if (this.JudgeEqual(StringConstants.DigitWithoutZero) >= 0) goto case INT_ONE;
+                    goto case INTEGER;
+                #endregion
+
+                #region Hexadecimal
+                case HEX_PREFIX:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Hexadecimal) >= 0) goto case HEX_DIGIT;
+                    goto case INTEGER_BACK;
+
+                case HEX_DIGIT:
+                    this.index++;
+                    if (this.JudgeEqual('_')) goto case HEX_UNDER;
+                    if (this.JudgeEqual(StringConstants.Hexadecimal) >= 0) goto case HEX_DIGIT;
+                    goto case INTEGER;
+
+                case HEX_UNDER:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Hexadecimal) >= 0) goto case HEX_DIGIT;
+                    goto case INTEGER_BACK;
+                #endregion
+
+                #region Octal
+                case OCT_PREFIX:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Octal) >= 0) goto case OCT_DIGIT;
+                    goto case INTEGER_BACK;
+
+                case OCT_DIGIT:
+                    this.index++;
+                    if (this.JudgeEqual('_')) goto case OCT_UNDER;
+                    if (this.JudgeEqual(StringConstants.Octal) >= 0) goto case OCT_DIGIT;
+                    goto case INTEGER;
+
+                case OCT_UNDER:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Octal) >= 0) goto case OCT_DIGIT;
+                    goto case INTEGER_BACK;
+                #endregion
+
+                #region Binary
+                case BIN_PREFIX:
+                    this.index++;
+                    if (this.JudgeEqual('0') || this.JudgeEqual('1')) goto case BIN_DIGIT;
+                    goto case INTEGER_BACK;
+
+                case BIN_DIGIT:
+                    this.index++;
+                    if (this.JudgeEqual('_')) goto case BIN_UNDER;
+                    if (this.JudgeEqual('0') || this.JudgeEqual('1')) goto case BIN_DIGIT;
+                    goto case INTEGER;
+
+                case BIN_UNDER:
+                    this.index++;
+                    if (this.JudgeEqual('0') || this.JudgeEqual('1')) goto case BIN_DIGIT;
+                    goto case INTEGER_BACK;
+                #endregion
+                #endregion
+
+                case POINT_END:
+                    this.index++;
+                    if (this.JudgeEqual('.')) goto case RANGE;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case FLT_DECIMAL;
+                    goto case FLOATING;
+
+                case RANGE:
+                    goto case INTEGER_BACK;
+
+                case POINT_START:
+                    this.index++;
+                    goto case FLT_DECIMAL;
+
+                #region FloatingPoint
+                case FLT_DECIMAL:
+                    this.index++;
+                    if (this.JudgeEqual('_')) goto case FLT_UNDER;
+                    if (this.JudgeEqual('e') || this.JudgeEqual('E')) goto case EXP_PREFIX_FLOAT;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case FLT_DECIMAL;
+                    goto case FLOATING;
+
+                case FLT_UNDER:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case FLT_DECIMAL;
+                    goto case FLOATING_BACK;
+
+                case EXP_PREFIX_INTEGER:
+                    this.index++;
+                    if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
+                    goto case INTEGER_BACK;
+
+                case EXP_PREFIX_FLOAT:
+                    this.index++;
+                    if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
+                    goto case FLOATING_BACK;
+
+                case EXP_SIGN:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
+                    this.index -= 2;
+                    goto case FLOATING;
+
+                case EXP_DIGIT:
+                    this.index++;
+                    if (this.JudgeEqual('_')) goto case EXP_UNDER;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
+                    goto case FLOATING;
+
+                case EXP_UNDER:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
+                    goto case FLOATING_BACK;
+                #endregion
+
+                #region Output
+                case INTEGER_BACK:
+                    this.index--;
+                    goto case INTEGER;
+
+                case INTEGER:
+                    if (this.JudgeEqual('i')) goto case IMAGINARY;
+                    this.AddToken(Lexer.Integer, index_old, this.index - index_old);
+                    break;
+
+                case FLOATING_BACK:
+                    this.index--;
+                    goto case FLOATING;
+
+                case FLOATING:
+                    if (this.JudgeEqual('i')) goto case IMAGINARY;
+                    this.AddToken(Lexer.FloatNumber, index_old, this.index - index_old);
+                    break;
+
+                case IMAGINARY:
+                    this.index++;
+                    this.AddToken(Lexer.ImaginaryNumber, index_old, this.index - index_old);
+                    break;
+                #endregion
             }
-            else if ((match = RegexConstants.FloatAndImaginary.Match(this.sourceCode, this.index)).Success &&
-                     match.Index == this.index)
-            {
-                // Float and Imaginary Float
-                str = match.Value;
 
-                if (str.EndsWith("i", StringComparison.Ordinal))
-                    this.AddToken(Lexer.ImaginaryNumber, str.Length);
-                else
-                    this.AddToken(Lexer.FloatNumber, str.Length);
-            }
-            else
-            {
-                match = RegexConstants.Integer.Match(this.sourceCode, this.index);
-                // Integer and Imaginary Integer
-                str = match.Value;
-
-                if (str.EndsWith("i", StringComparison.Ordinal))
-                    this.AddToken(Lexer.ImaginaryNumber, str.Length);
-                else
-                    this.AddToken(Lexer.Integer, str.Length);
-            }
-
-            this.index += str.Length;
             return true;
         }
 
