@@ -732,27 +732,6 @@ namespace Lury.Compiling.Lexer
         }
 
         /// <summary>
-        /// 指定された文字が出現するまでインデクスを前進させます。
-        /// 指定された文字は前進に含めません。
-        /// </summary>
-        /// <param name="character">一致を判定する文字。</param>
-        /// <returns>
-        /// 現在のインデクスから前進したインデクス数。
-        /// 文字列終端まで達し、前進できなかった場合は -1。
-        /// </returns>
-        private int Skip(char character)
-        {
-            int i = 0;
-
-            for (; i < this.length; i++, this.index++)
-                if (this.JudgeEqual(character))
-                    return i;
-
-            this.index -= i;
-            return -1;
-        }
-
-        /// <summary>
         /// 指定された文字列の配列のうち、一致するいずれかの文字列の長さだけインデクスを前進させます。
         /// </summary>
         /// <param name="chars">読み飛ばす文字列の配列。</param>
@@ -767,32 +746,6 @@ namespace Lury.Compiling.Lexer
                 return -1;
 
             this.index += chars[elementIndex].Length;
-            return elementIndex;
-        }
-
-        /// <summary>
-        /// 指定された文字列が一致するとき、文字列の長さだけインデクスを前進させます。
-        /// </summary>
-        /// <param name="chars">読み飛ばす文字列。</param>
-        /// <returns>
-        /// 読み飛ばしに成功した時 true、それ以外のとき false。
-        /// </returns>
-        private bool SkipOver(string chars)
-        {
-            if (this.JudgeEqual(chars))
-                return false;
-
-            this.index += chars.Length;
-            return true;
-        }
-
-        private int SkipOver(params char[] chars)
-        {
-            int elementIndex;
-            if ((elementIndex = this.JudgeEqual(chars)) == -1)
-                return -1;
-
-            this.index++;
             return elementIndex;
         }
 
