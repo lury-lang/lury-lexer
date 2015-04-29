@@ -29,4 +29,59 @@ ImaginaryNumber	0.0E-0i
 ,
 FloatNumber	1e10
 )
+NewLine
+(
+Integer	0x0
+,
+Integer	0X0
+,
+Integer	0x0_00
+,
+Integer	0
+Identifier	x
+,
+Integer	0x0
+Identifier	_
+)
+NewLine
+(
+Integer	0o0
+,
+Integer	0O0
+,
+Integer	0o0_00
+,
+Integer	0
+Identifier	o
+,
+Integer	0o0
+Identifier	_
+)
+NewLine
+(
+Integer	0b0
+,
+Integer	0B0
+,
+Integer	0b0_00
+,
+Integer	0
+Identifier	b
+,
+Integer	0b0
+Identifier	_
+)
+NewLine
+(
+FloatNumber	0_0e0
+,
+FloatNumber	0_0E0
+,
+Integer	01
+,
+Integer	0_1
+,
+Integer	0
+Identifier	_
+)
 EndOfFile
