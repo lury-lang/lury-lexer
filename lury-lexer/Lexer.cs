@@ -352,7 +352,8 @@ namespace Lury.Compiling.Lexer
                       FLT_UNDER = 17,
                       EXP_PREFIX_INTEGER = 18,
                       EXP_PREFIX_FLOAT = 19,
-                      EXP_SIGN = 20,
+                      EXP_SIGN_INTEGER = 20,
+                      EXP_SIGN_FLOAT = 21,
                       EXP_DIGIT = 22,
                       EXP_UNDER = 23,
                       INTEGER = 24,
@@ -484,17 +485,23 @@ namespace Lury.Compiling.Lexer
 
                 case EXP_PREFIX_INTEGER:
                     this.index++;
-                    if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN;
+                    if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN_INTEGER;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
                     goto case INTEGER_BACK;
 
                 case EXP_PREFIX_FLOAT:
                     this.index++;
-                    if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN;
+                    if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN_FLOAT;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
                     goto case FLOATING_BACK;
 
-                case EXP_SIGN:
+                case EXP_SIGN_INTEGER:
+                    this.index++;
+                    if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
+                    this.index -= 2;
+                    goto case INTEGER;
+
+                case EXP_SIGN_FLOAT:
                     this.index++;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
                     this.index -= 2;
