@@ -128,10 +128,10 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region Number
-        private static readonly RegexTokenEntry
-            ImaginaryNumber = new RegexTokenEntry("ImaginaryNumber", @"(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.?)([eE][\+\-]?[0-9](_?[0-9])*)?i?"),
-            FloatNumber = new RegexTokenEntry("FloatNumber", @"(([0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))[eE][\+\-]?[0-9](_?[0-9])*|(([0-9](_?[0-9])*)?\.[0-9](_?[0-9])*|[0-9](_?[0-9])*\.))"),
-            Integer = new RegexTokenEntry("Integer", @"(0([xX][0-9a-fA-F](_?[0-9a-fA-F])*|[oO][0-7](_?[0-7])*|[bB][01](_?[01])*)|[0-9](_?[0-9])*)");
+        private static readonly StaticTokenEntry
+            ImaginaryNumber = new StaticTokenEntry("ImaginaryNumber"),
+            FloatNumber = new StaticTokenEntry("FloatNumber"),
+            Integer = new StaticTokenEntry("Integer");
         #endregion
 
         #region Identifier
