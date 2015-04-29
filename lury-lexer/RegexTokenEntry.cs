@@ -47,16 +47,6 @@ namespace Lury.Compiling.Lexer
         #region -- Constructors --
 
         /// <summary>
-        /// 正規表現オブジェクトを指定せずに新しい RegexTokenEntry クラスのインスタンスを初期化します。
-        /// </summary>
-        /// <param name="name">トークン名。</param>
-        public RegexTokenEntry(string name)
-            : base(name)
-        {
-            this.Regex = null;
-        }
-
-        /// <summary>
         /// トークン名と正規表現オブジェクトを指定して新しい RegexTokenEntry クラスのインスタンスを初期化します。
         /// </summary>
         /// <param name="name">トークン名。</param>
