@@ -758,14 +758,13 @@ namespace Lury.Compiling.Lexer
 
         private int SkipWhile(params char[] chars)
         {
-            int baseIndex = this.index;
+            int length = 0;
 
-            for (int j = 0; this.index < this.length; this.index++, j++)
+            for (; this.index < this.length; this.index++, length++)
                 if (this.JudgeEqual(chars) < 0)
-                    return j;
+                    return length;
 
-            this.index = baseIndex;
-            return -1;
+            return length;
         }
 
         #endregion
