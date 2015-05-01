@@ -83,5 +83,39 @@ Integer	0_1
 ,
 Integer	0
 Identifier	_
+,
+FloatNumber	0e+0
+,
+FloatNumber	0e-0
+,
+Integer	0
+Identifier	e
++
+,
+Integer	0
+Identifier	e
+-
+,
+Integer	0
+Identifier	e
+)
+NewLine
+(
+FloatNumber	.00
+,
+FloatNumber	.0
+Identifier	_
+,
+FloatNumber	.0e+0
+Identifier	_
+,
+FloatNumber	.0e-0
+,
+FloatNumber	.0
+Identifier	e
+,
+FloatNumber	.0
+Identifier	e
++
 )
 EndOfFile
