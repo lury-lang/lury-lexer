@@ -143,10 +143,7 @@ namespace Lury.Compiling.Lexer
                     if (!this.commaDetected)
                     {
                         if (zeroWidthIndent)
-                        {
-                            if (!this.StackIndent(this.index, 0))
-                                return false;
-                        }
+                            this.StackIndent(this.index, 0);
                         else if (!passedFirstLine &&
                                  indentLength > 0)
                         {
@@ -175,7 +172,7 @@ namespace Lury.Compiling.Lexer
 
                 if (this.JudgeEqual(StringConstants.DigitAndDot) >= 0)
                 {
-                    if (!this.SkipNumber()) return false;
+                    this.SkipNumber();
                     continue;
                 }
 
@@ -195,7 +192,7 @@ namespace Lury.Compiling.Lexer
 
                 if (this.JudgeEqual(StringConstants.OperatorAndDelimiter) >= 0)
                 {
-                    if (!this.SkipOperatorAndDelimiter()) return false;
+                    this.SkipOperatorAndDelimiter();
                     continue;
                 }
 
