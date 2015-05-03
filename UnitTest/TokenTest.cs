@@ -75,5 +75,12 @@ namespace UnitTest
             Assert.IsTrue(tokenString.Contains(position.Column.ToString()));
             Assert.IsTrue(tokenString.Contains(entryShort.Name));
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ConstructorErrorTest()
+        {
+            Token token = new Token(entry, source, source.Length, 1);
+        }
     }
 }
