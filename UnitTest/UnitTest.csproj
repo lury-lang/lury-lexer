@@ -98,6 +98,12 @@
     <None Include="Error\UnclosedString1.lr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Error\UnrecognizableCharacter2.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\UnrecognizableCharacter2.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Error\UnrecognizableCharacter.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
