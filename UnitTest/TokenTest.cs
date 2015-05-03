@@ -40,6 +40,13 @@ namespace UnitTest
         }
 
         [TestMethod]
+        public void TextTest2()
+        {
+            Token token = new Token(entry, source, index, 0);
+            Assert.AreEqual(string.Empty, token.Text);
+        }
+
+        [TestMethod]
         public void IndexTest()
         {
             Token token = new Token(entry, source, index, length);
