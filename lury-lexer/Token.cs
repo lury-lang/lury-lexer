@@ -37,7 +37,7 @@ namespace Lury.Compiling.Lexer
 
         public TokenEntry Entry { get; private set; }
 
-        public string Text 
+        public string Text
         {
             get
             {
@@ -50,19 +50,26 @@ namespace Lury.Compiling.Lexer
 
         public int Length { get; private set; }
 
-        public CharPosition Position 
+        public CharPosition Position
         {
             get
             {
                 int index = this.Index;
-                
+
                 if (this.Index == this.SourceCode.Length)
+                {
                     index = this.SourceCode.Length - 1;
 
-                if (index < 0)
-                    return CharPosition.BasePosition;
-                else
-                    return this.SourceCode.GetPositionByIndex(index);
+                    if (index < 0)
+                        return CharPosition.BasePosition;
+                    else
+                    {
+                        CharPosition pos = this.SourceCode.GetPositionByIndex(index);
+                        pos.Column++;
+                        return pos;
+                    }
+                }
+                return this.SourceCode.GetPositionByIndex(index);
             }
         }
 
