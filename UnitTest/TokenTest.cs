@@ -54,6 +54,20 @@ namespace UnitTest
         }
 
         [TestMethod]
+        public void PositionTest2()
+        {
+            Token token = new Token(entry, source, source.Length, 0);
+            Assert.AreEqual(new CharPosition(1, 10), token.Position);
+        }
+
+        [TestMethod]
+        public void PositionTest3()
+        {
+            Token token = new Token(entry, string.Empty, 0, 0);
+            Assert.AreEqual(CharPosition.BasePosition, token.Position);
+        }
+
+        [TestMethod]
         public void ToStringTest()
         {
             Token token = new Token(entry, source, index, length);
