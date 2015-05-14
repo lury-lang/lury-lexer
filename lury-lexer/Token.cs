@@ -54,22 +54,7 @@ namespace Lury.Compiling.Lexer
         {
             get
             {
-                int index = this.Index;
-
-                if (this.Index == this.SourceCode.Length)
-                {
-                    index = this.SourceCode.Length - 1;
-
-                    if (index < 0)
-                        return CharPosition.BasePosition;
-                    else
-                    {
-                        CharPosition pos = this.SourceCode.GetPositionByIndex(index);
-                        pos.Column++;
-                        return pos;
-                    }
-                }
-                return this.SourceCode.GetPositionByIndex(index);
+                return this.SourceCode.GetPositionByIndex(this.Index);
             }
         }
 
