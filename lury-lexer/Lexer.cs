@@ -58,6 +58,8 @@ namespace Lury.Compiling.Lexer
 
         public OutputLogger Logger { get; private set; }
 
+        public bool IsFinished { get; private set; }
+
         #endregion
 
         #region -- Constructors --
@@ -80,6 +82,11 @@ namespace Lury.Compiling.Lexer
 
         public bool Tokenize()
         {
+            if (this.IsFinished)
+                throw new InvalidOperationException("Lexical analysis is already finished.");
+
+            this.IsFinished = true;
+
             bool lineBreak = true;
             int lineBreakIndex = 0;
             int lineBreakLength = 0;
