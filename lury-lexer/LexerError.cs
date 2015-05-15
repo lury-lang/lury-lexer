@@ -30,28 +30,72 @@ namespace Lury.Compiling.Lexer
 {
     // Lexer's Number Range: 0x10_0000 - 0x1f_ffff
 
+    /// <summary>
+    /// エラーを識別するための列挙体です。
+    /// </summary>
     public enum LexerError
     {
         // Number Range: 0x10_0000 - 0x10_ffff
+
+        /// <summary>
+        /// 不明なエラーです。
+        /// </summary>
         Unknown = 0x100000,
 
+        /// <summary>
+        /// 論理行の一行目に無効なインデントが存在します。
+        /// </summary>
         InvalidIndentFirstLine = 0x100001,
+
+        /// <summary>
+        /// 認識できない文字が検出されました。
+        /// </summary>
         InvalidCharacter = 0x100002,
+
+        /// <summary>
+        /// 無効なインデントが検出されました。
+        /// </summary>
         InvalidIndent = 0x100003,
+
+        /// <summary>
+        /// バックスラッシュの後に予期しない文字が存在します。
+        /// </summary>
         UnexpectedCharacterAfterBackslash = 0x100004,
+
+        /// <summary>
+        /// ブロックコメントが閉じられていません。
+        /// </summary>
         UnclosedBlockComment = 0x100005,
+
+        /// <summary>
+        /// 文字列リテラルが閉じられていません。
+        /// </summary>
         UnclosedStringLiteral = 0x100006,
     }
 
+    /// <summary>
+    /// 警告を識別するための列挙体です。
+    /// </summary>
     public enum LexerWarning
     {
         // Number Range: 0x11_0000 - 0x11_ffff
+        
+        /// <summary>
+        /// 不明な警告です。
+        /// </summary>
         Unknown = 0x110000,
     }
 
+    /// <summary>
+    /// 情報を識別するための列挙体です。
+    /// </summary>
     public enum LexerInfo
     {
         // Number Range: 0x12_0000 - 0x12_ffff
+
+        /// <summary>
+        /// 不明な情報です。
+        /// </summary>
         Unknown = 0x120000,
     }
 }
