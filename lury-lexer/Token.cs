@@ -31,12 +31,21 @@ using Lury.Compiling.Utils;
 
 namespace Lury.Compiling.Lexer
 {
+    /// <summary>
+    /// 字句解析で生成されたトークンを表します。
+    /// </summary>
     public class Token
     {
         #region -- Public Properties --
 
+        /// <summary>
+        /// トークンエントリを取得します。
+        /// </summary>
         public TokenEntry Entry { get; private set; }
 
+        /// <summary>
+        /// トークンの文字列を取得します。
+        /// </summary>
         public string Text
         {
             get
@@ -48,8 +57,14 @@ namespace Lury.Compiling.Lexer
             }
         }
 
+        /// <summary>
+        /// トークンの長さを取得します。
+        /// </summary>
         public int Length { get; private set; }
 
+        /// <summary>
+        /// トークンの SourceCode での出現位置を取得します。
+        /// </summary>
         public CharPosition Position
         {
             get
@@ -58,14 +73,27 @@ namespace Lury.Compiling.Lexer
             }
         }
 
+        /// <summary>
+        /// トークンの SourceCode でのインデクスを取得します。
+        /// </summary>
         public int Index { get; private set; }
 
+        /// <summary>
+        /// 字句解析されたソースコードを表す文字列を取得します。
+        /// </summary>
         public string SourceCode { get; private set; }
 
         #endregion
 
         #region -- Constructors --
 
+        /// <summary>
+        /// パラメータを指定して新しい Token クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="entry">トークンエントリ。</param>
+        /// <param name="sourceCode">字句解析された元のソースコード。</param>
+        /// <param name="index">トークンが出現したインデクス。</param>
+        /// <param name="length">トークンの長さ。</param>
         public Token(TokenEntry entry, string sourceCode, int index, int length)
         {
             if (sourceCode.Length < index + length)
@@ -81,6 +109,10 @@ namespace Lury.Compiling.Lexer
 
         #region -- Public Methods --
 
+        /// <summary>
+        /// このトークンオブジェクトの現在の状態を表す文字列を取得します。
+        /// </summary>
+        /// <returns>トークンエントリの名前、出現位置そしてトークン文字列を含む文字列。</returns>
         public override string ToString()
         {
             return string.Format("{0} {1}{2}", this.Position, this.Entry.Name, this.Entry.Name.Length > 1 ? " - " + this.Text : "");
