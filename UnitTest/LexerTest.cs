@@ -32,6 +32,15 @@ namespace UnitTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TokenizeError()
+        {
+            var lexer = new Lexer("");
+            lexer.Tokenize();
+            lexer.Tokenize();
+        }
+
+        [TestMethod]
         public void TokenizeTestExternal()
         {
             foreach (var file in answerFiles)
