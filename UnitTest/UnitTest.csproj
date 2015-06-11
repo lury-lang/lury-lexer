@@ -134,6 +134,12 @@
     <None Include="Input\EndOfFile.lr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Input\Operator.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Input\Operator.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Input\Keywords.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
