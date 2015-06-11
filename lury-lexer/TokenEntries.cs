@@ -101,6 +101,8 @@ namespace Lury.Compiling.Lexer
             new StaticTokenEntry("Lambda", "=>"),
             new StaticTokenEntry("="),
             new StaticTokenEntry("NotEqual", "!="),
+            new StaticTokenEntry("NotIn", "!in"),
+            new StaticTokenEntry("IsNot", "!is"),
             new StaticTokenEntry("!"),
             new StaticTokenEntry("AndShort", "&&"),
             new StaticTokenEntry("AssignmentAnd", "&="),
