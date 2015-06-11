@@ -103,7 +103,7 @@ namespace Lury.Compiling.Lexer
             new StaticTokenEntry("NotEqual", "!="),
             new StaticTokenEntry("!"),
             new StaticTokenEntry("AndShort", "&&"),
-            new StaticTokenEntry("AssginmentAnd", "&="),
+            new StaticTokenEntry("AssignmentAnd", "&="),
             new StaticTokenEntry("&"),
             new StaticTokenEntry("AssignmentXor", "^="),
             new StaticTokenEntry("^"),
