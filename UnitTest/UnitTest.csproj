@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Error\IndentCharacterConfusion.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Error\IndentCharacterConfusion.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Error\UnexpectedCharacterAfterBackslash.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

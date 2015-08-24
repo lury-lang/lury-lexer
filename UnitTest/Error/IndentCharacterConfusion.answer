@@ -1,0 +1,10 @@
+﻿KeywordIf	if
+Identifier	x
+:
+NewLine
+Indent
+KeywordIf	if
+Identifier	y
+:
+NewLine
+!Error	1048583
