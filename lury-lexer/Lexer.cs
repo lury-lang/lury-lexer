@@ -47,6 +47,7 @@ namespace Lury.Compiling.Lexer
         private readonly string sourceCode;
         private bool commaDetected;
         private int indentIndex;
+        private char? indentChar;
 
         #endregion
 
@@ -300,6 +301,14 @@ namespace Lury.Compiling.Lexer
                 return true;
             else if (peek < level)
             {
+                // issue #2: 混在したインデント文字に対するエラー
+                // https://github.com/lury-lang/lury-lexer/issues/2
+                if (!this.CheckIndentChar(indentIndex, level))
+                {
+                    this.Logger.ReportError(LexerError.IndentCharacterConfusion, null, this.SourceCode, this.sourceCode.GetPositionByIndex(indentIndex));
+                    return false;
+                }
+
                 indentStack.Push(level);
                 this.AddToken(Lexer.indent, indentIndex, 0);
             }
@@ -325,6 +334,20 @@ namespace Lury.Compiling.Lexer
                 for (int i = 0; i < dedentCount; i++)
                     this.AddToken(Lexer.dedent, indentIndex, 0);
             }
+
+            return true;
+        }
+
+        private bool CheckIndentChar(int indentIndex, int length)
+        {
+            if (!this.indentChar.HasValue)
+                this.indentChar = this.sourceCode[indentIndex];
+
+            char c = this.indentChar.Value;
+
+            for (int i = indentIndex, l = indentIndex + length; i < l; i++)
+                if (this.sourceCode[i] != c)
+                    return false;
 
             return true;
         }

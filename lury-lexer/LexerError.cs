@@ -71,6 +71,11 @@ namespace Lury.Compiling.Lexer
         /// 文字列リテラルが閉じられていません。
         /// </summary>
         UnclosedStringLiteral = 0x100006,
+
+        /// <summary>
+        /// インデントの文字種が混在しています。
+        /// </summary>
+        IndentCharacterConfusion = 0x100007,
     }
 
     /// <summary>
