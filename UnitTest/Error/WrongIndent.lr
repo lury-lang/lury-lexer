@@ -1,8 +1,8 @@
 ﻿for i in 0...5:
 	switch i:
-		case 0:
-		    println('Indent error')
-	    case 1:							# Wrong Indent!
+			case 0:
+				println('Indent error')
+		case 1:							# Wrong Indent!
 			println('Can\'t reach!')
 		default:
 			println('Never reach!')
