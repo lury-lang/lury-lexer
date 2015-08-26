@@ -497,5 +497,6 @@ Identifier	i
 Integer	5
 )
 )
+NewLine
 Dedent
 EndOfFile
