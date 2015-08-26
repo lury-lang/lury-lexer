@@ -224,7 +224,7 @@ namespace Lury.Compiling.Lexer
             }
 
             if (this.length > 0)
-                this.StackIndent(this.length - 1, 0);
+                this.StackIndent(this.length - 1, 0, atEndOfFile: true);
 
             this.AddToken(Lexer.endoffile, 0);
             return true;
@@ -293,7 +293,7 @@ namespace Lury.Compiling.Lexer
 
         #region Indent
 
-        private bool StackIndent(int indentIndex, int level)
+        private bool StackIndent(int indentIndex, int level, bool atEndOfFile = false)
         {
             int peek = this.indentStack.Peek();
 
@@ -330,6 +330,9 @@ namespace Lury.Compiling.Lexer
                     this.Logger.ReportError(LexerError.InvalidIndent, null, this.SourceCode);
                     return false;
                 }
+
+                if (atEndOfFile)
+                    this.AddToken(Lexer.newline, indentIndex, 0);
 
                 for (int i = 0; i < dedentCount; i++)
                     this.AddToken(Lexer.dedent, indentIndex, 0);
