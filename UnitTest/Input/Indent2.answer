@@ -1,0 +1,24 @@
+﻿KeywordIf	if
+Identifier	x
+LessThan	<=
+Integer	5
+:
+NewLine
+Indent
+Identifier	println
+(
+Identifier	x
+)
+NewLine
+Dedent
+KeywordElse
+:
+NewLine
+Indent
+Identifier	println
+(
+StringLiteral	'x is greater than 5'
+)
+NewLine
+Dedent
+EndOfFile

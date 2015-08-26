@@ -140,6 +140,12 @@
     <None Include="Input\EndOfFile.lr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Input\Indent2.answer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Input\Indent2.lr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Input\Operator.answer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

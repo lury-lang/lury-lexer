@@ -1,0 +1,4 @@
+﻿if x <= 5:
+  println(x)
+else:
+  println('x is greater than 5')
