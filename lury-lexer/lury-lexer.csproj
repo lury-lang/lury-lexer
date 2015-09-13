@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Lury.Compiling.Lexer</RootNamespace>
-    <AssemblyName>Lury.Compiling.Lexer</AssemblyName>
+    <AssemblyName>lury.lexer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
