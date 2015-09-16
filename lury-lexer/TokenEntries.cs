@@ -53,17 +53,23 @@ namespace Lury.Compiling.Lexer
         //
         // Combined: ([\u25a0-\u27bf]|\ud83c[\udf00-\udff7]|\ud83d[\udc00-\ude4f\ude80-\udef3])
         //
-        private static readonly RegexTokenEntry identifier = new RegexTokenEntry("Identifier", @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*");
+        private const string
+            regex_identifier = @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*",
+            regex_string = @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'",
+            regex_embString = @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?""",
+            regex_wysiwygString = @"`(``|[^`])*`";
 
-        private static readonly RegexTokenEntry
-            StringLiteral = new RegexTokenEntry("StringLiteral", @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'"),
-            EmbedStringLiteral = new RegexTokenEntry("EmbedStringLiteral", @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?"""),
-            WysiwygStringLiteral = new RegexTokenEntry("WysiwygStringLiteral", new Regex(@"`(``|[^`])*`", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture));
+        private static readonly RegexTokenEntry 
+            identifier = new RegexTokenEntry("Identifier", regex_identifier),
+            StringLiteral = new RegexTokenEntry("StringLiteral", regex_string),
+            EmbedStringLiteral = new RegexTokenEntry("EmbedStringLiteral", regex_embString),
+            WysiwygStringLiteral = new RegexTokenEntry("WysiwygStringLiteral", new Regex(regex_wysiwygString, RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture));
 
         #region Static Characters
 
-        private static readonly StaticTokenEntry comma = new StaticTokenEntry(",");
-        private static readonly StaticTokenEntry dot = new StaticTokenEntry(".");
+        private static readonly StaticTokenEntry
+            comma = new StaticTokenEntry(","),
+            dot = new StaticTokenEntry(".");
 
         private static readonly IReadOnlyCollection<StaticTokenEntry> staticAndOperators = new[]{ 
             new StaticTokenEntry("$"),
@@ -130,13 +136,16 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region Number
+
         private static readonly StaticTokenEntry
             ImaginaryNumber = new StaticTokenEntry("ImaginaryNumber"),
             FloatNumber = new StaticTokenEntry("FloatNumber"),
             Integer = new StaticTokenEntry("Integer");
+
         #endregion
 
         #region Identifier
+
         private static readonly IReadOnlyCollection<StaticTokenEntry> identifiers = new[]{
             new StaticTokenEntry("IdentifierGet", @"get"),
             new StaticTokenEntry("IdentifierSet", @"set"),
@@ -202,14 +211,18 @@ namespace Lury.Compiling.Lexer
             new StaticTokenEntry("KeywordWith", @"with"),
             new StaticTokenEntry("KeywordYield", @"yield"),
         };
+
         #endregion
 
         #region Space
-        private static readonly StaticTokenEntry endoffile = new StaticTokenEntry("EndOfFile");
-        private static readonly StaticTokenEntry newline = new StaticTokenEntry("NewLine");
 
-        private static readonly StaticTokenEntry indent = new StaticTokenEntry("Indent");
-        private static readonly StaticTokenEntry dedent = new StaticTokenEntry("Dedent");
+        private static readonly StaticTokenEntry
+            endoffile = new StaticTokenEntry("EndOfFile"),
+            newline = new StaticTokenEntry("NewLine"),
+
+            indent = new StaticTokenEntry("Indent"),
+            dedent = new StaticTokenEntry("Dedent");
+
         #endregion
     }
 }
