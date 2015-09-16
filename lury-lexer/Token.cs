@@ -65,11 +65,12 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// トークンの SourceCode での出現位置を取得します。
         /// </summary>
-        public CharPosition Position
+        public CodePosition Position
         {
             get
             {
-                return this.SourceCode.GetPositionByIndex(this.Index);
+                var pos = this.SourceCode.GetPositionByIndex(this.Index);
+                return new CodePosition(this.SourceName, pos);
             }
         }
 
@@ -83,6 +84,12 @@ namespace Lury.Compiling.Lexer
         /// </summary>
         public string SourceCode { get; private set; }
 
+        /// <summary>
+        /// 字句解析されたソースコードを識別するための名前を取得します。
+        /// </summary>
+        /// <value>ソースコードの名前。</value>
+        public string SourceName { get; private set; }
+
         #endregion
 
         #region -- Constructors --
@@ -94,12 +101,13 @@ namespace Lury.Compiling.Lexer
         /// <param name="sourceCode">字句解析された元のソースコード。</param>
         /// <param name="index">トークンが出現したインデクス。</param>
         /// <param name="length">トークンの長さ。</param>
-        public Token(TokenEntry entry, string sourceCode, int index, int length)
+        public Token(TokenEntry entry, string sourceName, string sourceCode, int index, int length)
         {
             if (sourceCode.Length < index + length)
                 throw new ArgumentOutOfRangeException("length");
 
             this.Entry = entry;
+            this.SourceName = sourceName;
             this.SourceCode = sourceCode;
             this.Index = index;
             this.Length = length;
@@ -115,7 +123,11 @@ namespace Lury.Compiling.Lexer
         /// <returns>トークンエントリの名前、出現位置そしてトークン文字列を含む文字列。</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1}{2}", this.Position, this.Entry.Name, this.Entry.Name.Length > 1 ? " - " + this.Text : "");
+            return string.Format(
+                "{0} {1}{2}",
+                this.Position.Position,
+                this.Entry.Name,
+                this.Entry.Name.Length > 1 ? " - " + this.Text : "");
         }
 
         #endregion
