@@ -43,7 +43,6 @@ namespace Lury.Compiling.Lexer
         private readonly Stack<int> indentStack;
         private int index;
         private readonly int length;
-        private CharPosition position;
         private readonly string sourceCode;
         private bool commaDetected;
         private int indentIndex;
@@ -70,7 +69,6 @@ namespace Lury.Compiling.Lexer
             this.sourceCode = sourceCode;
             this.index = 0;
             this.length = sourceCode.Length;
-            this.position = CharPosition.BasePosition;
             this.Logger = new OutputLogger();
             this.output = new List<Token>();
             this.indentStack = new Stack<int>();
