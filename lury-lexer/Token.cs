@@ -46,16 +46,7 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// トークンの文字列を取得します。
         /// </summary>
-        public string Text
-        {
-            get
-            {
-                if (this.Length == 0)
-                    return "";
-                else
-                    return this.SourceCode.Substring(this.Index, this.Length);
-            }
-        }
+        public string Text { get; private set; }
 
         /// <summary>
         /// トークンの長さを取得します。
@@ -106,11 +97,28 @@ namespace Lury.Compiling.Lexer
             if (sourceCode.Length < index + length)
                 throw new ArgumentOutOfRangeException("length");
 
+            if (sourceName == null)
+                throw new ArgumentNullException("sourceName");
+
+            if (sourceCode == null)
+                throw new ArgumentNullException("sourceCode");
+
+            // index == sourceCode.Length when entry == EndOfFile!
+            if (index < 0 || index > sourceCode.Length)
+                throw new ArgumentOutOfRangeException("index");
+
+            if (length < 0 || length > sourceCode.Length)
+                throw new ArgumentOutOfRangeException("length");
+
             this.Entry = entry;
             this.SourceName = sourceName;
             this.SourceCode = sourceCode;
             this.Index = index;
             this.Length = length;
+
+            this.Text = (length == 0 && index == sourceCode.Length) ?
+                string.Empty :
+                this.SourceCode.Substring(index, length);
         }
 
         #endregion
