@@ -157,10 +157,7 @@ namespace Lury.Compiling.Lexer
                         else if (!passedFirstLine &&
                                  indentLength > 0)
                         {
-                            this.Logger.ReportError(LexerError.InvalidIndentFirstLine,
-                                                    null,
-                                                    this.sourceCode,
-                                                    this.sourceCode.GetPositionByIndex(this.indentIndex));
+                            this.ReportErrorZeroWidth(LexerError.InvalidIndentFirstLine, this.indentIndex);
                             return false;
                         }
                         else if (this.indentIndex >= 0 &&
@@ -215,10 +212,7 @@ namespace Lury.Compiling.Lexer
                 else
                 {
                     // !Error: Unknown Character!
-                    this.Logger.ReportError(LexerError.InvalidCharacter,
-                                            this.sourceCode[this.index].ToString(),
-                                            this.sourceCode,
-                                            this.sourceCode.GetPositionByIndex(this.index));
+                    this.ReportErrorHere(LexerError.InvalidCharacter);
                     return false;
                 }
 
@@ -250,10 +244,7 @@ namespace Lury.Compiling.Lexer
                 if (this.SkipOver(StringConstants.LineCancel) == -1)
                 {
                     // !Error: NewLine is expected after `\'
-                    this.Logger.ReportError(LexerError.UnexpectedCharacterAfterBackslash,
-                                            this.sourceCode[this.index].ToString(),
-                                            this.sourceCode,
-                                            this.sourceCode.GetPositionByIndex(this.index));
+                    this.ReportErrorHere(LexerError.UnexpectedCharacterAfterBackslash);
                     return false;
                 }
             }
@@ -267,10 +258,7 @@ namespace Lury.Compiling.Lexer
                     if (this.Skip("###") == -1)
                     {
                         // !Error: BlockComment is not closed!
-                        this.Logger.ReportError(LexerError.UnclosedBlockComment,
-                                                this.sourceCode[this.index].ToString(),
-                                                this.sourceCode,
-                                                this.sourceCode.GetPositionByIndex(this.index));
+                        this.ReportErrorHere(LexerError.UnclosedBlockComment);
                         return false;
                     }
 
@@ -307,7 +295,7 @@ namespace Lury.Compiling.Lexer
                 // https://github.com/lury-lang/lury-lexer/issues/2
                 if (!this.CheckIndentChar(indentIndex, level))
                 {
-                    this.Logger.ReportError(LexerError.IndentCharacterConfusion, null, this.SourceCode, this.sourceCode.GetPositionByIndex(indentIndex));
+                    this.ReportErrorZeroWidth(LexerError.IndentCharacterConfusion, indentIndex);
                     return false;
                 }
 
@@ -610,10 +598,7 @@ namespace Lury.Compiling.Lexer
             if (!match.Success)
             {
                 // !Error: String literal is not closed!
-                this.Logger.ReportError(LexerError.UnclosedStringLiteral,
-                                        this.sourceCode[this.index].ToString(),
-                                        this.sourceCode,
-                                        this.sourceCode.GetPositionByIndex(this.index));
+                this.ReportErrorHere(LexerError.UnclosedStringLiteral);
                 return false;
             }
 
@@ -669,6 +654,24 @@ namespace Lury.Compiling.Lexer
         private void AddToken(TokenEntry tokenEntry, int index, int length)
         {
             this.output.Add(new Token(tokenEntry, this.sourceName, this.sourceCode, index, length));
+        }
+
+        private void ReportErrorHere(LexerError error)
+        {
+            this.Logger.ReportError(
+                error,
+                this.sourceCode[this.index].ToString(),
+                this.sourceCode,
+                new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(this.index)));
+        }
+
+        private void ReportErrorZeroWidth(LexerError error, int index)
+        {
+            this.Logger.ReportError(
+                error,
+                null,
+                this.sourceCode,
+                new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(index)));
         }
 
         /// <summary>
