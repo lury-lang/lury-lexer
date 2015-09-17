@@ -22,7 +22,7 @@ namespace PerformanceTest
 
             for (int i = 0; i < count; i++)
             {
-                Lexer lexer = new Lexer(inputSouceCode);
+                Lexer lexer = new Lexer(string.Empty, inputSouceCode);
                 lexer.Tokenize();
             }
         }

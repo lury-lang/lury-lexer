@@ -25,7 +25,7 @@ namespace UnitTest
         [TestMethod]
         public void TokenizeTest1()
         {
-            var lexer = new Lexer("");
+            var lexer = new Lexer(string.Empty, string.Empty);
             Assert.IsTrue(lexer.Tokenize());
 
             CollectionAssert.AreEqual(new string[] { "EndOfFile" }, lexer.TokenOutput.Select(t => t.Entry.Name).ToArray());
@@ -35,7 +35,7 @@ namespace UnitTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void TokenizeError()
         {
-            var lexer = new Lexer("");
+            var lexer = new Lexer(string.Empty, string.Empty);
             lexer.Tokenize();
             lexer.Tokenize();
         }
@@ -45,7 +45,7 @@ namespace UnitTest
         {
             foreach (var file in answerFiles)
             {
-                var lexer = new Lexer(File.ReadAllText(file.TestFilePath));
+                var lexer = new Lexer(string.Empty, File.ReadAllText(file.TestFilePath));
                 Assert.IsTrue(lexer.Tokenize());
                 int index = 0;
 
@@ -76,7 +76,7 @@ namespace UnitTest
         {
             foreach (var file in errorFiles)
             {
-                var lexer = new Lexer(File.ReadAllText(file.TestFilePath));
+                var lexer = new Lexer(string.Empty, File.ReadAllText(file.TestFilePath));
                 Assert.IsFalse(lexer.Tokenize());
                 int index = 0;
 
@@ -110,7 +110,7 @@ namespace UnitTest
                     else
                         Assert.Fail("予期しないエラー (#{0}) が発生しました。{3} 位置: {1}、テキスト `{2}'",
                                     error.OutputNumber,
-                                    error.Position,
+                                    error.Position.Position,
                                     error.Code,
                                     error.Message);
                 }
