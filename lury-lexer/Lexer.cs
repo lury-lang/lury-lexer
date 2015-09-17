@@ -44,6 +44,7 @@ namespace Lury.Compiling.Lexer
         private int index;
         private readonly int length;
         private readonly string sourceCode;
+        private readonly string sourceName;
         private bool commaDetected;
         private int indentIndex;
         private char? indentChar;
@@ -51,6 +52,8 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         #region -- Public Properties --
+
+        public string SourceName { get { return this.sourceName; } }
 
         public string SourceCode { get { return this.sourceCode; } }
 
@@ -64,8 +67,9 @@ namespace Lury.Compiling.Lexer
 
         #region -- Constructors --
 
-        public Lexer(string sourceCode)
+        public Lexer(string sourceName, string sourceCode)
         {
+            this.sourceName = sourceName;
             this.sourceCode = sourceCode;
             this.index = 0;
             this.length = sourceCode.Length;
@@ -664,7 +668,7 @@ namespace Lury.Compiling.Lexer
 
         private void AddToken(TokenEntry tokenEntry, int index, int length)
         {
-            this.output.Add(new Token(tokenEntry, this.sourceCode, index, length));
+            this.output.Add(new Token(tokenEntry, this.sourceName, this.sourceCode, index, length));
         }
 
         /// <summary>
