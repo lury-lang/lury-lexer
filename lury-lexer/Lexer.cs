@@ -35,6 +35,9 @@ using Lury.Compiling.Utils;
 
 namespace Lury.Compiling.Lexer
 {
+    /// <summary>
+    /// 与えられた単一のソースコードをトークン列に変換するための字句解析器です。
+    /// </summary>
     public partial class Lexer
     {
         #region -- Private Fields --
@@ -54,10 +57,19 @@ namespace Lury.Compiling.Lexer
 
         #region -- Public Properties --
 
+        /// <summary>
+        /// ソースコードを識別するための名前を取得します。
+        /// </summary>
         public string SourceName { get { return this.sourceName; } }
 
+        /// <summary>
+        /// ソースコードの文字列を取得します。
+        /// </summary>
         public string SourceCode { get { return this.sourceCode; } }
 
+        /// <summary>
+        /// 字句解析の結果、出力されたトークン列のリストを取得します。
+        /// </summary>
         public IReadOnlyList<Token> TokenOutput
         {
             get
@@ -68,14 +80,28 @@ namespace Lury.Compiling.Lexer
                 return this.output;
             }
         }
+
+        /// <summary>
+        /// トークン出力で報告されたメッセージを格納した
+        /// <see cref="Lury.Compiling.Logger.OutputLogger"/> オブジェクトを指定します。
+        /// </summary>
         public OutputLogger Logger { get; private set; }
 
+        /// <summary>
+        /// 字句解析が終了したかの真偽値を取得します。
+        /// </summary>
         public bool IsFinished { get; private set; }
 
         #endregion
 
         #region -- Constructors --
 
+        /// <summary>
+        /// ソースコードとその名前を指定して、
+        /// 新しい <see cref="Lury.Compiling.Lexer.Lexer"/> クラスのインスタンスを初期化します。
+        /// </summary>
+        /// <param name="sourceName">ソースコードを識別するための null でない名前。</param>
+        /// <param name="sourceCode">ソースコードの文字列。</param>
         public Lexer(string sourceName, string sourceCode)
         {
             this.sourceName = sourceName;
@@ -92,6 +118,10 @@ namespace Lury.Compiling.Lexer
 
         #region -- Public Methods --
 
+        /// <summary>
+        /// ソースコードを字句解析し、結果を TokenOutput プロパティに格納します。
+        /// </summary>
+        /// <returns>字句解析に成功したとき true、それ以外のとき false。</returns>
         public bool Tokenize()
         {
             if (this.IsFinished)
@@ -395,7 +425,7 @@ namespace Lury.Compiling.Lexer
             #endregion
 
             int index_old = this.lookIndex;
-                       
+
             switch (START)
             {
                 case START:
@@ -573,7 +603,7 @@ namespace Lury.Compiling.Lexer
                     this.lookIndex++;
                     this.AddToken(Lexer.ImaginaryNumber, index_old, this.lookIndex - index_old);
                     break;
-                #endregion
+                    #endregion
             }
 
             return true;
@@ -685,6 +715,12 @@ namespace Lury.Compiling.Lexer
                 new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(index)));
         }
 
+        #region JudgeEqual
+
+        // [JudgeEqualメソッド群] lookIndex以降、一致しているかを判定
+        // パラメータが配列 ... インデクスを返却。全不一致なら -1
+        // パラメータが単一 ... 真偽値を返却。不一致なら false
+
         /// <summary>
         /// 指定された文字列の配列のうち、いずれかが現在のインデクスから一致しているかを判定します。
         /// </summary>
@@ -714,6 +750,14 @@ namespace Lury.Compiling.Lexer
                     this.sourceCode.IndexOf(chars, this.lookIndex, chars.Length, StringComparison.Ordinal) == this.lookIndex);
         }
 
+        /// <summary>
+        /// 指定された文字列の配列のうち、いずれかが現在のインデクスから一致しているかを判定します。
+        /// </summary>
+        /// <param name="chars">一致を判定する文字列の配列。</param>
+        /// <returns>
+        /// 引数として指定された文字列の配列のうち、最初に一致と判定された要素のインデクス。
+        /// いずれの文字列にも一致しない場合は -1。
+        /// </returns>
         private int JudgeEqual(params char[] chars)
         {
             if (this.sourceLength < this.lookIndex + 1)
@@ -737,6 +781,15 @@ namespace Lury.Compiling.Lexer
             return (this.sourceLength >= this.lookIndex + 1 &&
                     this.sourceCode[this.lookIndex] == character);
         }
+
+        #endregion
+
+        #region Skip Methods
+
+        // [Skipメソッド群] 一定の条件の下でlookIndex前進
+        // Skip      ... 指定された文字(列)まで前進。文字(列)のインデクスを返却
+        // SkipOver  ... 指定された文字列分だけ前進。文字列のインデクスを返却
+        // SkipWhile ... 指定された文字が続くまで前進。前進文字数を返却
 
         /// <summary>
         /// 指定された文字列の配列のうち、いずれかの文字列が出現するまでインデクスを前進させます。
@@ -802,6 +855,11 @@ namespace Lury.Compiling.Lexer
             return elementIndex;
         }
 
+        /// <summary>
+        /// 指定された文字の配列のうち、いずれかが一致した場合のみのインデクスを前進させます。
+        /// </summary>
+        /// <param name="chars">読み飛ばす文字の配列。</param>
+        /// <returns>読み飛ばした文字数。</returns>
         private int SkipWhile(params char[] chars)
         {
             int length = 0;
@@ -813,6 +871,7 @@ namespace Lury.Compiling.Lexer
             return length;
         }
 
+        #endregion
         #endregion
     }
 }
