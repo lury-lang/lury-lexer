@@ -58,8 +58,16 @@ namespace Lury.Compiling.Lexer
 
         public string SourceCode { get { return this.sourceCode; } }
 
-        public IEnumerable<Token> TokenOutput { get { return this.output; } }
+        public IReadOnlyList<Token> TokenOutput
+        {
+            get
+            {
+                if (!this.IsFinished)
+                    throw new InvalidOperationException("先に Tokenize メソッドを実行してください。");
 
+                return this.output;
+            }
+        }
         public OutputLogger Logger { get; private set; }
 
         public bool IsFinished { get; private set; }
