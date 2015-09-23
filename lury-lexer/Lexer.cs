@@ -41,10 +41,11 @@ namespace Lury.Compiling.Lexer
 
         private readonly List<Token> output;
         private readonly Stack<int> indentStack;
-        private int index;
-        private readonly int length;
+        private readonly int sourceLength;
         private readonly string sourceCode;
         private readonly string sourceName;
+
+        private int lookIndex;
         private bool commaDetected;
         private int indentIndex;
         private char? indentChar;
@@ -71,8 +72,8 @@ namespace Lury.Compiling.Lexer
         {
             this.sourceName = sourceName;
             this.sourceCode = sourceCode;
-            this.index = 0;
-            this.length = sourceCode.Length;
+            this.lookIndex = 0;
+            this.sourceLength = sourceCode.Length;
             this.Logger = new OutputLogger();
             this.output = new List<Token>();
             this.indentStack = new Stack<int>();
@@ -89,26 +90,27 @@ namespace Lury.Compiling.Lexer
                 throw new InvalidOperationException("Lexical analysis is already finished.");
 
             this.IsFinished = true;
+            this.indentIndex = -1;
 
             bool lineBreak = true;
             int lineBreakIndex = 0;
             int lineBreakLength = 0;
-            this.indentIndex = -1;
             int indentLength = 0;
             bool zeroWidthIndent = false;
-            int elementIndex;
             bool passedFirstLine = false;
 
-            for (; this.index < this.length; )
+            while (this.lookIndex < this.sourceLength)
             {
                 #region 1 : WhiteSpace and Comment
+                int elementIndex;
+
                 // 1.1 : NewLine
                 if ((elementIndex = this.SkipOver(StringConstants.NewLine)) >= 0)
                 {
                     if (!lineBreak)
                     {
                         lineBreakLength = StringConstants.NewLine[elementIndex].Length;
-                        lineBreakIndex = this.index - lineBreakLength;
+                        lineBreakIndex = this.lookIndex - lineBreakLength;
                         lineBreak = true;
                     }
 
@@ -122,7 +124,7 @@ namespace Lury.Compiling.Lexer
                 if (this.JudgeEqual(StringConstants.Space) >= 0)
                 {
                     if (lineBreak && this.indentIndex < 0)
-                        this.indentIndex = this.index;
+                        this.indentIndex = this.lookIndex;
 
                     int spaceLength = this.SkipWhile(StringConstants.Space);
 
@@ -153,7 +155,7 @@ namespace Lury.Compiling.Lexer
                     if (!this.commaDetected)
                     {
                         if (zeroWidthIndent)
-                            this.StackIndent(this.index, 0);
+                            this.StackIndent(this.lookIndex, 0);
                         else if (!passedFirstLine &&
                                  indentLength > 0)
                         {
@@ -219,8 +221,9 @@ namespace Lury.Compiling.Lexer
                 #endregion
             }
 
-            if (this.length > 0)
-                this.StackIndent(this.length - 1, 0, atEndOfFile: true);
+            // Dedent All
+            if (this.sourceLength > 0)
+                this.StackIndent(this.sourceLength - 1, 0, atEndOfFile: true);
 
             this.AddToken(Lexer.endoffile, 0);
             return true;
@@ -252,7 +255,7 @@ namespace Lury.Compiling.Lexer
             {
                 if (this.JudgeEqual("###"))
                 {
-                    this.index += 3;
+                    this.lookIndex += 3;
 
                     // BlockComment
                     if (this.Skip("###") == -1)
@@ -262,7 +265,7 @@ namespace Lury.Compiling.Lexer
                         return false;
                     }
 
-                    this.index += 3;
+                    this.lookIndex += 3;
                 }
                 else
                 {
@@ -272,7 +275,7 @@ namespace Lury.Compiling.Lexer
                     this.indentIndex = -1;
                     if (this.Skip(StringConstants.LineBreak) == -1)
                         // Reached the end of file
-                        this.index = this.length;
+                        this.lookIndex = this.sourceLength;
                 }
             }
 
@@ -383,7 +386,7 @@ namespace Lury.Compiling.Lexer
                       IMAGINARY = 28;
             #endregion
 
-            int index_old = this.index;
+            int index_old = this.lookIndex;
                        
             switch (START)
             {
@@ -395,7 +398,7 @@ namespace Lury.Compiling.Lexer
                 #region Integer
                 #region Decimal
                 case INT_ZERO:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('x') || this.JudgeEqual('X')) goto case HEX_PREFIX;
                     if (this.JudgeEqual('o') || this.JudgeEqual('O')) goto case OCT_PREFIX;
                     if (this.JudgeEqual('b') || this.JudgeEqual('B')) goto case BIN_PREFIX;
@@ -407,13 +410,13 @@ namespace Lury.Compiling.Lexer
                     goto case INTEGER;
 
                 case INT_UNDER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('0')) goto case INT_ZERO;
                     if (this.JudgeEqual(StringConstants.DigitWithoutZero) >= 0) goto case INT_ONE;
                     goto case INTEGER_BACK;
 
                 case INT_ONE:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('0')) goto case INT_ZERO;
                     if (this.JudgeEqual('_')) goto case INT_UNDER;
                     if (this.JudgeEqual('.')) goto case POINT_END;
@@ -424,61 +427,61 @@ namespace Lury.Compiling.Lexer
 
                 #region Hexadecimal
                 case HEX_PREFIX:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Hexadecimal) >= 0) goto case HEX_DIGIT;
                     goto case INTEGER_BACK;
 
                 case HEX_DIGIT:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('_')) goto case HEX_UNDER;
                     if (this.JudgeEqual(StringConstants.Hexadecimal) >= 0) goto case HEX_DIGIT;
                     goto case INTEGER;
 
                 case HEX_UNDER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Hexadecimal) >= 0) goto case HEX_DIGIT;
                     goto case INTEGER_BACK;
                 #endregion
 
                 #region Octal
                 case OCT_PREFIX:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Octal) >= 0) goto case OCT_DIGIT;
                     goto case INTEGER_BACK;
 
                 case OCT_DIGIT:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('_')) goto case OCT_UNDER;
                     if (this.JudgeEqual(StringConstants.Octal) >= 0) goto case OCT_DIGIT;
                     goto case INTEGER;
 
                 case OCT_UNDER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Octal) >= 0) goto case OCT_DIGIT;
                     goto case INTEGER_BACK;
                 #endregion
 
                 #region Binary
                 case BIN_PREFIX:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('0') || this.JudgeEqual('1')) goto case BIN_DIGIT;
                     goto case INTEGER_BACK;
 
                 case BIN_DIGIT:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('_')) goto case BIN_UNDER;
                     if (this.JudgeEqual('0') || this.JudgeEqual('1')) goto case BIN_DIGIT;
                     goto case INTEGER;
 
                 case BIN_UNDER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('0') || this.JudgeEqual('1')) goto case BIN_DIGIT;
                     goto case INTEGER_BACK;
                 #endregion
                 #endregion
 
                 case POINT_END:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('.')) goto case RANGE;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case FLT_DECIMAL;
                     goto case FLOATING;
@@ -487,80 +490,80 @@ namespace Lury.Compiling.Lexer
                     goto case INTEGER_BACK;
 
                 case POINT_START:
-                    this.index++;
+                    this.lookIndex++;
                     goto case FLT_DECIMAL;
 
                 #region FloatingPoint
                 case FLT_DECIMAL:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('_')) goto case FLT_UNDER;
                     if (this.JudgeEqual('e') || this.JudgeEqual('E')) goto case EXP_PREFIX_FLOAT;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case FLT_DECIMAL;
                     goto case FLOATING;
 
                 case FLT_UNDER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case FLT_DECIMAL;
                     goto case FLOATING_BACK;
 
                 case EXP_PREFIX_INTEGER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN_INTEGER;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
                     goto case INTEGER_BACK;
 
                 case EXP_PREFIX_FLOAT:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('+') || this.JudgeEqual('-')) goto case EXP_SIGN_FLOAT;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
                     goto case FLOATING_BACK;
 
                 case EXP_SIGN_INTEGER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
-                    this.index -= 2;
+                    this.lookIndex -= 2;
                     goto case INTEGER;
 
                 case EXP_SIGN_FLOAT:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
-                    this.index -= 2;
+                    this.lookIndex -= 2;
                     goto case FLOATING;
 
                 case EXP_DIGIT:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual('_')) goto case EXP_UNDER;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
                     goto case FLOATING;
 
                 case EXP_UNDER:
-                    this.index++;
+                    this.lookIndex++;
                     if (this.JudgeEqual(StringConstants.Digit) >= 0) goto case EXP_DIGIT;
                     goto case FLOATING_BACK;
                 #endregion
 
                 #region Output
                 case INTEGER_BACK:
-                    this.index--;
+                    this.lookIndex--;
                     goto case INTEGER;
 
                 case INTEGER:
                     if (this.JudgeEqual('i')) goto case IMAGINARY;
-                    this.AddToken(Lexer.Integer, index_old, this.index - index_old);
+                    this.AddToken(Lexer.Integer, index_old, this.lookIndex - index_old);
                     break;
 
                 case FLOATING_BACK:
-                    this.index--;
+                    this.lookIndex--;
                     goto case FLOATING;
 
                 case FLOATING:
                     if (this.JudgeEqual('i')) goto case IMAGINARY;
-                    this.AddToken(Lexer.FloatNumber, index_old, this.index - index_old);
+                    this.AddToken(Lexer.FloatNumber, index_old, this.lookIndex - index_old);
                     break;
 
                 case IMAGINARY:
-                    this.index++;
-                    this.AddToken(Lexer.ImaginaryNumber, index_old, this.index - index_old);
+                    this.lookIndex++;
+                    this.AddToken(Lexer.ImaginaryNumber, index_old, this.lookIndex - index_old);
                     break;
                 #endregion
             }
@@ -578,20 +581,20 @@ namespace Lury.Compiling.Lexer
 
             if (this.JudgeEqual('\''))
             {
-                if ((match = Lexer.StringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
-                    match.Index == this.index)
+                if ((match = Lexer.StringLiteral.Regex.Match(this.sourceCode, this.lookIndex)).Success &&
+                    match.Index == this.lookIndex)
                     this.AddToken(Lexer.StringLiteral, match.Length);
             }
             else if (this.JudgeEqual('"'))
             {
-                if ((match = Lexer.EmbedStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
-                    match.Index == this.index)
+                if ((match = Lexer.EmbedStringLiteral.Regex.Match(this.sourceCode, this.lookIndex)).Success &&
+                    match.Index == this.lookIndex)
                     this.AddToken(Lexer.EmbedStringLiteral, match.Length);
             }
             else
             {
-                if ((match = Lexer.WysiwygStringLiteral.Regex.Match(this.sourceCode, this.index)).Success &&
-                    match.Index == this.index)
+                if ((match = Lexer.WysiwygStringLiteral.Regex.Match(this.sourceCode, this.lookIndex)).Success &&
+                    match.Index == this.lookIndex)
                     this.AddToken(Lexer.WysiwygStringLiteral, match.Length);
             }
 
@@ -602,7 +605,7 @@ namespace Lury.Compiling.Lexer
                 return false;
             }
 
-            this.index += match.Length;
+            this.lookIndex += match.Length;
             return true;
         }
 
@@ -618,7 +621,7 @@ namespace Lury.Compiling.Lexer
             if (token == comma)
                 this.commaDetected = true;
 
-            this.index += token.TokenValue.Length;
+            this.lookIndex += token.TokenValue.Length;
             return true;
         }
 
@@ -628,9 +631,9 @@ namespace Lury.Compiling.Lexer
 
         private bool SkipIdentifier()
         {
-            Match match = Lexer.identifier.Regex.Match(this.sourceCode, this.index);
+            Match match = Lexer.identifier.Regex.Match(this.sourceCode, this.lookIndex);
 
-            if (!match.Success || match.Index != this.index)
+            if (!match.Success || match.Index != this.lookIndex)
                 return false;
 
             var keyword = Lexer.identifiers.FirstOrDefault(e => e.TokenValue == match.Value);
@@ -640,7 +643,7 @@ namespace Lury.Compiling.Lexer
             else
                 this.AddToken(keyword, match.Length);
 
-            this.index += match.Length;
+            this.lookIndex += match.Length;
             return true;
         }
 
@@ -648,7 +651,7 @@ namespace Lury.Compiling.Lexer
 
         private void AddToken(TokenEntry tokenEntry, int length)
         {
-            this.AddToken(tokenEntry, this.index, length);
+            this.AddToken(tokenEntry, this.lookIndex, length);
         }
 
         private void AddToken(TokenEntry tokenEntry, int index, int length)
@@ -660,9 +663,9 @@ namespace Lury.Compiling.Lexer
         {
             this.Logger.ReportError(
                 error,
-                this.sourceCode[this.index].ToString(),
+                this.sourceCode[this.lookIndex].ToString(),
                 this.sourceCode,
-                new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(this.index)));
+                new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(this.lookIndex)));
         }
 
         private void ReportErrorZeroWidth(LexerError error, int index)
@@ -685,8 +688,8 @@ namespace Lury.Compiling.Lexer
         private int JudgeEqual(params string[] chars)
         {
             for (int i = 0, count = chars.Length; i < count; i++)
-                if (this.length >= this.index + chars[i].Length &&
-                    this.sourceCode.IndexOf(chars[i], this.index, chars[i].Length, StringComparison.Ordinal) == this.index)
+                if (this.sourceLength >= this.lookIndex + chars[i].Length &&
+                    this.sourceCode.IndexOf(chars[i], this.lookIndex, chars[i].Length, StringComparison.Ordinal) == this.lookIndex)
                     return i;
 
             return -1;
@@ -699,16 +702,16 @@ namespace Lury.Compiling.Lexer
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(string chars)
         {
-            return (this.length >= this.index + chars.Length &&
-                    this.sourceCode.IndexOf(chars, this.index, chars.Length, StringComparison.Ordinal) == this.index);
+            return (this.sourceLength >= this.lookIndex + chars.Length &&
+                    this.sourceCode.IndexOf(chars, this.lookIndex, chars.Length, StringComparison.Ordinal) == this.lookIndex);
         }
 
         private int JudgeEqual(params char[] chars)
         {
-            if (this.length < this.index + 1)
+            if (this.sourceLength < this.lookIndex + 1)
                 return -1;
 
-            char current = this.sourceCode[this.index];
+            char current = this.sourceCode[this.lookIndex];
             for (int i = 0, count = chars.Length; i < count; i++)
                 if (current == chars[i])
                     return i;
@@ -723,8 +726,8 @@ namespace Lury.Compiling.Lexer
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(char character)
         {
-            return (this.length >= this.index + 1 &&
-                    this.sourceCode[this.index] == character);
+            return (this.sourceLength >= this.lookIndex + 1 &&
+                    this.sourceCode[this.lookIndex] == character);
         }
 
         /// <summary>
@@ -741,13 +744,13 @@ namespace Lury.Compiling.Lexer
             var keys = chars.Select(c => c[0]).Distinct().ToArray();
             int i = 0;
 
-            for (; i < this.length; i++, this.index++)
+            for (; i < this.sourceLength; i++, this.lookIndex++)
                 for (int j = 0; j < keys.Length; j++)
                     if (this.JudgeEqual(keys[j]) &&
                         this.JudgeEqual(chars) >= 0)
                         return i;
 
-            this.index -= i;
+            this.lookIndex -= i;
             return -1;
         }
 
@@ -764,12 +767,12 @@ namespace Lury.Compiling.Lexer
         {
             int i = 0;
 
-            for (; i < this.length; i++, this.index++)
+            for (; i < this.sourceLength; i++, this.lookIndex++)
                 if (this.JudgeEqual(chars[0]) &&
                     this.JudgeEqual(chars))
                     return i;
 
-            this.index -= i;
+            this.lookIndex -= i;
             return -1;
         }
 
@@ -787,7 +790,7 @@ namespace Lury.Compiling.Lexer
             if ((elementIndex = this.JudgeEqual(chars)) == -1)
                 return -1;
 
-            this.index += chars[elementIndex].Length;
+            this.lookIndex += chars[elementIndex].Length;
             return elementIndex;
         }
 
@@ -795,7 +798,7 @@ namespace Lury.Compiling.Lexer
         {
             int length = 0;
 
-            for (; this.index < this.length; this.index++, length++)
+            for (; this.lookIndex < this.sourceLength; this.lookIndex++, length++)
                 if (this.JudgeEqual(chars) < 0)
                     return length;
 
