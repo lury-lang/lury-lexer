@@ -26,6 +26,13 @@ namespace UnitTest
         }
 
         [TestMethod]
+        public void LengthTest()
+        {
+            Token token = new Token(entry, string.Empty, source, index, length);
+            Assert.AreEqual(length, token.Length);
+        }
+
+        [TestMethod]
         public void EntryTest()
         {
             Token token = new Token(entry, string.Empty, source, index, length);
@@ -99,9 +106,51 @@ namespace UnitTest
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ConstructorErrorTest()
+        public void ConstructorErrorTest1()
         {
             Token token = new Token(entry, string.Empty, source, source.Length, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructorErrorTest2()
+        {
+            Token token = new Token(null, string.Empty, source, 0, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructorErrorTest3()
+        {
+            Token token = new Token(entry, null, source, 0, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructorErrorTest4()
+        {
+            Token token = new Token(entry, string.Empty, null, 0, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ConstructorErrorTest5()
+        {
+            Token token = new Token(entry, string.Empty, source, -1, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ConstructorErrorTest6()
+        {
+            Token token = new Token(entry, string.Empty, source, source.Length + 1, -1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ConstructorErrorTest7()
+        {
+            Token token = new Token(entry, string.Empty, source, 0, -1);
         }
     }
 }
