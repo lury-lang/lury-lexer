@@ -94,14 +94,17 @@ namespace Lury.Compiling.Lexer
         /// <param name="length">トークンの長さ。</param>
         public Token(TokenEntry entry, string sourceName, string sourceCode, int index, int length)
         {
-            if (sourceCode.Length < index + length)
-                throw new ArgumentOutOfRangeException("length");
+            if (entry == null)
+                throw new ArgumentNullException("entry");
 
             if (sourceName == null)
                 throw new ArgumentNullException("sourceName");
 
             if (sourceCode == null)
                 throw new ArgumentNullException("sourceCode");
+
+            if (sourceCode.Length < index + length)
+                throw new ArgumentOutOfRangeException("length");
 
             // index == sourceCode.Length when entry == EndOfFile!
             if (index < 0 || index > sourceCode.Length)
