@@ -23,6 +23,22 @@ namespace UnitTest
         }
 
         [TestMethod]
+        public void SourceNameTest()
+        {
+            const string sourceName = "TestSource";
+            var lexer = new Lexer(sourceName, string.Empty);
+            Assert.AreEqual(sourceName, lexer.SourceName);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TokenOutputError()
+        {
+            var lexer = new Lexer(string.Empty, string.Empty);
+            var output = lexer.TokenOutput;
+        }
+
+        [TestMethod]
         public void TokenizeTest1()
         {
             var lexer = new Lexer(string.Empty, string.Empty);
