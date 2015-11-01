@@ -89,6 +89,7 @@ namespace Lury.Compiling.Lexer
         /// パラメータを指定して新しい Token クラスのインスタンスを初期化します。
         /// </summary>
         /// <param name="entry">トークンエントリ。</param>
+        /// <param name="sourceName">字句解析された元のソースコードの名前。</param>
         /// <param name="sourceCode">字句解析された元のソースコード。</param>
         /// <param name="index">トークンが出現したインデクス。</param>
         /// <param name="length">トークンの長さ。</param>
