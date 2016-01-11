@@ -106,49 +106,49 @@ namespace UnitTest
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ConstructorErrorTest1()
+        public void ConstructorError1()
         {
             Token token = new Token(entry, string.Empty, source, source.Length, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorErrorTest2()
+        public void ConstructorError2()
         {
             Token token = new Token(null, string.Empty, source, 0, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorErrorTest3()
+        public void ConstructorError3()
         {
             Token token = new Token(entry, null, source, 0, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorErrorTest4()
+        public void ConstructorError4()
         {
             Token token = new Token(entry, string.Empty, null, 0, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ConstructorErrorTest5()
+        public void ConstructorError5()
         {
             Token token = new Token(entry, string.Empty, source, -1, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ConstructorErrorTest6()
+        public void ConstructorError6()
         {
             Token token = new Token(entry, string.Empty, source, source.Length + 1, -1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ConstructorErrorTest7()
+        public void ConstructorError7()
         {
             Token token = new Token(entry, string.Empty, source, 0, -1);
         }
