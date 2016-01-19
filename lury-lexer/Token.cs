@@ -54,7 +54,7 @@ namespace Lury.Compiling.Lexer
         public int Length { get; private set; }
 
         /// <summary>
-        /// トークンの SourceCode での出現位置を取得します。
+        /// トークンのソースコード <see cref="SourceCode"/> 上の出現位置を取得します。
         /// </summary>
         public CodePosition CodePosition
         {
@@ -66,7 +66,7 @@ namespace Lury.Compiling.Lexer
         }
 
         /// <summary>
-        /// トークンの SourceCode でのインデクスを取得します。
+        /// トークンのソースコード <see cref="SourceCode"/> 上のインデクスを取得します。
         /// </summary>
         public int Index { get; private set; }
 
