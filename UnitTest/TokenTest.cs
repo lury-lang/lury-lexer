@@ -64,21 +64,21 @@ namespace UnitTest
         public void PositionTest()
         {
             Token token = new Token(entry, string.Empty, source, index, length);
-            Assert.AreEqual(position, token.Position.CharPosition);
+            Assert.AreEqual(position, token.CodePosition.CharPosition);
         }
 
         [TestMethod]
         public void PositionTest2()
         {
             Token token = new Token(entry, string.Empty, source, source.Length, 0);
-            Assert.AreEqual(new CharPosition(1, 10), token.Position.CharPosition);
+            Assert.AreEqual(new CharPosition(1, 10), token.CodePosition.CharPosition);
         }
 
         [TestMethod]
         public void PositionTest3()
         {
             Token token = new Token(entry, string.Empty, string.Empty, 0, 0);
-            Assert.AreEqual(CharPosition.BasePosition, token.Position.CharPosition);
+            Assert.AreEqual(CharPosition.BasePosition, token.CodePosition.CharPosition);
         }
 
         [TestMethod]

@@ -56,7 +56,7 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// トークンの SourceCode での出現位置を取得します。
         /// </summary>
-        public CodePosition Position
+        public CodePosition CodePosition
         {
             get
             {
@@ -137,7 +137,7 @@ namespace Lury.Compiling.Lexer
         {
             return string.Format(
                 "{0} {1}{2}",
-                this.Position.CharPosition,
+                this.CodePosition.CharPosition,
                 this.Entry.Name,
                 this.Entry.Name.Length > 1 ? " - " + this.Text : "");
         }
