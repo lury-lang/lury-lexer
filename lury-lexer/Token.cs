@@ -137,7 +137,7 @@ namespace Lury.Compiling.Lexer
         {
             return string.Format(
                 "{0} {1}{2}",
-                this.Position.Position,
+                this.Position.CharPosition,
                 this.Entry.Name,
                 this.Entry.Name.Length > 1 ? " - " + this.Text : "");
         }

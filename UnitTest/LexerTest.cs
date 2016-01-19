@@ -126,7 +126,7 @@ namespace UnitTest
                     else
                         Assert.Fail("予期しないエラー (#{0}) が発生しました。{3} 位置: {1}、テキスト `{2}'",
                                     error.OutputNumber,
-                                    error.Position.Position,
+                                    error.CodePosition.CharPosition,
                                     error.Code,
                                     error.Message);
                 }
