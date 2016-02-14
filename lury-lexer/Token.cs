@@ -96,23 +96,23 @@ namespace Lury.Compiling.Lexer
         public Token(TokenEntry entry, string sourceName, string sourceCode, int index, int length)
         {
             if (entry == null)
-                throw new ArgumentNullException("entry");
+                throw new ArgumentNullException(nameof(entry));
 
             if (sourceName == null)
-                throw new ArgumentNullException("sourceName");
+                throw new ArgumentNullException(nameof(sourceName));
 
             if (sourceCode == null)
-                throw new ArgumentNullException("sourceCode");
+                throw new ArgumentNullException(nameof(sourceCode));
 
             if (sourceCode.Length < index + length)
-                throw new ArgumentOutOfRangeException("length");
+                throw new ArgumentOutOfRangeException(nameof(length));
 
             // index == sourceCode.Length when entry == EndOfFile!
             if (index < 0 || index > sourceCode.Length)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             if (length < 0 || length > sourceCode.Length)
-                throw new ArgumentOutOfRangeException("length");
+                throw new ArgumentOutOfRangeException(nameof(length));
 
             this.Entry = entry;
             this.SourceName = sourceName;
@@ -134,13 +134,11 @@ namespace Lury.Compiling.Lexer
         /// </summary>
         /// <returns>トークンエントリの名前、出現位置そしてトークン文字列を含む文字列。</returns>
         public override string ToString()
-        {
-            return string.Format(
+            => string.Format(
                 "{0} {1}{2}",
                 this.CodePosition.CharPosition,
                 this.Entry.Name,
                 this.Entry.Name.Length > 1 ? " - " + this.Text : "");
-        }
 
         #endregion
     }

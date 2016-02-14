@@ -60,12 +60,12 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// ソースコードを識別するための名前を取得します。
         /// </summary>
-        public string SourceName { get { return this.sourceName; } }
+        public string SourceName => this.sourceName;
 
         /// <summary>
         /// ソースコードの文字列を取得します。
         /// </summary>
-        public string SourceCode { get { return this.sourceCode; } }
+        public string SourceCode => this.sourceCode;
 
         /// <summary>
         /// 字句解析の結果、出力されたトークン列のリストを取得します。
@@ -688,32 +688,24 @@ namespace Lury.Compiling.Lexer
         #endregion
 
         private void AddToken(TokenEntry tokenEntry, int length)
-        {
-            this.AddToken(tokenEntry, this.lookIndex, length);
-        }
+            => this.AddToken(tokenEntry, this.lookIndex, length);
 
         private void AddToken(TokenEntry tokenEntry, int index, int length)
-        {
-            this.output.Add(new Token(tokenEntry, this.sourceName, this.sourceCode, index, length));
-        }
-
+            => this.output.Add(new Token(tokenEntry, this.sourceName, this.sourceCode, index, length));
+        
         private void ReportErrorHere(LexerError error)
-        {
-            this.Logger.ReportError(
+            => this.Logger.ReportError(
                 error,
                 this.sourceCode[this.lookIndex].ToString(),
                 this.sourceCode,
                 new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(this.lookIndex)));
-        }
-
+        
         private void ReportErrorZeroWidth(LexerError error, int index)
-        {
-            this.Logger.ReportError(
+            => this.Logger.ReportError(
                 error,
                 null,
                 this.sourceCode,
                 new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(index)));
-        }
 
         #region JudgeEqual
 
@@ -745,11 +737,9 @@ namespace Lury.Compiling.Lexer
         /// <param name="chars">一致を判定する文字列。</param>
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(string chars)
-        {
-            return (this.sourceLength >= this.lookIndex + chars.Length &&
-                    this.sourceCode.IndexOf(chars, this.lookIndex, chars.Length, StringComparison.Ordinal) == this.lookIndex);
-        }
-
+            => this.sourceLength >= this.lookIndex + chars.Length &&
+               this.sourceCode.IndexOf(chars, this.lookIndex, chars.Length, StringComparison.Ordinal) == this.lookIndex;
+     
         /// <summary>
         /// 指定された文字列の配列のうち、いずれかが現在のインデクスから一致しているかを判定します。
         /// </summary>
@@ -777,10 +767,8 @@ namespace Lury.Compiling.Lexer
         /// <param name="character">一致を判定する文字。</param>
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(char character)
-        {
-            return (this.sourceLength >= this.lookIndex + 1 &&
-                    this.sourceCode[this.lookIndex] == character);
-        }
+            => this.sourceLength >= this.lookIndex + 1 &&
+                    this.sourceCode[this.lookIndex] == character;
 
         #endregion
 
