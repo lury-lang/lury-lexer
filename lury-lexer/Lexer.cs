@@ -45,8 +45,6 @@ namespace Lury.Compiling.Lexer
         private readonly List<Token> output;
         private readonly Stack<int> indentStack;
         private readonly int sourceLength;
-        private readonly string sourceCode;
-        private readonly string sourceName;
 
         private int lookIndex;
         private bool commaDetected;
@@ -60,12 +58,12 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// ソースコードを識別するための名前を取得します。
         /// </summary>
-        public string SourceName => this.sourceName;
+        public string SourceName { get; }
 
         /// <summary>
         /// ソースコードの文字列を取得します。
         /// </summary>
-        public string SourceCode => this.sourceCode;
+        public string SourceCode { get; }
 
         /// <summary>
         /// 字句解析の結果、出力されたトークン列のリストを取得します。
@@ -85,7 +83,7 @@ namespace Lury.Compiling.Lexer
         /// トークン出力で報告されたメッセージを格納した
         /// <see cref="Lury.Compiling.Logger.OutputLogger"/> オブジェクトを指定します。
         /// </summary>
-        public OutputLogger Logger { get; private set; }
+        public OutputLogger Logger { get; }
 
         /// <summary>
         /// 字句解析が終了したかの真偽値を取得します。
@@ -104,8 +102,8 @@ namespace Lury.Compiling.Lexer
         /// <param name="sourceCode">ソースコードの文字列。</param>
         public Lexer(string sourceName, string sourceCode)
         {
-            this.sourceName = sourceName;
-            this.sourceCode = sourceCode;
+            this.SourceName = sourceName;
+            this.SourceCode = sourceCode;
             this.lookIndex = 0;
             this.sourceLength = sourceCode.Length;
             this.Logger = new OutputLogger();
@@ -375,12 +373,12 @@ namespace Lury.Compiling.Lexer
         private bool CheckIndentChar(int indentIndex, int length)
         {
             if (!this.indentChar.HasValue)
-                this.indentChar = this.sourceCode[indentIndex];
+                this.indentChar = this.SourceCode[indentIndex];
 
             char c = this.indentChar.Value;
 
             for (int i = indentIndex, l = indentIndex + length; i < l; i++)
-                if (this.sourceCode[i] != c)
+                if (this.SourceCode[i] != c)
                     return false;
 
             return true;
@@ -619,19 +617,19 @@ namespace Lury.Compiling.Lexer
 
             if (this.JudgeEqual('\''))
             {
-                if ((match = Lexer.StringLiteral.Regex.Match(this.sourceCode, this.lookIndex)).Success &&
+                if ((match = Lexer.StringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
                     match.Index == this.lookIndex)
                     this.AddToken(Lexer.StringLiteral, match.Length);
             }
             else if (this.JudgeEqual('"'))
             {
-                if ((match = Lexer.EmbedStringLiteral.Regex.Match(this.sourceCode, this.lookIndex)).Success &&
+                if ((match = Lexer.EmbedStringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
                     match.Index == this.lookIndex)
                     this.AddToken(Lexer.EmbedStringLiteral, match.Length);
             }
             else
             {
-                if ((match = Lexer.WysiwygStringLiteral.Regex.Match(this.sourceCode, this.lookIndex)).Success &&
+                if ((match = Lexer.WysiwygStringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
                     match.Index == this.lookIndex)
                     this.AddToken(Lexer.WysiwygStringLiteral, match.Length);
             }
@@ -696,16 +694,16 @@ namespace Lury.Compiling.Lexer
         private void ReportErrorHere(LexerError error)
             => this.Logger.ReportError(
                 error,
-                this.sourceCode[this.lookIndex].ToString(),
-                this.sourceCode,
-                new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(this.lookIndex)));
+                this.SourceCode[this.lookIndex].ToString(),
+                this.SourceCode,
+                new CodePosition(this.SourceName, this.SourceCode.GetPositionByIndex(this.lookIndex)));
         
         private void ReportErrorZeroWidth(LexerError error, int index)
             => this.Logger.ReportError(
                 error,
                 null,
-                this.sourceCode,
-                new CodePosition(this.sourceName, this.sourceCode.GetPositionByIndex(index)));
+                this.SourceCode,
+                new CodePosition(this.SourceName, this.SourceCode.GetPositionByIndex(index)));
 
         #region JudgeEqual
 
@@ -725,7 +723,7 @@ namespace Lury.Compiling.Lexer
         {
             for (int i = 0, count = chars.Length; i < count; i++)
                 if (this.sourceLength >= this.lookIndex + chars[i].Length &&
-                    this.sourceCode.IndexOf(chars[i], this.lookIndex, chars[i].Length, StringComparison.Ordinal) == this.lookIndex)
+                    this.SourceCode.IndexOf(chars[i], this.lookIndex, chars[i].Length, StringComparison.Ordinal) == this.lookIndex)
                     return i;
 
             return -1;
@@ -738,7 +736,7 @@ namespace Lury.Compiling.Lexer
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(string chars)
             => this.sourceLength >= this.lookIndex + chars.Length &&
-               this.sourceCode.IndexOf(chars, this.lookIndex, chars.Length, StringComparison.Ordinal) == this.lookIndex;
+               this.SourceCode.IndexOf(chars, this.lookIndex, chars.Length, StringComparison.Ordinal) == this.lookIndex;
      
         /// <summary>
         /// 指定された文字列の配列のうち、いずれかが現在のインデクスから一致しているかを判定します。
@@ -753,7 +751,7 @@ namespace Lury.Compiling.Lexer
             if (this.sourceLength < this.lookIndex + 1)
                 return -1;
 
-            char current = this.sourceCode[this.lookIndex];
+            char current = this.SourceCode[this.lookIndex];
             for (int i = 0, count = chars.Length; i < count; i++)
                 if (current == chars[i])
                     return i;
@@ -768,7 +766,7 @@ namespace Lury.Compiling.Lexer
         /// <returns>一致するとき true、しないとき false。</returns>
         private bool JudgeEqual(char character)
             => this.sourceLength >= this.lookIndex + 1 &&
-                    this.sourceCode[this.lookIndex] == character;
+                    this.SourceCode[this.lookIndex] == character;
 
         #endregion
 
