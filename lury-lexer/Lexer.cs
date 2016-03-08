@@ -370,14 +370,14 @@ namespace Lury.Compiling.Lexer
             return true;
         }
 
-        private bool CheckIndentChar(int indentIndex, int length)
+        private bool CheckIndentChar(int targetIndentIndex, int length)
         {
             if (!this.indentChar.HasValue)
-                this.indentChar = this.SourceCode[indentIndex];
+                this.indentChar = this.SourceCode[targetIndentIndex];
 
             char c = this.indentChar.Value;
 
-            for (int i = indentIndex, l = indentIndex + length; i < l; i++)
+            for (int i = targetIndentIndex, l = targetIndentIndex + length; i < l; i++)
                 if (this.SourceCode[i] != c)
                     return false;
 
