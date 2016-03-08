@@ -186,7 +186,7 @@ namespace Lury.Compiling.Lexer
                 if (lineBreak)
                 {
                     if (passedFirstLine)
-                        this.AddToken(Lexer.newline, lineBreakIndex, lineBreakLength);
+                        this.AddToken(newline, lineBreakIndex, lineBreakLength);
 
                     if (!this.commaDetected)
                     {
@@ -261,7 +261,7 @@ namespace Lury.Compiling.Lexer
             if (this.sourceLength > 0)
                 this.StackIndent(this.sourceLength - 1, 0, atEndOfFile: true);
 
-            this.AddToken(Lexer.endoffile, 0);
+            this.AddToken(endoffile, 0);
             return true;
         }
 
@@ -617,21 +617,21 @@ namespace Lury.Compiling.Lexer
 
             if (this.JudgeEqual('\''))
             {
-                if ((match = Lexer.StringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
+                if ((match = stringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
                     match.Index == this.lookIndex)
-                    this.AddToken(Lexer.StringLiteral, match.Length);
+                    this.AddToken(stringLiteral, match.Length);
             }
             else if (this.JudgeEqual('"'))
             {
-                if ((match = Lexer.EmbedStringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
+                if ((match = embedStringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
                     match.Index == this.lookIndex)
-                    this.AddToken(Lexer.EmbedStringLiteral, match.Length);
+                    this.AddToken(embedStringLiteral, match.Length);
             }
             else
             {
-                if ((match = Lexer.WysiwygStringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
+                if ((match = wysiwygStringLiteral.Regex.Match(this.SourceCode, this.lookIndex)).Success &&
                     match.Index == this.lookIndex)
-                    this.AddToken(Lexer.WysiwygStringLiteral, match.Length);
+                    this.AddToken(wysiwygStringLiteral, match.Length);
             }
 
             if (!match.Success)
@@ -651,7 +651,7 @@ namespace Lury.Compiling.Lexer
 
         private bool SkipOperatorAndDelimiter()
         {
-            var token = Lexer.staticAndOperators.First(e => this.JudgeEqual(e.TokenValue));
+            var token = staticAndOperators.First(e => this.JudgeEqual(e.TokenValue));
             this.AddToken(token, token.TokenValue.Length);
 
             if (token == comma)
@@ -667,15 +667,15 @@ namespace Lury.Compiling.Lexer
 
         private bool SkipIdentifier()
         {
-            Match match = Lexer.identifier.Regex.Match(this.sourceCode, this.lookIndex);
+            Match match = identifier.Regex.Match(this.SourceCode, this.lookIndex);
 
             if (!match.Success || match.Index != this.lookIndex)
                 return false;
 
-            var keyword = Lexer.identifiers.FirstOrDefault(e => e.TokenValue == match.Value);
+            var keyword = identifiers.FirstOrDefault(e => e.TokenValue == match.Value);
 
             if (keyword == null)
-                this.AddToken(Lexer.identifier, match.Length);
+                this.AddToken(identifier, match.Length);
             else
                 this.AddToken(keyword, match.Length);
 
@@ -689,7 +689,7 @@ namespace Lury.Compiling.Lexer
             => this.AddToken(tokenEntry, this.lookIndex, length);
 
         private void AddToken(TokenEntry tokenEntry, int index, int length)
-            => this.output.Add(new Token(tokenEntry, this.sourceName, this.sourceCode, index, length));
+            => this.output.Add(new Token(tokenEntry, this.SourceName, this.SourceCode, index, length));
         
         private void ReportErrorHere(LexerError error)
             => this.Logger.ReportError(
