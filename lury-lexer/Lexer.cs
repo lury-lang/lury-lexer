@@ -322,7 +322,7 @@ namespace Lury.Compiling.Lexer
 
         #region Indent
 
-        private bool StackIndent(int indentIndex, int level, bool atEndOfFile = false)
+        private bool StackIndent(int targetIndentIndex, int level, bool atEndOfFile = false)
         {
             int peek = this.indentStack.Peek();
 
@@ -332,14 +332,14 @@ namespace Lury.Compiling.Lexer
             {
                 // issue #2: 混在したインデント文字に対するエラー
                 // https://github.com/lury-lang/lury-lexer/issues/2
-                if (!this.CheckIndentChar(indentIndex, level))
+                if (!this.CheckIndentChar(targetIndentIndex, level))
                 {
-                    this.ReportErrorZeroWidth(LexerError.IndentCharacterConfusion, indentIndex);
+                    this.ReportErrorZeroWidth(LexerError.IndentCharacterConfusion, targetIndentIndex);
                     return false;
                 }
 
                 indentStack.Push(level);
-                this.AddToken(Lexer.indent, indentIndex, 0);
+                this.AddToken(indent, targetIndentIndex, 0);
             }
             else // peek > level
             {
@@ -361,10 +361,10 @@ namespace Lury.Compiling.Lexer
                 }
 
                 if (atEndOfFile)
-                    this.AddToken(Lexer.newline, indentIndex, 0);
+                    this.AddToken(newline, targetIndentIndex, 0);
 
                 for (int i = 0; i < dedentCount; i++)
-                    this.AddToken(Lexer.dedent, indentIndex, 0);
+                    this.AddToken(dedent, targetIndentIndex, 0);
             }
 
             return true;
