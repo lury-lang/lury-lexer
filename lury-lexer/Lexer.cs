@@ -259,7 +259,7 @@ namespace Lury.Compiling.Lexer
 
             // Dedent All
             if (this.sourceLength > 0)
-                this.StackIndent(this.sourceLength - 1, 0, atEndOfFile: true);
+                this.StackIndent(this.sourceLength - 1, 0, true);
 
             this.AddToken(endoffile, 0);
             return true;
