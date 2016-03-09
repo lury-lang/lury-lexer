@@ -247,12 +247,9 @@ namespace Lury.Compiling.Lexer
 
                 if (this.SkipIdentifier())
                     continue;
-                else
-                {
-                    // !Error: Unknown Character!
-                    this.ReportErrorHere(LexerError.InvalidCharacter);
-                    return false;
-                }
+                // !Error: Unknown Character!
+                this.ReportErrorHere(LexerError.InvalidCharacter);
+                return false;
 
                 #endregion
             }
@@ -328,7 +325,7 @@ namespace Lury.Compiling.Lexer
 
             if (peek == level)
                 return true;
-            else if (peek < level)
+            if (peek < level)
             {
                 // issue #2: 混在したインデント文字に対するエラー
                 // https://github.com/lury-lang/lury-lexer/issues/2
