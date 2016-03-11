@@ -335,7 +335,7 @@ namespace Lury.Compiling.Lexer
                     return false;
                 }
 
-                indentStack.Push(level);
+                this.indentStack.Push(level);
                 this.AddToken(indent, targetIndentIndex, 0);
             }
             else // peek > level
@@ -343,10 +343,10 @@ namespace Lury.Compiling.Lexer
                 int dedentCount = 0;
                 do
                 {
-                    indentStack.Pop();
+                    this.indentStack.Pop();
                     dedentCount++;
 
-                    if (indentStack.Count == 0 || indentStack.Peek() == level)
+                    if (this.indentStack.Count == 0 || this.indentStack.Peek() == level)
                         break;
                 }
                 while (indentStack.Count > 0);
