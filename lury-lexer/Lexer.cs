@@ -789,10 +789,9 @@ namespace Lury.Compiling.Lexer
             int i = 0;
 
             for (; i < this.sourceLength; i++, this.lookIndex++)
-                for (int j = 0; j < keys.Length; j++)
-                    if (this.JudgeEqual(keys[j]) &&
-                        this.JudgeEqual(chars) >= 0)
-                        return i;
+                if (keys.Any(t => this.JudgeEqual(t) &&
+                                  this.JudgeEqual(chars) >= 0))
+                    return i;
 
             this.lookIndex -= i;
             return -1;
