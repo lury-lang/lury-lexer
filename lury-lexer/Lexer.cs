@@ -646,7 +646,7 @@ namespace Lury.Compiling.Lexer
 
         #region Operator and Delimiter
 
-        private bool SkipOperatorAndDelimiter()
+        private void SkipOperatorAndDelimiter()
         {
             var token = staticAndOperators.First(e => this.JudgeEqual(e.TokenValue));
             this.AddToken(token, token.TokenValue.Length);
@@ -655,7 +655,6 @@ namespace Lury.Compiling.Lexer
                 this.commaDetected = true;
 
             this.lookIndex += token.TokenValue.Length;
-            return true;
         }
 
         #endregion
