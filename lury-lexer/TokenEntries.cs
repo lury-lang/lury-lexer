@@ -54,16 +54,16 @@ namespace Lury.Compiling.Lexer
         // Combined: ([\u25a0-\u27bf]|\ud83c[\udf00-\udff7]|\ud83d[\udc00-\ude4f\ude80-\udef3])
         //
         private const string
-            regex_identifier = @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*",
-            regex_string = @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'",
-            regex_embString = @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?""",
-            regex_wysiwygString = @"`(``|[^`])*`";
+            RegexIdentifier = @"(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\u25A0-\u27BF])(\uD83C[\uDF00-\uDFF7]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEF3]|[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\u25A0-\u27BF])*",
+            RegexString = @"'(\\'|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?'",
+            RegexEmbString = @"""(\\""|\\(\n|(\r\n)|\r|\u2028|\u2029)|.)*?""",
+            RegexWysiwygString = @"`(``|[^`])*`";
 
         private static readonly RegexTokenEntry 
-            identifier = new RegexTokenEntry("Identifier", regex_identifier),
-            StringLiteral = new RegexTokenEntry("StringLiteral", regex_string),
-            EmbedStringLiteral = new RegexTokenEntry("EmbedStringLiteral", regex_embString),
-            WysiwygStringLiteral = new RegexTokenEntry("WysiwygStringLiteral", new Regex(regex_wysiwygString, RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture));
+            identifier = new RegexTokenEntry("Identifier", RegexIdentifier),
+            stringLiteral = new RegexTokenEntry("StringLiteral", RegexString),
+            embedStringLiteral = new RegexTokenEntry("EmbedStringLiteral", RegexEmbString),
+            wysiwygStringLiteral = new RegexTokenEntry("WysiwygStringLiteral", new Regex(RegexWysiwygString, RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.ExplicitCapture));
 
         #region Static Characters
 
@@ -129,7 +129,7 @@ namespace Lury.Compiling.Lexer
             new StaticTokenEntry("{"),
             new StaticTokenEntry("}"),
             new StaticTokenEntry(";"),
-            new StaticTokenEntry("@"),
+            new StaticTokenEntry("@")
         };
 
         #endregion
@@ -138,9 +138,9 @@ namespace Lury.Compiling.Lexer
         #region Number
 
         private static readonly StaticTokenEntry
-            ImaginaryNumber = new StaticTokenEntry("ImaginaryNumber"),
-            FloatNumber = new StaticTokenEntry("FloatNumber"),
-            Integer = new StaticTokenEntry("Integer");
+            imaginaryNumber = new StaticTokenEntry("ImaginaryNumber"),
+            floatNumber = new StaticTokenEntry("FloatNumber"),
+            integer = new StaticTokenEntry("Integer");
 
         #endregion
 
@@ -209,7 +209,7 @@ namespace Lury.Compiling.Lexer
             new StaticTokenEntry("KeywordVar", @"var"),
             new StaticTokenEntry("KeywordWhile", @"while"),
             new StaticTokenEntry("KeywordWith", @"with"),
-            new StaticTokenEntry("KeywordYield", @"yield"),
+            new StaticTokenEntry("KeywordYield", @"yield")
         };
 
         #endregion
