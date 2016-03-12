@@ -349,9 +349,9 @@ namespace Lury.Compiling.Lexer
                     if (this.indentStack.Count == 0 || this.indentStack.Peek() == level)
                         break;
                 }
-                while (indentStack.Count > 0);
+                while (this.indentStack.Count > 0);
 
-                if (indentStack.Count == 0)
+                if (this.indentStack.Count == 0)
                 {
                     this.Logger.ReportError(LexerError.InvalidIndent, null, this.SourceCode);
                     return false;
