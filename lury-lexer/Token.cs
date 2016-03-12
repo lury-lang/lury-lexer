@@ -41,17 +41,17 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// トークンエントリを取得します。
         /// </summary>
-        public TokenEntry Entry { get; private set; }
+        public TokenEntry Entry { get; }
 
         /// <summary>
         /// トークンの文字列を取得します。
         /// </summary>
-        public string Text { get; private set; }
+        public string Text { get; }
 
         /// <summary>
         /// トークンの長さを取得します。
         /// </summary>
-        public int Length { get; private set; }
+        public int Length { get; }
 
         /// <summary>
         /// トークンのソースコード <see cref="SourceCode"/> 上の出現位置を取得します。
@@ -68,18 +68,18 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// トークンのソースコード <see cref="SourceCode"/> 上のインデクスを取得します。
         /// </summary>
-        public int Index { get; private set; }
+        public int Index { get; }
 
         /// <summary>
         /// 字句解析されたソースコードを表す文字列を取得します。
         /// </summary>
-        public string SourceCode { get; private set; }
+        public string SourceCode { get; }
 
         /// <summary>
         /// 字句解析されたソースコードを識別するための名前を取得します。
         /// </summary>
         /// <value>ソースコードの名前。</value>
-        public string SourceName { get; private set; }
+        public string SourceName { get; }
 
         #endregion
 
