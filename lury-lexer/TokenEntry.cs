@@ -38,7 +38,7 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// トークン名を表す文字列を取得します。
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         #endregion
 
