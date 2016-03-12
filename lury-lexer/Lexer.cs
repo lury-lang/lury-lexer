@@ -385,7 +385,7 @@ namespace Lury.Compiling.Lexer
 
         #region Number
 
-        private bool SkipNumber()
+        private void SkipNumber()
         {
             #region Labels
             const int Start = 0,
@@ -600,8 +600,6 @@ namespace Lury.Compiling.Lexer
                     break;
                     #endregion
             }
-
-            return true;
         }
 
         #endregion
