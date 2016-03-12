@@ -134,11 +134,7 @@ namespace Lury.Compiling.Lexer
         /// </summary>
         /// <returns>トークンエントリの名前、出現位置そしてトークン文字列を含む文字列。</returns>
         public override string ToString()
-            => string.Format(
-                "{0} {1}{2}",
-                this.CodePosition.CharPosition,
-                this.Entry.Name,
-                this.Entry.Name.Length > 1 ? " - " + this.Text : "");
+            => $"{this.CodePosition.CharPosition} {this.Entry.Name}{(this.Entry.Name.Length > 1 ? " - " + this.Text : "")}";
 
         #endregion
     }
