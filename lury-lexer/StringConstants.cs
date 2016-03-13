@@ -37,7 +37,7 @@ namespace Lury.Compiling.Lexer
 
         public static readonly string[]
            
-            LineCancel = new string[] {
+            LineCancel = {
                 "\\\u000d\u000a",
                 "\\\u000a",
                 "\\\u000d",
@@ -45,15 +45,15 @@ namespace Lury.Compiling.Lexer
                 "\\\u2029"
             },
 
-            NewLine = new string[] {
+            NewLine = {
                 "\u000d\u000a",
                 "\u000a",
                 "\u000d",
                 "\u2028",
-                "\u2029",
+                "\u2029"
             },
 
-            LineBreak = new string[] {
+            LineBreak = {
                 "\u000d\u000a",
                 "\u000a",
                 "\u000d",
@@ -63,7 +63,7 @@ namespace Lury.Compiling.Lexer
                 "\u001a"
             },
             
-            DigitAndDot = new string[] {
+            DigitAndDot = {
                 "0",
                 "1",
                 "2",
@@ -88,25 +88,25 @@ namespace Lury.Compiling.Lexer
 
         public static readonly char[]
 
-            Space = new char[] { 
+            Space = { 
                 '\u0020',
                 '\u0009',
                 '\u000b',
                 '\u000c'
             },
 
-            EndOfFile = new char[] {
+            EndOfFile = {
                 '\u0000',
                 '\u001a'
             },
 
-            StringLiteral = new char[] {
+            StringLiteral = {
                 '\'',
                 '"',
                 '`'
             },
 
-            Digit = new char[] {
+            Digit = {
                 '0',
                 '1',
                 '2',
@@ -119,7 +119,7 @@ namespace Lury.Compiling.Lexer
                 '9'
             },
 
-            DigitWithoutZero = new char[] {
+            DigitWithoutZero = {
                 '1',
                 '2',
                 '3',
@@ -131,7 +131,7 @@ namespace Lury.Compiling.Lexer
                 '9'
             },
 
-            Hexadecimal = new char[] {
+            Hexadecimal = {
                 '0',
                 '1',
                 '2',
@@ -156,7 +156,7 @@ namespace Lury.Compiling.Lexer
                 'F'
             },
 
-            Octal = new char[] {
+            Octal = {
                 '0',
                 '1',
                 '2',
@@ -167,7 +167,7 @@ namespace Lury.Compiling.Lexer
                 '7'
             },
 
-            OperatorAndDelimiter = new char[] {
+            OperatorAndDelimiter = {
                 '.',
                 '+',
                 '-',
