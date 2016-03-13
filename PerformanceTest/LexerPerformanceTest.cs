@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using Lury.Compiling.Lexer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,7 +12,7 @@ namespace PerformanceTest
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            LexerPerformanceTest.inputSouceCode = System.IO.File.ReadAllText("Input.lr");
+            inputSouceCode = File.ReadAllText("Input.lr");
         }
 
         [TestMethod]
