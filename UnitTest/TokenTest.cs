@@ -8,12 +8,12 @@ namespace UnitTest
     [TestClass]
     public class TokenTest
     {
-        const string name = "dummyName";
-        const string nameShort = "n";
-        const string regex = "dummyRegex";
-        const string source = "dummyText";
-        const int index = 2;
-        const int length = 3;
+        const string Name = "dummyName";
+        const string NameShort = "n";
+        const string Regex = "dummyRegex";
+        const string Source = "dummyText";
+        const int Index = 2;
+        const int Length = 3;
         static CharPosition position;
         static RegexTokenEntry entry, entryShort;
 
@@ -21,56 +21,56 @@ namespace UnitTest
         public static void ClassInitialize(TestContext context)
         {
             position = new CharPosition(1, 3);
-            entry = new RegexTokenEntry(name, regex);
-            entryShort = new RegexTokenEntry(nameShort, regex);
+            entry = new RegexTokenEntry(Name, Regex);
+            entryShort = new RegexTokenEntry(NameShort, Regex);
         }
 
         [TestMethod]
         public void LengthTest()
         {
-            Token token = new Token(entry, string.Empty, source, index, length);
-            Assert.AreEqual(length, token.Length);
+            Token token = new Token(entry, string.Empty, Source, Index, Length);
+            Assert.AreEqual(Length, token.Length);
         }
 
         [TestMethod]
         public void EntryTest()
         {
-            Token token = new Token(entry, string.Empty, source, index, length);
+            Token token = new Token(entry, string.Empty, Source, Index, Length);
             Assert.AreEqual(entry, token.Entry);
         }
 
         [TestMethod]
         public void TextTest()
         {
-            Token token = new Token(entry, string.Empty, source, index, length);
+            Token token = new Token(entry, string.Empty, Source, Index, Length);
             Assert.AreEqual("mmy", token.Text);
         }
 
         [TestMethod]
         public void TextTest2()
         {
-            Token token = new Token(entry, string.Empty, source, index, 0);
+            Token token = new Token(entry, string.Empty, Source, Index, 0);
             Assert.AreEqual(string.Empty, token.Text);
         }
 
         [TestMethod]
         public void IndexTest()
         {
-            Token token = new Token(entry, string.Empty, source, index, length);
-            Assert.AreEqual(index, token.Index);
+            Token token = new Token(entry, string.Empty, Source, Index, Length);
+            Assert.AreEqual(Index, token.Index);
         }
 
         [TestMethod]
         public void PositionTest()
         {
-            Token token = new Token(entry, string.Empty, source, index, length);
+            Token token = new Token(entry, string.Empty, Source, Index, Length);
             Assert.AreEqual(position, token.CodePosition.CharPosition);
         }
 
         [TestMethod]
         public void PositionTest2()
         {
-            Token token = new Token(entry, string.Empty, source, source.Length, 0);
+            Token token = new Token(entry, string.Empty, Source, Source.Length, 0);
             Assert.AreEqual(new CharPosition(1, 10), token.CodePosition.CharPosition);
         }
 
@@ -84,7 +84,7 @@ namespace UnitTest
         [TestMethod]
         public void ToStringTest()
         {
-            Token token = new Token(entry, string.Empty, source, index, length);
+            Token token = new Token(entry, string.Empty, Source, Index, Length);
             string tokenString = token.ToString();
 
             Assert.IsTrue(tokenString.Contains(position.Line.ToString()));
@@ -96,7 +96,7 @@ namespace UnitTest
         [TestMethod]
         public void ToStringTestShort()
         {
-            Token token = new Token(entryShort, string.Empty, source, index, length);
+            Token token = new Token(entryShort, string.Empty, Source, Index, Length);
             string tokenString = token.ToString();
 
             Assert.IsTrue(tokenString.Contains(position.Line.ToString()));
@@ -108,21 +108,21 @@ namespace UnitTest
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ConstructorError1()
         {
-            Token token = new Token(entry, string.Empty, source, source.Length, 1);
+            Token token = new Token(entry, string.Empty, Source, Source.Length, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorError2()
         {
-            Token token = new Token(null, string.Empty, source, 0, 1);
+            Token token = new Token(null, string.Empty, Source, 0, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorError3()
         {
-            Token token = new Token(entry, null, source, 0, 1);
+            Token token = new Token(entry, null, Source, 0, 1);
         }
 
         [TestMethod]
@@ -136,21 +136,21 @@ namespace UnitTest
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ConstructorError5()
         {
-            Token token = new Token(entry, string.Empty, source, -1, 1);
+            Token token = new Token(entry, string.Empty, Source, -1, 1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ConstructorError6()
         {
-            Token token = new Token(entry, string.Empty, source, source.Length + 1, -1);
+            Token token = new Token(entry, string.Empty, Source, Source.Length + 1, -1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ConstructorError7()
         {
-            Token token = new Token(entry, string.Empty, source, 0, -1);
+            Token token = new Token(entry, string.Empty, Source, 0, -1);
         }
     }
 }
