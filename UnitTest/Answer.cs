@@ -23,18 +23,15 @@ namespace UnitTest
             using (StreamReader sr = new StreamReader(stream))
             {
                 string line;
-                int sep;
 
                 while ((line = sr.ReadLine()) != null)
                 {
+                    int sep;
+
                     if ((sep = line.IndexOf('\t')) == -1)
-                    {
                         answers.Add(new Answer(line, null));
-                    }
                     else
-                    {
                         answers.Add(new Answer(line.Substring(0, sep), ReplaceEscapeChars(line.Substring(sep + 1))));
-                    }
                 }
             }
 
