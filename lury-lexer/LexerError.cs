@@ -75,7 +75,7 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// インデントの文字種が混在しています。
         /// </summary>
-        IndentCharacterConfusion = 0x100007,
+        IndentCharacterConfusion = 0x100007
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// 不明な警告です。
         /// </summary>
-        Unknown = 0x110000,
+        Unknown = 0x110000
     }
 
     /// <summary>
@@ -101,6 +101,6 @@ namespace Lury.Compiling.Lexer
         /// <summary>
         /// 不明な情報です。
         /// </summary>
-        Unknown = 0x120000,
+        Unknown = 0x120000
     }
 }
