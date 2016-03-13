@@ -25,9 +25,9 @@ namespace UnitTest
         [TestMethod]
         public void SourceNameTest()
         {
-            const string sourceName = "TestSource";
-            var lexer = new Lexer(sourceName, string.Empty);
-            Assert.AreEqual(sourceName, lexer.SourceName);
+            const string SourceName = "TestSource";
+            var lexer = new Lexer(SourceName, string.Empty);
+            Assert.AreEqual(SourceName, lexer.SourceName);
         }
 
         [TestMethod]
