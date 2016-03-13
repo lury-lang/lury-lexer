@@ -18,8 +18,8 @@ namespace UnitTest
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            LexerTest.answerFiles = Directory.GetFiles("Input", "*.answer").Select(s => new AnswerFile(s));
-            LexerTest.errorFiles = Directory.GetFiles("Error", "*.answer").Select(s => new AnswerFile(s));
+            answerFiles = Directory.GetFiles("Input", "*.answer").Select(s => new AnswerFile(s));
+            errorFiles = Directory.GetFiles("Error", "*.answer").Select(s => new AnswerFile(s));
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace UnitTest
             var lexer = new Lexer(string.Empty, string.Empty);
             Assert.IsTrue(lexer.Tokenize());
 
-            CollectionAssert.AreEqual(new string[] { "EndOfFile" }, lexer.TokenOutput.Select(t => t.Entry.Name).ToArray());
+            CollectionAssert.AreEqual(new[] { "EndOfFile" }, lexer.TokenOutput.Select(t => t.Entry.Name).ToArray());
         }
 
         [TestMethod]
