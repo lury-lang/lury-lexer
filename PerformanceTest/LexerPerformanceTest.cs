@@ -1,28 +1,29 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Lury.Compiling.Lexer;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace PerformanceTest
 {
-    [TestClass]
+    [TestFixture]
     public class LexerPerformanceTest
     {
-        private static string inputSouceCode;
+        private static string _inputSouceCode;
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
+        [OneTimeSetUp]
+        public static void OneTimeSetUp()
         {
-            inputSouceCode = File.ReadAllText("Input.lr");
+            _inputSouceCode = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Input.lr"));
         }
 
-        [TestMethod]
+        [Test]
         public void TokenizeTest()
         {
-            const int COUNT = 100;
+            const int count = 100;
 
-            for (int i = 0; i < COUNT; i++)
+            for (var i = 0; i < count; i++)
             {
-                Lexer lexer = new Lexer(string.Empty, inputSouceCode);
+                var lexer = new Lexer(string.Empty, _inputSouceCode);
                 lexer.Tokenize();
             }
         }
