@@ -1,13 +1,16 @@
 language: csharp
 solution: lury-lexer.sln
 mono:
-  - latest
-  - 4.4.0
+- latest
+- 4.4.0
 install:
-  - nuget restore lury-lexer.sln
-  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
+- nuget restore lury-lexer.sln
+- nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release lury-lexer.sln
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./UnitTest/bin/Release/UnitTest.dll
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./IntegrationTest/bin/Release/UnitTest.dll
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./PerformanceTest/bin/Release/UnitTest.dll
+- xbuild /p:Configuration=Release lury-lexer.sln
+- mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./UnitTest/bin/Release/UnitTest.dll
+- mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./IntegrationTest/bin/Release/UnitTest.dll
+- mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./PerformanceTest/bin/Release/UnitTest.dll
+env:
+  global:
+    secure: ahOmwG3R4b//X+Jz0WM9Iixqw/4BxnujRj77hLJ+oVfF/VoyKbxYHOFRSiM7/rlpAGwxlGlSlMxEWP9T7/jnm+dLuEI4sMhLcvrjdAxMVYtMPBJsm+dLFGscCYupM5nA4GEgNClduCrvOG4a3rm/2ctpqsxO7wRl91rsGhTM7No=
