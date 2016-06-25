@@ -4,7 +4,7 @@ EmbedStringLiteral	"test2'"
 NewLine
 WysiwygStringLiteral	`test3'"`
 NewLine
-WysiwygStringLiteral	`line1\r\nline2\r\nline3`
+WysiwygStringLiteral	`line1\nline2\nline3`
 NewLine
 WysiwygStringLiteral	````
 EndOfFile
