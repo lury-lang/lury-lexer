@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace UnitTest
+namespace IntegrationTest
 {
-    class AnswerFile
+    public class AnswerFile
     {
         public IReadOnlyList<Answer> Answers { get; private set; }
 

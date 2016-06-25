@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace UnitTest
+namespace IntegrationTest
 {
-    class Answer
+    public class Answer
     {
         public string TokenName { get; private set; }
 
