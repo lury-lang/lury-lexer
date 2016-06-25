@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Lury.Compiling.Lexer;
 using Lury.Compiling.Utils;
 using NUnit.Framework;
@@ -14,45 +15,44 @@ namespace UnitTest
         private const string Source = "dummyText";
         private const int Index = 2;
         private const int Length = 3;
-        private static CharPosition _position;
-        private static RegexTokenEntry _entry;
-        private static RegexTokenEntry _entryShort;
-
-        [OneTimeSetUp]
-        public static void OneTimeSetUp()
+        private static readonly CharPosition Position;
+        private static readonly RegexTokenEntry Entry;
+        private static readonly RegexTokenEntry EntryShort;
+        
+        static TokenTest()
         {
-            _position = new CharPosition(1, 3);
-            _entry = new RegexTokenEntry(Name, Regex);
-            _entryShort = new RegexTokenEntry(NameShort, Regex);
+            Position = new CharPosition(1, 3);
+            Entry = new RegexTokenEntry(Name, Regex);
+            EntryShort = new RegexTokenEntry(NameShort, Regex);
         }
 
         [Test]
         public void LengthTest()
         {
-            var token = new Token(_entry, string.Empty, Source, Index, Length);
+            var token = new Token(Entry, string.Empty, Source, Index, Length);
             Assert.AreEqual(Length, token.Length);
         }
 
         [Test]
         public void EntryTest()
         {
-            var token = new Token(_entry, string.Empty, Source, Index, Length);
-            Assert.AreEqual(_entry, token.Entry);
+            var token = new Token(Entry, string.Empty, Source, Index, Length);
+            Assert.AreEqual(Entry, token.Entry);
         }
 
         [Test]
-        [TestCase("mmy")]
-        [TestCase("")]
-        public void TextTest(string tokenText)
+        [TestCase("mmy", Index, Length)]
+        [TestCase("", 0, 0)]
+        public void TextTest(string tokenText, int index, int length)
         {
-            var token = new Token(_entry, tokenText, Source, Index, Length);
+            var token = new Token(Entry, string.Empty, Source, index, length);
             Assert.AreEqual(tokenText, token.Text);
         }
 
         [Test]
         public void IndexTest()
         {
-            var token = new Token(_entry, string.Empty, Source, Index, Length);
+            var token = new Token(Entry, string.Empty, Source, Index, Length);
             Assert.AreEqual(Index, token.Index);
         }
 
@@ -62,50 +62,68 @@ namespace UnitTest
         [TestCase("", 0, 0, 1, 1)]
         public void PositionTest(string sourceCode, int index, int length, int line, int column)
         {
-            var token = new Token(_entry, string.Empty, sourceCode, index, length);
+            var token = new Token(Entry, string.Empty, sourceCode, index, length);
             Assert.AreEqual(new CharPosition(line, column), token.CodePosition.CharPosition);
         }
 
         [Test]
         public void ToStringTest()
         {
-            var token = new Token(_entry, string.Empty, Source, Index, Length);
+            var token = new Token(Entry, string.Empty, Source, Index, Length);
             var tokenString = token.ToString();
 
-            Assert.IsTrue(tokenString.Contains(_position.Line.ToString()));
-            Assert.IsTrue(tokenString.Contains(_position.Column.ToString()));
-            Assert.IsTrue(tokenString.Contains(_entry.Name));
+            Assert.IsTrue(tokenString.Contains(Position.Line.ToString()));
+            Assert.IsTrue(tokenString.Contains(Position.Column.ToString()));
+            Assert.IsTrue(tokenString.Contains(Entry.Name));
             Assert.IsTrue(tokenString.Contains("mmy"));
         }
 
         [Test]
         public void ToStringTestShort()
         {
-            var token = new Token(_entryShort, string.Empty, Source, Index, Length);
+            var token = new Token(EntryShort, string.Empty, Source, Index, Length);
             var tokenString = token.ToString();
 
-            Assert.IsTrue(tokenString.Contains(_position.Line.ToString()));
-            Assert.IsTrue(tokenString.Contains(_position.Column.ToString()));
-            Assert.IsTrue(tokenString.Contains(_entryShort.Name));
+            Assert.IsTrue(tokenString.Contains(Position.Line.ToString()));
+            Assert.IsTrue(tokenString.Contains(Position.Column.ToString()));
+            Assert.IsTrue(tokenString.Contains(EntryShort.Name));
         }
 
-        private static readonly TestCaseData[] ConstructorErrorTestCases =
+        private static IEnumerable<TestCaseData> ConstructorErrorTestCases1
         {
-            new TestCaseData(_entry, string.Empty, Source, Source.Length, 1),
-            new TestCaseData(null, string.Empty, Source, 0, 1),
-            new TestCaseData(_entry, null, Source, 0, 1),
-            new TestCaseData(_entry, string.Empty, null, 0, 1),
-            new TestCaseData(_entry, string.Empty, Source, -1, 1),
-            new TestCaseData(_entry, string.Empty, Source, Source.Length + 1, -1),
-            new TestCaseData(_entry, string.Empty, Source, 0, -1)
-        };
+            get
+            {
+                yield return new TestCaseData(Entry, string.Empty, Source, Source.Length, 1);
+                yield return new TestCaseData(Entry, string.Empty, Source, -1, 1);
+                yield return new TestCaseData(Entry, string.Empty, Source, Source.Length + 1, -1);
+                yield return new TestCaseData(Entry, string.Empty, Source, 0, -1);
+            }
+        }
+
+        private static IEnumerable<TestCaseData> ConstructorErrorTestCases2
+        {
+            get
+            {
+                yield return new TestCaseData(null, string.Empty, Source, 0, 1);
+                yield return new TestCaseData(Entry, null, Source, 0, 1);
+                yield return new TestCaseData(Entry, string.Empty, null, 0, 1);
+            }
+        }
 
         [Test]
-        [TestCaseSource(nameof(ConstructorErrorTestCases))]
-        public void ConstructorError(TokenEntry entry, string sourceName, string sourceCode, int index, int length)
+        [TestCaseSource(nameof(ConstructorErrorTestCases1))]
+        public void ConstructorError1(TokenEntry entry, string sourceName, string sourceCode, int index, int length)
         {
             // ReSharper disable once ObjectCreationAsStatement
             Assert.Throws<ArgumentOutOfRangeException>(() => new Token(entry, sourceName, sourceCode, index, length));
+        }
+
+        [Test]
+        [TestCaseSource(nameof(ConstructorErrorTestCases2))]
+        public void ConstructorError2(TokenEntry entry, string sourceName, string sourceCode, int index, int length)
+        {
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<ArgumentNullException>(() => new Token(entry, sourceName, sourceCode, index, length));
         }
     }
 }
