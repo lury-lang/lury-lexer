@@ -9,5 +9,5 @@ install:
 script:
 - xbuild /p:Configuration=Release lury-lexer.sln
 - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./UnitTest/bin/Release/UnitTest.dll
-- mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./IntegrationTest/bin/Release/UnitTest.dll
-- mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./PerformanceTest/bin/Release/UnitTest.dll
+- mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./IntegrationTest/bin/Release/IntegrationTest.dll
+- mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./PerformanceTest/bin/Release/PerformanceTest.dll
