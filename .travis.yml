@@ -1,0 +1,13 @@
+language: csharp
+solution: lury-lexer.sln
+mono:
+  - latest
+  - 4.4.0
+install:
+  - nuget restore lury-lexer.sln
+  - nuget install NUnit.Runners -Version 3.2.1 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release lury-lexer.sln
+  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./UnitTest/bin/Release/UnitTest.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./IntegrationTest/bin/Release/UnitTest.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./PerformanceTest/bin/Release/UnitTest.dll
