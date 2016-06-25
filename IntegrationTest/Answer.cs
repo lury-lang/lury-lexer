@@ -11,16 +11,16 @@ namespace IntegrationTest
 
         public Answer(string tokenName, string tokenValue)
         {
-            this.TokenName = tokenName;
-            this.TokenValue = tokenValue;
+            TokenName = tokenName;
+            TokenValue = tokenValue;
         }
 
         public static IReadOnlyList<Answer> FromFile(string filePath)
         {
-            List<Answer> answers = new List<Answer>();
+            var answers = new List<Answer>();
 
-            using (FileStream stream = new FileStream(filePath, FileMode.Open))
-            using (StreamReader sr = new StreamReader(stream))
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            using (var sr = new StreamReader(stream))
             {
                 string line;
 
@@ -28,10 +28,9 @@ namespace IntegrationTest
                 {
                     int sep;
 
-                    if ((sep = line.IndexOf('\t')) == -1)
-                        answers.Add(new Answer(line, null));
-                    else
-                        answers.Add(new Answer(line.Substring(0, sep), ReplaceEscapeChars(line.Substring(sep + 1))));
+                    answers.Add((sep = line.IndexOf('\t')) == -1
+                        ? new Answer(line, null)
+                        : new Answer(line.Substring(0, sep), ReplaceEscapeChars(line.Substring(sep + 1))));
                 }
             }
 

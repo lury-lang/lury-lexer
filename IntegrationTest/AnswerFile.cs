@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace IntegrationTest
@@ -7,20 +8,18 @@ namespace IntegrationTest
     {
         public IReadOnlyList<Answer> Answers { get; private set; }
 
-        public string AnswerFilePath { get; private set; }
-
-        public string TestFilePath
-        {
-            get
-            {
-                return Path.Combine(Path.GetDirectoryName(this.AnswerFilePath), Path.GetFileNameWithoutExtension(this.AnswerFilePath) + ".lr");
-            }
-        }
+        public string AnswerFilePath { get; }
+        
+        // ReSharper disable once AssignNullToNotNullAttribute
+        public string TestFilePath => Path.Combine(Path.GetDirectoryName(AnswerFilePath), Path.GetFileNameWithoutExtension(AnswerFilePath) + ".lr");
 
         public AnswerFile(string answerFilePath)
         {
-            this.AnswerFilePath = answerFilePath;
-            this.Answers = Answer.FromFile(answerFilePath);
+            if (answerFilePath == null)
+                throw  new ArgumentNullException(nameof(answerFilePath));
+
+            AnswerFilePath = answerFilePath;
+            Answers = Answer.FromFile(answerFilePath);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace IntegrationTest
             var lexer = new Lexer(Path.GetFileName(file.TestFilePath), File.ReadAllText(file.TestFilePath));
             Assert.IsTrue(lexer.Tokenize());
 
-            int index = 0;
+            var index = 0;
             Assert.AreEqual(file.Answers.Count, lexer.TokenOutput.Count());
 
             foreach (var token in lexer.TokenOutput)
@@ -48,7 +48,7 @@ namespace IntegrationTest
             var lexer = new Lexer(Path.GetFileName(file.TestFilePath), File.ReadAllText(file.TestFilePath));
             Assert.IsFalse(lexer.Tokenize());
 
-            int index = 0;
+            var index = 0;
             Assert.AreEqual(file.Answers.Count(a => a.TokenName != "!Error"), lexer.TokenOutput.Count());
 
             foreach (var token in lexer.TokenOutput)
