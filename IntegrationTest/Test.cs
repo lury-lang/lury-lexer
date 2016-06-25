@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Lury.Compiling.Lexer;
 using NUnit.Framework;
 
@@ -29,13 +30,12 @@ namespace IntegrationTest
                 if (file.Answers[index].TokenName != token.Entry.Name ||
                    (file.Answers[index].TokenValue != null &&
                     file.Answers[index].TokenValue != token.Text))
-                    Assert.Fail("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
+                    Assert.Fail("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。\n{4}",
                                 Path.GetFileName(file.AnswerFilePath),
                                 index + 1,
                                 file.Answers[index].TokenName,
                                 token.Entry.Name,
-                                file.Answers[index].TokenValue ?? "(null)",
-                                token.Text);
+                                GetDiffString(file.Answers[index].TokenValue ?? "(null)", token.Text));
 
                 index++;
             }
@@ -56,13 +56,13 @@ namespace IntegrationTest
                 if (file.Answers[index].TokenName != token.Entry.Name ||
                    (file.Answers[index].TokenValue != null &&
                     file.Answers[index].TokenValue != token.Text))
-                    Assert.Fail("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。(値は {4} および {5})",
+                    Assert.Fail("ファイル {0} の {1} 番目のトークン {2} は {3} と一致しません。\n{4}",
                                 Path.GetFileName(file.AnswerFilePath),
                                 index + 1,
                                 file.Answers[index].TokenName,
                                 token.Entry.Name,
-                                file.Answers[index].TokenValue ?? "(null)",
-                                token.Text);
+                                GetDiffString(file.Answers[index].TokenValue ?? "(null)", token.Text));
+
                 index++;
             }
 
@@ -86,6 +86,16 @@ namespace IntegrationTest
             {
                 Assert.Fail("予期されたエラー (#{0}) は発生しませんでした。", unexpectedError.TokenValue);
             }
+        }
+
+        private static string GetDiffString(string input, string output)
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("Input (Length: {0}): ", input.Length);
+            sb.AppendLine(input);
+            sb.AppendFormat("Onput (Length: {0}): ", output.Length);
+            sb.AppendLine(output);
+            return sb.ToString();
         }
     }
 }
