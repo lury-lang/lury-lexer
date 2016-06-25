@@ -19,7 +19,7 @@ namespace UnitTest
         private static RegexTokenEntry _entryShort;
 
         [OneTimeSetUp]
-        public static void ClassInitialize(TestContext context)
+        public static void OneTimeSetUp()
         {
             _position = new CharPosition(1, 3);
             _entry = new RegexTokenEntry(Name, Regex);
